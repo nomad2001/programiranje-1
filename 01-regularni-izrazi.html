@@ -733,6 +733,35 @@ Potrebujem 500g moke.
 </div>
 </div>
 </div>
+<p>Omenimo tudi vzorca <code class="docutils literal notranslate"><span class="pre">\b</span></code> ter <code class="docutils literal notranslate"><span class="pre">\B</span></code> <em>(boundary)</em>. Oba sta ničelne širine, torej sama ne označujeta nobenega znaka.
+<code class="docutils literal notranslate"><span class="pre">\b</span></code> označuje pozicijo med besednim znakom (karkoli ujemajoče z \w) ter nebesednim znakom (karkoli ujemajoče z \W).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pokazi_vse_pojavitve</span><span class="p">(</span><span class="s1">&#39;Je pravo vprašanje kaj ali zakaj?&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bkaj\b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Je pravo vprašanje kaj ali zakaj?
+                   ^^^
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vzorec <code class="docutils literal notranslate"><span class="pre">\B</span></code> pa predstavlja ravno obratno. Uporabimo ga, kadar iskani del ni na začetku ali koncu besede.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pokazi_vse_pojavitve</span><span class="p">(</span><span class="s1">&#39;Svet ni niti bel, niti črnobel.&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\Bbel\b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Svet ni niti bel, niti črnobel.
+                           ^^^
+</pre></div>
+</div>
+</div>
+</div>
 <p>Če se želimo omejiti na posamezne znake ali posamezen razpon zaporednih znakov, jih naštejemo med oglatimi oklepaji:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1063,7 +1092,6 @@ enota: ml, vrednost: 250
 <li><p><code class="docutils literal notranslate"><span class="pre">match</span></code>, ki vrne pojavitev, če ta ustreza začetku niza oziroma <code class="docutils literal notranslate"><span class="pre">None</span></code>, če ne:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">fullmatch</span></code>, ki vrne pojavitev, če ta ustreza celotnemu nizu oziroma <code class="docutils literal notranslate"><span class="pre">None</span></code>, če ne:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">finditer</span></code>, ki vrne iterator čez vse pojavitve vzorca v nizu:</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">findall</span></code>, ki vrne seznam vsebin vseh pojavitev vzorca v nizu:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">findall</span></code>, ki vrne seznam vsebin vseh pojavitev vzorca v nizu:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">split</span></code>, ki dani niz razdeli po pojavitvah:</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sub</span></code>, ki v danem nizu pojavitve zamenja z drugimi nizi, v katerih lahko do posameznih skupin dostopamo prek <code class="docutils literal notranslate"><span class="pre">\1</span></code>, <code class="docutils literal notranslate"><span class="pre">\2</span></code>, …</p></li>
