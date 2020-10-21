@@ -46,6 +46,8 @@
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.be0a4a0c39cd630af62a2fcf693f3f06.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -55,7 +57,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Uvod v OCaml" href="04-uvod-v-ocaml.html" />
+    <link rel="next" title="Naivni Bayesov klasifikator" href="04-naivni-bayesov-klasifikator.html" />
     <link rel="prev" title="Zajem podatkov" href="02-zajem-podatkov.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -115,6 +117,11 @@
    Analiza podatkov
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04-naivni-bayesov-klasifikator.html">
+   Naivni Bayesov klasifikator
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -123,28 +130,23 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="04-uvod-v-ocaml.html">
+  <a class="reference internal" href="05-uvod-v-ocaml.html">
    Uvod v OCaml
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="05-funkcijsko-programiranje.html">
+  <a class="reference internal" href="06-funkcijsko-programiranje.html">
    Funkcijsko programiranje
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="06-definicije-tipov.html">
+  <a class="reference internal" href="07-definicije-tipov.html">
    Definicije tipov
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="07-ucinki-in-cistost.html">
+  <a class="reference internal" href="08-ucinki-in-cistost.html">
    Učinki in čistost
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="09-modularnost.html">
-   Modularnost
   </a>
  </li>
 </ul>
@@ -155,7 +157,7 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="08-iskalna-drevesa.html">
+  <a class="reference internal" href="09-iskalna-drevesa.html">
    Iskalna drevesa
   </a>
  </li>
@@ -219,7 +221,10 @@
     
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="_sources/03-analiza-podatkov.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="_sources/03-analiza-podatkov.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -241,10 +246,99 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/matijapretnar/programiranje-1/zapiski?urlpath=tree/03-analiza-podatkov.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#predpriprava">
+   Predpriprava
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#osnovni-izbori-elementov-razpredelnic">
+   Osnovni izbori elementov razpredelnic
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#filtriranje">
+   Filtriranje
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#naloga">
+     Naloga
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#urejanje">
+   Urejanje
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#zdruzevanje">
+   Združevanje
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Naloga
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#risanje-grafov">
+   Risanje grafov
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Naloga
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#stikanje">
+   Stikanje
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Naloga
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
         
     </div>
 </div>
@@ -255,6 +349,343 @@
                 
   <div class="section" id="analiza-podatkov">
 <h1>Analiza podatkov<a class="headerlink" href="#analiza-podatkov" title="Permalink to this headline">¶</a></h1>
+<p>Spodaj je pregled najosnovnejših metod, ki jih ponuja knjižnica Pandas. Vsaka od naštetih metod ponuja še cel kup dodatnih možnosti, ki so natančno opisane v <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/">uradni dokumentaciji</a>. Z branjem dokumentacije se vam seveda najbolj splača začeti pri <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/tutorials.html">uvodih</a>.</p>
+<div class="section" id="predpriprava">
+<h2>Predpriprava<a class="headerlink" href="#predpriprava" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># naložimo paket</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># naložimo razpredelnico, s katero bomo delali</span>
+<span class="n">filmi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/filmi.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+
+<span class="c1"># ker bomo delali z velikimi razpredelnicami, povemo, da naj se vedno izpiše le 20 vrstic</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">4</span><span class="n">a4aa8fc71eb</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># naložimo paket</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> 
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># naložimo razpredelnico, s katero bomo delali</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">filmi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/filmi.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="osnovni-izbori-elementov-razpredelnic">
+<h2>Osnovni izbori elementov razpredelnic<a class="headerlink" href="#osnovni-izbori-elementov-razpredelnic" title="Permalink to this headline">¶</a></h2>
+<p>Z metodo <code class="docutils literal notranslate"><span class="pre">.head(n=5)</span></code> pogledamo prvih <code class="docutils literal notranslate"><span class="pre">n</span></code>, z metodo <code class="docutils literal notranslate"><span class="pre">.tail(n=5)</span></code> pa zadnjih <code class="docutils literal notranslate"><span class="pre">n</span></code> vrstic razpredelnice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Z rezinami pa dostopamo do izbranih vrstic.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Z indeksiranjem razpredelnice dostopamo do posameznih stolpcev.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="s1">&#39;ocena&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Do stolpcev pogosto dostopamo, zato lahko uporabimo tudi krajši zapis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Če želimo več stolpcev, moramo za indeks podati seznam vseh oznak.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[[</span><span class="s1">&#39;naslov&#39;</span><span class="p">,</span> <span class="s1">&#39;ocena&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Do vrednosti z indeksom <code class="docutils literal notranslate"><span class="pre">i</span></code> dostopamo z <code class="docutils literal notranslate"><span class="pre">.iloc[i]</span></code>, do tiste s ključem <code class="docutils literal notranslate"><span class="pre">k</span></code> pa z <code class="docutils literal notranslate"><span class="pre">.loc[k]</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">120</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">97576</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="filtriranje">
+<h2>Filtriranje<a class="headerlink" href="#filtriranje" title="Permalink to this headline">¶</a></h2>
+<p>Izbor določenih vrstic razpredelnice naredimo tako, da za indeks podamo stolpec logičnih vrednosti, ki ga dobimo z običajnimi operacijami. V vrnjeni razpredelnici bodo ostale vrstice, pri katerih je v stolpcu vrednost <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&gt;=</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&gt;=</span> <span class="mf">9.3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[(</span><span class="n">filmi</span><span class="o">.</span><span class="n">leto</span> <span class="o">&gt;</span> <span class="mi">2010</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="naloga">
+<h3>Naloga<a class="headerlink" href="#naloga" title="Permalink to this headline">¶</a></h3>
+<p>Poiščite filme, ki si jih želimo izogniti za vsako ceno, torej tiste, ki so daljši od dveh ur in imajo oceno pod 4.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[(</span><span class="n">filmi</span><span class="o">.</span><span class="n">dolzina</span> <span class="o">&gt;</span> <span class="mi">120</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filmi</span><span class="o">.</span><span class="n">glasovi</span> <span class="o">&gt;</span> <span class="mi">50000</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="urejanje">
+<h2>Urejanje<a class="headerlink" href="#urejanje" title="Permalink to this headline">¶</a></h2>
+<p>Razpredelnico urejamo z metodo <code class="docutils literal notranslate"><span class="pre">.sort_values</span></code>, ki ji podamo ime ali seznam imen stolpcev, po katerih želimo urejati. Po želji lahko tudi povemo, kateri stolpci naj bodo urejeni naraščajoče in kateri padajoče.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;dolzina&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># najprej uredi padajoče po oceni, pri vsaki oceni pa še naraščajoče po letu</span>
+<span class="n">filmi</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;ocena&#39;</span><span class="p">,</span> <span class="s1">&#39;leto&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="zdruzevanje">
+<h2>Združevanje<a class="headerlink" href="#zdruzevanje" title="Permalink to this headline">¶</a></h2>
+<p>Z metodo <code class="docutils literal notranslate"><span class="pre">.groupby</span></code> ustvarimo razpredelnico posebne vrste, v katerem so vrstice združene glede na skupno lastnost.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_letih</span> <span class="o">=</span> <span class="n">filmi</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;leto&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_letih</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># povprečna ocena vsakega leta</span>
+<span class="n">filmi_po_letih</span><span class="o">.</span><span class="n">ocena</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Če želimo, lahko združujemo tudi po izračunanih lastnostih. Izračunajmo stolpec in ga shranimo v razpredelnico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="s1">&#39;desetletje&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="n">filmi</span><span class="o">.</span><span class="n">leto</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_desetletjih</span> <span class="o">=</span> <span class="n">filmi</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;desetletje&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Preštejemo, koliko filmov je bilo v vsakem desetletju. Pri večini stolpcev dobimo iste številke, ker imamo v vsakem stolpcu enako vnosov. Če kje kakšen podatek manjkal, je številka manjša.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_desetletjih</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Če želimo dobiti le število članov posamezne skupine, uporabimo metodo <code class="docutils literal notranslate"><span class="pre">.size()</span></code>. V tem primeru dobimo le stolpec, ne razpredelnice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_desetletjih</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pogledamo povprečja vsakega desetletja. Dobimo povprečno leto, dolžino, ocene in zaslužek. Povprečnega naslova ne dobimo, ker se ga ne da izračunati, zato ustreznega stolpca ni.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_desetletjih</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Naloga<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Izračunajte število filmov posamezne dolžine, zaokrožene na 5 minut.</p>
+</div>
+</div>
+<div class="section" id="risanje-grafov">
+<h2>Risanje grafov<a class="headerlink" href="#risanje-grafov" title="Permalink to this headline">¶</a></h2>
+<p>Običajen graf dobimo z metodo <code class="docutils literal notranslate"><span class="pre">plot</span></code>. Uporabljamo ga, kadar želimo prikazati spreminjanje vrednosti v odvisnosti od zvezne spremenljivke. Naša hipoteza je, da so zlata leta filma mimo. Graf to zanika.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="n">filmi</span><span class="o">.</span><span class="n">ocena</span> <span class="o">&gt;</span> <span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;desetletje&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Razsevni diagram dobimo z metodo <code class="docutils literal notranslate"><span class="pre">plot.scatter</span></code>. Uporabljamo ga, če želimo ugotoviti povezavo med dvema spremenljivkama.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;ocena&#39;</span><span class="p">,</span> <span class="s1">&#39;metascore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="n">filmi</span><span class="o">.</span><span class="n">dolzina</span> <span class="o">&lt;</span> <span class="mi">250</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;dolzina&#39;</span><span class="p">,</span> <span class="s1">&#39;ocena&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Stolpčni diagram dobimo z metodo <code class="docutils literal notranslate"><span class="pre">plot.bar</span></code>. Uporabljamo ga, če želimo primerjati vrednosti pri diskretnih (običajno kategoričnih) spremenljivkah. Pogosto je koristno, da graf uredimo po vrednostih.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;naslov&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Naloga<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Narišite grafe, ki ustrezno kažejo:</p>
+<ul class="simple">
+<li><p>Povezavo med IMDB in metascore oceno</p></li>
+<li><p>Spreminjanje povprečne dolžine filmov skozi leta</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="stikanje">
+<h2>Stikanje<a class="headerlink" href="#stikanje" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">osebe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/osebe.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+<span class="n">vloge</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/vloge.csv&#39;</span><span class="p">)</span>
+<span class="n">zanri</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/zanri.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Razpredelnice stikamo s funkcijo <code class="docutils literal notranslate"><span class="pre">merge</span></code>, ki vrne razpredelnico vnosov iz obeh tabel, pri katerih se vsi istoimenski podatki ujemajo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vloge</span><span class="p">[</span><span class="n">vloge</span><span class="o">.</span><span class="n">film</span> <span class="o">==</span> <span class="mi">12349</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zanri</span><span class="p">[</span><span class="n">zanri</span><span class="o">.</span><span class="n">film</span> <span class="o">==</span> <span class="mi">12349</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">vloge</span><span class="p">,</span> <span class="n">zanri</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>V osnovi vsebuje staknjena razpredelnica le tiste vnose, ki se pojavijo v obeh tabelah. Temu principu pravimo notranji stik (<em>inner join</em>). Lahko pa se odločimo, da izberemo tudi tiste vnose, ki imajo podatke le v levi tabeli (<em>left join</em>), le v desni tabeli (<em>right join</em>) ali v vsaj eni tabeli (<em>outer join</em>). Če v eni tabeli ni vnosov, bodo v staknjeni tabeli označene manjkajoče vrednosti. Ker smo v našem primeru podatke jemali iz IMDBja, kjer so za vsak film določeni tako žanri kot vloge, do razlik ne pride.</p>
+<p>Včasih želimo stikati tudi po stolpcih z različnimi imeni. V tem primeru funkciji <code class="docutils literal notranslate"><span class="pre">merge</span></code> podamo argumenta <code class="docutils literal notranslate"><span class="pre">left_on</span></code> in <code class="docutils literal notranslate"><span class="pre">right_on</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">vloge</span><span class="p">,</span> <span class="n">zanri</span><span class="p">),</span> <span class="n">osebe</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;oseba&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Poglejmo, katera osebe so nastopale v največ komedijah.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zanri_oseb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">vloge</span><span class="p">,</span> <span class="n">zanri</span><span class="p">),</span> <span class="n">osebe</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;oseba&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+<span class="n">zanri_oseb</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">zanri_oseb</span><span class="o">.</span><span class="n">zanr</span> <span class="o">==</span> <span class="s1">&#39;Comedy&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+    <span class="p">(</span><span class="n">zanri_oseb</span><span class="o">.</span><span class="n">vloga</span> <span class="o">==</span> <span class="s1">&#39;I&#39;</span><span class="p">)</span>
+<span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+    <span class="s1">&#39;ime&#39;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+    <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Naloga<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Izračunajte povprečno oceno vsakega žanra.</p></li>
+<li><p>Kateri režiserji snemajo najdonosnejše filme?</p></li>
+</ul>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -286,7 +717,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="02-zajem-podatkov.html" title="previous page">Zajem podatkov</a>
-    <a class='right-next' id="next-link" href="04-uvod-v-ocaml.html" title="next page">Uvod v OCaml</a>
+    <a class='right-next' id="next-link" href="04-naivni-bayesov-klasifikator.html" title="next page">Naivni Bayesov klasifikator</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

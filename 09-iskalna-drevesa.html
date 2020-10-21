@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modularnost &#8212; Programiranje 1</title>
+    <title>Iskalna drevesa &#8212; Programiranje 1</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -46,6 +46,8 @@
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.be0a4a0c39cd630af62a2fcf693f3f06.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -55,8 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Iskalna drevesa" href="08-iskalna-drevesa.html" />
-    <link rel="prev" title="Učinki in čistost" href="07-ucinki-in-cistost.html" />
+    <link rel="next" title="Spremenljive podatkovne strukture" href="10-spremenljive-podatkovne-strukture.html" />
+    <link rel="prev" title="Učinki in čistost" href="08-ucinki-in-cistost.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -115,36 +117,36 @@
    Analiza podatkov
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04-naivni-bayesov-klasifikator.html">
+   Naivni Bayesov klasifikator
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
   Funkcijsko programiranje
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="04-uvod-v-ocaml.html">
+  <a class="reference internal" href="05-uvod-v-ocaml.html">
    Uvod v OCaml
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="05-funkcijsko-programiranje.html">
+  <a class="reference internal" href="06-funkcijsko-programiranje.html">
    Funkcijsko programiranje
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="06-definicije-tipov.html">
+  <a class="reference internal" href="07-definicije-tipov.html">
    Definicije tipov
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="07-ucinki-in-cistost.html">
+  <a class="reference internal" href="08-ucinki-in-cistost.html">
    Učinki in čistost
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Modularnost
   </a>
  </li>
 </ul>
@@ -153,9 +155,9 @@
   Podatkovne strukture in algoritmi
  </span>
 </p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="08-iskalna-drevesa.html">
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Iskalna drevesa
   </a>
  </li>
@@ -221,7 +223,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/09-modularnost.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/09-iskalna-drevesa.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -253,8 +255,8 @@
         
               <div>
                 
-  <div class="section" id="modularnost">
-<h1>Modularnost<a class="headerlink" href="#modularnost" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="iskalna-drevesa">
+<h1>Iskalna drevesa<a class="headerlink" href="#iskalna-drevesa" title="Permalink to this headline">¶</a></h1>
 </div>
 
     <script type="text/x-thebe-config">
@@ -285,8 +287,8 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="07-ucinki-in-cistost.html" title="previous page">Učinki in čistost</a>
-    <a class='right-next' id="next-link" href="08-iskalna-drevesa.html" title="next page">Iskalna drevesa</a>
+    <a class='left-prev' id="prev-link" href="08-ucinki-in-cistost.html" title="previous page">Učinki in čistost</a>
+    <a class='right-next' id="next-link" href="10-spremenljive-podatkovne-strukture.html" title="next page">Spremenljive podatkovne strukture</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

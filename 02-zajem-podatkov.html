@@ -46,6 +46,8 @@
     <script src="_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.be0a4a0c39cd630af62a2fcf693f3f06.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -115,6 +117,11 @@
    Analiza podatkov
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04-naivni-bayesov-klasifikator.html">
+   Naivni Bayesov klasifikator
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -123,28 +130,23 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="04-uvod-v-ocaml.html">
+  <a class="reference internal" href="05-uvod-v-ocaml.html">
    Uvod v OCaml
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="05-funkcijsko-programiranje.html">
+  <a class="reference internal" href="06-funkcijsko-programiranje.html">
    Funkcijsko programiranje
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="06-definicije-tipov.html">
+  <a class="reference internal" href="07-definicije-tipov.html">
    Definicije tipov
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="07-ucinki-in-cistost.html">
+  <a class="reference internal" href="08-ucinki-in-cistost.html">
    Učinki in čistost
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="09-modularnost.html">
-   Modularnost
   </a>
  </li>
 </ul>
@@ -155,7 +157,7 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="08-iskalna-drevesa.html">
+  <a class="reference internal" href="09-iskalna-drevesa.html">
    Iskalna drevesa
   </a>
  </li>
@@ -246,6 +248,40 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#knjiznica-requests">
+   Knjižnica
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     requests
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#branje-podatkov-v-json-datoteko">
+   Branje podatkov v JSON datoteko
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#csv-datoteke">
+   CSV datoteke
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#normalizacija-podatkov">
+   Normalizacija podatkov
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -255,6 +291,18 @@
                 
   <div class="section" id="zajem-podatkov">
 <h1>Zajem podatkov<a class="headerlink" href="#zajem-podatkov" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="knjiznica-requests">
+<h2>Knjižnica <code class="docutils literal notranslate"><span class="pre">requests</span></code><a class="headerlink" href="#knjiznica-requests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="branje-podatkov-v-json-datoteko">
+<h2>Branje podatkov v JSON datoteko<a class="headerlink" href="#branje-podatkov-v-json-datoteko" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="csv-datoteke">
+<h2>CSV datoteke<a class="headerlink" href="#csv-datoteke" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="normalizacija-podatkov">
+<h2>Normalizacija podatkov<a class="headerlink" href="#normalizacija-podatkov" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
