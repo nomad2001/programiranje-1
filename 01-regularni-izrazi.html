@@ -113,8 +113,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="03-analiza-podatkov.html">
-   Analiza podatkov
+  <a class="reference internal" href="03-knjiznica-pandas.html">
+   Knjižnica Pandas
   </a>
  </li>
  <li class="toctree-l1">
@@ -301,6 +301,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#organizacija-vecjih-regularnih-izrazov">
+   Organizacija večjih regularnih izrazov
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#knjiznica-beautiful-soup">
    Knjižnica Beautiful Soup
   </a>
@@ -323,7 +328,7 @@
 <p>Če pa v brskalniku shranimo izvorno kodo in HTML datoteko odpremo, pa je podatke težko najti.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;datoteke/250-najbolj-znanih-filmov.html&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../01-regularni-izrazi/predavanja/250-najbolj-znanih-filmov.html&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">html</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">[:</span><span class="mi">1000</span><span class="p">])</span>
@@ -735,8 +740,7 @@ Potrebujem 500g moke.
 </div>
 </div>
 </div>
-<p>Omenimo tudi vzorca <code class="docutils literal notranslate"><span class="pre">\b</span></code> ter <code class="docutils literal notranslate"><span class="pre">\B</span></code> <em>(boundary)</em>. Oba sta ničelne širine, torej sama ne označujeta nobenega znaka.
-<code class="docutils literal notranslate"><span class="pre">\b</span></code> označuje pozicijo med besednim znakom (karkoli ujemajoče z \w) ter nebesednim znakom (karkoli ujemajoče z \W).</p>
+<p>Omenimo tudi vzorca <code class="docutils literal notranslate"><span class="pre">\b</span></code> ter <code class="docutils literal notranslate"><span class="pre">\B</span></code> <em>(boundary)</em>. Oba sta ničelne širine, torej sama ne označujeta nobenega znaka. <code class="docutils literal notranslate"><span class="pre">\b</span></code> označuje pozicijo med besednim znakom (karkoli ujemajoče z \w) ter nebesednim znakom (karkoli ujemajoče z \W).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pokazi_vse_pojavitve</span><span class="p">(</span><span class="s1">&#39;Je pravo vprašanje kaj ali zakaj?&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bkaj\b&#39;</span><span class="p">)</span>
@@ -989,7 +993,9 @@ Oddal sem davčno napoved
        ^^^^^^
 &quot;Brrr, brrrrrr, brrr, brrrrrrr,&quot; je drgetal od mraza.
                 ^^^^
-&quot;Brrr, brrrrrr, brrr, brrrrrrr,&quot; je drgetal od mraza.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;Brrr, brrrrrr, brrr, brrrrrrr,&quot; je drgetal od mraza.
                       ^^^^^^
 </pre></div>
 </div>
@@ -1162,6 +1168,137 @@ enota: ml, vrednost: 250
 </div>
 </div>
 <p>Vse zgoraj omenjene funkcije sprejmejo niz z vzorcem, ki ga iščemo. Še bolj Pythonovsko in tudi bolj učinkovito, če vzorec uporabljamo večkrat, pa je, da vzorec s funkcijo <code class="docutils literal notranslate"><span class="pre">compile</span></code> pretvorimo v objekt <code class="docutils literal notranslate"><span class="pre">re.Pattern</span></code>. Na takem objektu lahko potem kličemo metode z istimi imeni kot zgoraj omenjene funkcije.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">izraz</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;X.*?Y&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="o">|</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">))</span>
+<span class="n">izraz</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;XyzzY x    y X</span><span class="se">\n</span><span class="s1">Y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Xy&#39;, &#39;x    y&#39;, &#39;X\nY&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="organizacija-vecjih-regularnih-izrazov">
+<h2>Organizacija večjih regularnih izrazov<a class="headerlink" href="#organizacija-vecjih-regularnih-izrazov" title="Permalink to this headline">¶</a></h2>
+<p>Če želimo zajeti veliko podatkov, potrebujemo vedno bolj zapletene regularne izraze, kar postane hitro nepregledno. Najprej si bomo pomagali s tem, da bomo regularne izraze pisali čez več vrstic. Python nam omogoča, da dobesedne nize (torej tiste v narekovajih) stikamo tako, da jih pišemo enega za drugim, na primer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;Tole &#39;</span> <span class="s1">&#39;dela&#39;</span> <span class="s1">&#39;,&#39;</span> <span class="s2">&quot; ker imamo&quot;</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot; </span><span class="si">{</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span> <span class="s1">&#39; nizov v narekovajih.&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Tole dela, ker imamo 6 nizov v narekovajih.&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">izvor_tezave</span> <span class="o">=</span> <span class="s1">&#39;spremenljivka&#39;</span>
+<span class="s1">&#39;Tole pa ne,&#39;</span> <span class="s2">&quot;ker je vmes tudi &#39; izvor_tezave &#39;.&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-52-7f3653a40206&gt;&quot;</span><span class="gt">, line </span><span class="mi">2</span>
+    <span class="s1">&#39;Tole pa ne,&#39;</span> <span class="s2">&quot;ker je vmes tudi &#39; izvor_tezave &#39;.&#39;</span>
+                                                      <span class="o">^</span>
+<span class="ne">SyntaxError</span>: EOL while scanning string literal
+</pre></div>
+</div>
+</div>
+</div>
+<p>Poleg tega lahko v Pythonu izraze v oklepajih razbijemo čez več vrstic. Oboje skupaj nam omogoča, da vzorec filma napišemo takole:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vzorec_filma</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="c1"># šifro vzamemo iz povezave</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;a href=&quot;/title/tt(?P&lt;id&gt;\d+)/.*?&quot;.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;img alt=&quot;(?P&lt;naslov&gt;.+?)&quot;.*?&#39;</span>
+    <span class="c1"># pri letu ignoriramo morebitne rimske številke</span>
+    <span class="sa">r</span><span class="s1">&#39;lister-item-year text-muted unbold&quot;&gt;.*?\((?P&lt;leto&gt;\d</span><span class="si">{4}</span><span class="s1">)\)&lt;/span&gt;.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;runtime&quot;&gt;(?P&lt;dolzina&gt;\d+?) min&lt;/.*?&#39;</span>
+    <span class="c1"># žanre zajamemo v enem kosu, ki ga bomo kasneje razbili</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;span class=&quot;genre&quot;&gt;(?P&lt;zanri&gt;.*?)&lt;/span&gt;.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;strong&gt;(?P&lt;ocena&gt;.+?)&lt;/strong&gt;.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;p class=&quot;text-muted&quot;&gt;(?P&lt;opis&gt;.+?)&lt;/p.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;Directors?:(?P&lt;reziserji&gt;.+?)(&lt;span class=&quot;ghost&quot;&gt;|&lt;/p&gt;).*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;Votes:.*?data-value=&quot;(?P&lt;glasovi&gt;\d+)&quot;&#39;</span><span class="p">,</span>
+    <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Poleg tega bomo napisali več manjših vzorcev, ki bodo postopoma obdelovali datoteko. Pri regularnih izrazih namreč že majhna sprememba povzroči, da iz sto zadetkov pademo na nobenega (ali pa enega, ki zajame celotno besedilo od začetka prvega do konca zadnjega želenega zadetka). Zato zgoraj napisanega vzorca filma ne bomo iskali v celotni datoteki, temveč bomo datoteko najprej razbili na osnovne bloke, v katerih so vsi podatki posameznega filma. Če se malo potrudimo, vidimo, da je ustrezen sledeči vzorec:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vzorec_bloka</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;div class=&quot;lister-item mode-advanced&quot;&gt;.*?&#39;</span>
+    <span class="sa">r</span><span class="s1">&#39;&lt;/p&gt;\s*&lt;/div&gt;\s*&lt;/div&gt;&#39;</span><span class="p">,</span>
+    <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Nato bomo v vsakem od blokov poiskali (edini) vzorec podatkov filma.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">blok</span> <span class="ow">in</span> <span class="n">vzorec_bloka</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+    <span class="n">film</span> <span class="o">=</span> <span class="n">vzorec_filma</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">blok</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;Star Wars&#39;</span> <span class="ow">in</span> <span class="n">film</span><span class="p">[</span><span class="s1">&#39;naslov&#39;</span><span class="p">]:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">film</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;id&#39;: &#39;0076759&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode IV - A New Hope&#39;, &#39;leto&#39;: &#39;1977&#39;, &#39;dolzina&#39;: &#39;121&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;8.6&#39;, &#39;opis&#39;: &quot;\n    Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire&#39;s world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth Vader.&quot;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0000184/?ref_=adv_li_dr_0&quot;\n&gt;George Lucas&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;1209955&#39;}
+{&#39;id&#39;: &#39;0080684&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode V - The Empire Strikes Back&#39;, &#39;leto&#39;: &#39;1980&#39;, &#39;dolzina&#39;: &#39;124&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;8.7&#39;, &#39;opis&#39;: &#39;\n    After the Rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader and a bounty hunter named Boba Fett all over the galaxy.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0449984/?ref_=adv_li_dr_0&quot;\n&gt;Irvin Kershner&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;1138180&#39;}
+{&#39;id&#39;: &#39;0086190&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode VI - Return of the Jedi&#39;, &#39;leto&#39;: &#39;1983&#39;, &#39;dolzina&#39;: &#39;131&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;8.3&#39;, &#39;opis&#39;: &quot;\n    After a daring mission to rescue Han Solo from Jabba the Hutt, the Rebels dispatch to Endor to destroy the second Death Star. Meanwhile, Luke struggles to help Darth Vader back from the dark side without falling into the Emperor&#39;s trap.&quot;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0549658/?ref_=adv_li_dr_0&quot;\n&gt;Richard Marquand&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;932915&#39;}
+{&#39;id&#39;: &#39;2488496&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode VII - The Force Awakens&#39;, &#39;leto&#39;: &#39;2015&#39;, &#39;dolzina&#39;: &#39;138&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Sci-Fi            &#39;, &#39;ocena&#39;: &#39;7.9&#39;, &#39;opis&#39;: &#39;\n    As a new threat to the galaxy rises, Rey, a desert scavenger, and Finn, an ex-stormtrooper, must join Han Solo and Chewbacca to search for the one hope of restoring peace.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0009190/?ref_=adv_li_dr_0&quot;\n&gt;J.J. Abrams&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;848171&#39;}
+{&#39;id&#39;: &#39;0120915&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode I - The Phantom Menace&#39;, &#39;leto&#39;: &#39;1999&#39;, &#39;dolzina&#39;: &#39;136&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;6.5&#39;, &#39;opis&#39;: &#39;\n    Two Jedi escape a hostile blockade to find allies and come across a young boy who may bring balance to the Force, but the long dormant Sith resurface to claim their original glory.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0000184/?ref_=adv_li_dr_0&quot;\n&gt;George Lucas&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;716553&#39;}
+{&#39;id&#39;: &#39;0121766&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode III - Revenge of the Sith&#39;, &#39;leto&#39;: &#39;2005&#39;, &#39;dolzina&#39;: &#39;140&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;7.5&#39;, &#39;opis&#39;: &#39;\n    Three years into the Clone Wars, the Jedi rescue Palpatine from Count Dooku. As Obi-Wan pursues a new threat, Anakin acts as a double agent between the Jedi Council and Palpatine and is lured into a sinister plan to rule the galaxy.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0000184/?ref_=adv_li_dr_0&quot;\n&gt;George Lucas&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;697730&#39;}
+{&#39;id&#39;: &#39;0121765&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode II - Attack of the Clones&#39;, &#39;leto&#39;: &#39;2002&#39;, &#39;dolzina&#39;: &#39;142&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;6.5&#39;, &#39;opis&#39;: &#39;\n    Ten years after initially meeting, Anakin Skywalker shares a forbidden romance with Padmé Amidala, while Obi-Wan Kenobi investigates an assassination attempt on the senator and discovers a secret clone army crafted for the Jedi.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0000184/?ref_=adv_li_dr_0&quot;\n&gt;George Lucas&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;628955&#39;}
+{&#39;id&#39;: &#39;2527336&#39;, &#39;naslov&#39;: &#39;Star Wars: Episode VIII - The Last Jedi&#39;, &#39;leto&#39;: &#39;2017&#39;, &#39;dolzina&#39;: &#39;152&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Fantasy            &#39;, &#39;ocena&#39;: &#39;7.0&#39;, &#39;opis&#39;: &#39;\n    Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm0426059/?ref_=adv_li_dr_0&quot;\n&gt;Rian Johnson&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;551147&#39;}
+{&#39;id&#39;: &#39;3748528&#39;, &#39;naslov&#39;: &#39;Rogue One: A Star Wars Story&#39;, &#39;leto&#39;: &#39;2016&#39;, &#39;dolzina&#39;: &#39;133&#39;, &#39;zanri&#39;: &#39;\nAction, Adventure, Sci-Fi            &#39;, &#39;ocena&#39;: &#39;7.8&#39;, &#39;opis&#39;: &#39;\n    The daughter of an Imperial scientist joins the Rebel Alliance in a risky move to steal the plans for the Death Star.&#39;, &#39;reziserji&#39;: &#39;\n&lt;a href=&quot;/name/nm2284484/?ref_=adv_li_dr_0&quot;\n&gt;Gareth Edwards&lt;/a&gt;\n                 &#39;, &#39;glasovi&#39;: &#39;541845&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Nekateri izmed manj znanih filmov nimajo vseh podatkov o zaslužku ali oznakah ustreznosti. To bi lahko rešili tako, da bi del vzorca, ki zajema te podatke zapisali v obliki <code class="docutils literal notranslate"><span class="pre">(...)?</span></code>, vendar vsaka taka možnost povečuje zapletenost regularnega izraza in čas iskanja. Namesto tega lahko neobvezne podatke izločimo z dodatno analizo bloka. Na primer, zaslužek najdemo z vzorcem</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vzorec_zasluzka</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s1">&#39;Gross:.*?data-value=&quot;(?P&lt;zasluzek&gt;(\d|,)+)&quot;&#39;</span><span class="p">,</span>
+    <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Nato pa ta vzorec poskusimo najti v vsakem bloku. Če je, ga pretvorimo v število, sicer pa ga nastavimo na <code class="docutils literal notranslate"><span class="pre">None</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zasluzek</span> <span class="o">=</span> <span class="n">vzorec_zasluzka</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">blok</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">zasluzek</span><span class="p">:</span>
+    <span class="n">film</span><span class="p">[</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">zasluzek</span><span class="p">[</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">film</span><span class="p">[</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Podobno moramo počistiti tudi večino ostalih podatkov. Na primer, žanri se skrivajo v znački <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">class=&quot;genre&quot;&gt;...&lt;/span&gt;</span></code>, vendar znotraj značke ni nobene strukture, samo niz, ločen z vejicami. Tako bomo žanre počistili z:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">film</span><span class="p">[</span><span class="s1">&#39;zanri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">film</span><span class="p">[</span><span class="s1">&#39;zanri&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Pri igralcih in režiserjih je zadeva še bolj zapletena, ker ima vsak izmed njih še svojo šifro osebe, pa tudi zanima nas, na katerem mestu je kdo napisan (glavne vloge so na začetku, stranske pa kasneje). Tudi tu najprej zajamemo del vsebine, kjer so podatki o igralcih, nato pa znotraj tega dela z manjšim vzorcem izluščimo podatke. Celoten program lahko najdemo <span class="xref myst">tu</span>.</p>
 </div>
 <div class="section" id="knjiznica-beautiful-soup">
 <h2>Knjižnica Beautiful Soup<a class="headerlink" href="#knjiznica-beautiful-soup" title="Permalink to this headline">¶</a></h2>
