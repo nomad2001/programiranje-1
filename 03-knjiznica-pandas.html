@@ -365,20 +365,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">4</span><span class="n">a4aa8fc71eb</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># naložimo paket</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> 
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># naložimo razpredelnico, s katero bomo delali</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">filmi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../02-zajem-podatkov/predavanja/obdelani-podatki/filmi.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 <div class="section" id="osnovni-izbori-elementov-razpredelnic">
@@ -390,6 +376,172 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4972</th>
+      <td>The Birth of a Nation</td>
+      <td>195</td>
+      <td>1915</td>
+      <td>6.3</td>
+      <td>NaN</td>
+      <td>22363</td>
+      <td>10000000.0</td>
+      <td>NaN</td>
+      <td>The Stoneman family finds its friendship with ...</td>
+    </tr>
+    <tr>
+      <th>6864</th>
+      <td>Intolerance: Love's Struggle Throughout the Ages</td>
+      <td>163</td>
+      <td>1916</td>
+      <td>7.7</td>
+      <td>99.0</td>
+      <td>13970</td>
+      <td>2180000.0</td>
+      <td>NaN</td>
+      <td>The story of a poor young woman, separated by ...</td>
+    </tr>
+    <tr>
+      <th>9968</th>
+      <td>Broken Blossoms or The Yellow Man and the Girl</td>
+      <td>90</td>
+      <td>1919</td>
+      <td>7.3</td>
+      <td>NaN</td>
+      <td>9296</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A frail waif, abused by her brutal boxer fathe...</td>
+    </tr>
+    <tr>
+      <th>10323</th>
+      <td>Das Cabinet des Dr. Caligari</td>
+      <td>76</td>
+      <td>1920</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>56089</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Hypnotist Dr. Caligari uses a somnambulist, Ce...</td>
+    </tr>
+    <tr>
+      <th>12349</th>
+      <td>The Kid</td>
+      <td>68</td>
+      <td>1921</td>
+      <td>8.3</td>
+      <td>NaN</td>
+      <td>110278</td>
+      <td>5450000.0</td>
+      <td>NaN</td>
+      <td>The Tramp cares for an abandoned child, but ev...</td>
+    </tr>
+    <tr>
+      <th>12364</th>
+      <td>Körkarlen</td>
+      <td>107</td>
+      <td>1921</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>10158</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>On New Year's Eve, the driver of a ghostly car...</td>
+    </tr>
+    <tr>
+      <th>13442</th>
+      <td>Nosferatu, simfonija groze</td>
+      <td>94</td>
+      <td>1922</td>
+      <td>7.9</td>
+      <td>NaN</td>
+      <td>87208</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Vampire Count Orlok expresses interest in a ne...</td>
+    </tr>
+    <tr>
+      <th>14341</th>
+      <td>Naše gostoljubje</td>
+      <td>65</td>
+      <td>1923</td>
+      <td>7.8</td>
+      <td>NaN</td>
+      <td>9980</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A man returns to his Appalachian homestead. On...</td>
+    </tr>
+    <tr>
+      <th>14429</th>
+      <td>Resitev v zadnjem trenutku</td>
+      <td>74</td>
+      <td>1923</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>17921</td>
+      <td>623809.0</td>
+      <td>NaN</td>
+      <td>A boy leaves his small country town and heads ...</td>
+    </tr>
+    <tr>
+      <th>15064</th>
+      <td>Der letzte Mann</td>
+      <td>77</td>
+      <td>1924</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>12345</td>
+      <td>94812.0</td>
+      <td>NaN</td>
+      <td>An aging doorman is forced to face the scorn o...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -397,6 +549,112 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>11390036</th>
+      <td>A Fall from Grace</td>
+      <td>115</td>
+      <td>2020</td>
+      <td>5.8</td>
+      <td>34.0</td>
+      <td>10414</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Disheartened since her ex-husband's affair, Gr...</td>
+    </tr>
+    <tr>
+      <th>11905962</th>
+      <td>Sputnik</td>
+      <td>113</td>
+      <td>2020</td>
+      <td>6.3</td>
+      <td>61.0</td>
+      <td>8285</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The lone survivor of an enigmatic spaceship in...</td>
+    </tr>
+    <tr>
+      <th>12393526</th>
+      <td>Bulbbul</td>
+      <td>94</td>
+      <td>2020</td>
+      <td>6.6</td>
+      <td>NaN</td>
+      <td>8381</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A man returns home after years to find his bro...</td>
+    </tr>
+    <tr>
+      <th>12567088</th>
+      <td>Raat Akeli Hai</td>
+      <td>149</td>
+      <td>2020</td>
+      <td>7.3</td>
+      <td>NaN</td>
+      <td>12232</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The film follows a small town cop who is summo...</td>
+    </tr>
+    <tr>
+      <th>12749596</th>
+      <td>Host</td>
+      <td>57</td>
+      <td>2020</td>
+      <td>6.6</td>
+      <td>72.0</td>
+      <td>8713</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Six friends hire a medium to hold a seance via...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>Z rezinami pa dostopamo do izbranih vrstic.</p>
 <div class="cell docutils container">
@@ -405,11 +663,122 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10323</th>
+      <td>Das Cabinet des Dr. Caligari</td>
+      <td>76</td>
+      <td>1920</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>56089</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Hypnotist Dr. Caligari uses a somnambulist, Ce...</td>
+    </tr>
+    <tr>
+      <th>12364</th>
+      <td>Körkarlen</td>
+      <td>107</td>
+      <td>1921</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>10158</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>On New Year's Eve, the driver of a ghostly car...</td>
+    </tr>
+    <tr>
+      <th>14341</th>
+      <td>Naše gostoljubje</td>
+      <td>65</td>
+      <td>1923</td>
+      <td>7.8</td>
+      <td>NaN</td>
+      <td>9980</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A man returns to his Appalachian homestead. On...</td>
+    </tr>
+    <tr>
+      <th>15064</th>
+      <td>Der letzte Mann</td>
+      <td>77</td>
+      <td>1924</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>12345</td>
+      <td>94812.0</td>
+      <td>NaN</td>
+      <td>An aging doorman is forced to face the scorn o...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>Z indeksiranjem razpredelnice dostopamo do posameznih stolpcev.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="s1">&#39;ocena&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id
+4972        6.3
+6864        7.7
+9968        7.3
+10323       8.1
+12349       8.3
+           ... 
+11390036    5.8
+11905962    6.3
+12393526    6.6
+12567088    7.3
+12749596    6.6
+Name: ocena, Length: 10000, dtype: float64
 </pre></div>
 </div>
 </div>
@@ -421,6 +790,23 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id
+4972        6.3
+6864        7.7
+9968        7.3
+10323       8.1
+12349       8.3
+           ... 
+11390036    5.8
+11905962    6.3
+12393526    6.6
+12567088    7.3
+12749596    6.6
+Name: ocena, Length: 10000, dtype: float64
+</pre></div>
+</div>
+</div>
 </div>
 <p>Če želimo več stolpcev, moramo za indeks podati seznam vseh oznak.</p>
 <div class="cell docutils container">
@@ -429,6 +815,94 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>ocena</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4972</th>
+      <td>The Birth of a Nation</td>
+      <td>6.3</td>
+    </tr>
+    <tr>
+      <th>6864</th>
+      <td>Intolerance: Love's Struggle Throughout the Ages</td>
+      <td>7.7</td>
+    </tr>
+    <tr>
+      <th>9968</th>
+      <td>Broken Blossoms or The Yellow Man and the Girl</td>
+      <td>7.3</td>
+    </tr>
+    <tr>
+      <th>10323</th>
+      <td>Das Cabinet des Dr. Caligari</td>
+      <td>8.1</td>
+    </tr>
+    <tr>
+      <th>12349</th>
+      <td>The Kid</td>
+      <td>8.3</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>11390036</th>
+      <td>A Fall from Grace</td>
+      <td>5.8</td>
+    </tr>
+    <tr>
+      <th>11905962</th>
+      <td>Sputnik</td>
+      <td>6.3</td>
+    </tr>
+    <tr>
+      <th>12393526</th>
+      <td>Bulbbul</td>
+      <td>6.6</td>
+    </tr>
+    <tr>
+      <th>12567088</th>
+      <td>Raat Akeli Hai</td>
+      <td>7.3</td>
+    </tr>
+    <tr>
+      <th>12749596</th>
+      <td>Host</td>
+      <td>6.6</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 2 columns</p>
+</div></div></div>
 </div>
 <p>Do vrednosti z indeksom <code class="docutils literal notranslate"><span class="pre">i</span></code> dostopamo z <code class="docutils literal notranslate"><span class="pre">.iloc[i]</span></code>, do tiste s ključem <code class="docutils literal notranslate"><span class="pre">k</span></code> pa z <code class="docutils literal notranslate"><span class="pre">.loc[k]</span></code>.</p>
 <div class="cell docutils container">
@@ -437,10 +911,38 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>naslov                                   Foreign Correspondent
+dolzina                                                    120
+leto                                                      1940
+ocena                                                      7.5
+metascore                                                   88
+glasovi                                                  18050
+zasluzek                                           3.48459e+06
+oznaka                                                     NaN
+opis         On the eve of World War II, a young American r...
+Name: 32484, dtype: object
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">97576</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>naslov                 Indiana Jones in Zadnji križarski pohod
+dolzina                                                    127
+leto                                                      1989
+ocena                                                      8.2
+metascore                                                   65
+glasovi                                                 680400
+zasluzek                                           1.97172e+08
+oznaka                                                   PG-13
+opis         In 1938, after his father Professor Henry Jone...
+Name: 97576, dtype: object
 </pre></div>
 </div>
 </div>
@@ -455,6 +957,23 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id
+4972        False
+6864        False
+9968        False
+10323        True
+12349        True
+            ...  
+11390036    False
+11905962    False
+12393526    False
+12567088    False
+12749596    False
+Name: ocena, Length: 10000, dtype: bool
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -462,6 +981,76 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>111161</th>
+      <td>Kaznilnica odrešitve</td>
+      <td>142</td>
+      <td>1994</td>
+      <td>9.3</td>
+      <td>80.0</td>
+      <td>2293163</td>
+      <td>28341469.0</td>
+      <td>R</td>
+      <td>Two imprisoned men bond over a number of years...</td>
+    </tr>
+    <tr>
+      <th>252487</th>
+      <td>Hababam Sinifi</td>
+      <td>87</td>
+      <td>1975</td>
+      <td>9.3</td>
+      <td>NaN</td>
+      <td>36468</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Lazy, uneducated students share a very close b...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -469,6 +1058,185 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>28346</th>
+      <td>Tell Your Children</td>
+      <td>66</td>
+      <td>1936</td>
+      <td>3.8</td>
+      <td>70.0</td>
+      <td>7775</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Cautionary tale features a fictionalized take ...</td>
+    </tr>
+    <tr>
+      <th>45826</th>
+      <td>Glen or Glenda</td>
+      <td>65</td>
+      <td>1953</td>
+      <td>4.2</td>
+      <td>NaN</td>
+      <td>7901</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A psychiatrist tells the stories of a transves...</td>
+    </tr>
+    <tr>
+      <th>52077</th>
+      <td>Plan 9 from Outer Space</td>
+      <td>79</td>
+      <td>1957</td>
+      <td>4.0</td>
+      <td>NaN</td>
+      <td>35646</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Evil aliens attack Earth and set their terribl...</td>
+    </tr>
+    <tr>
+      <th>54673</th>
+      <td>The Beast of Yucca Flats</td>
+      <td>54</td>
+      <td>1961</td>
+      <td>2.2</td>
+      <td>NaN</td>
+      <td>7952</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A defecting Soviet scientist is hit by a nucle...</td>
+    </tr>
+    <tr>
+      <th>58548</th>
+      <td>Santa Claus Conquers the Martians</td>
+      <td>81</td>
+      <td>1964</td>
+      <td>2.7</td>
+      <td>NaN</td>
+      <td>10706</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The Martians kidnap Santa Claus because there ...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>10230426</th>
+      <td>Mrs. Serial Killer</td>
+      <td>106</td>
+      <td>2020</td>
+      <td>4.9</td>
+      <td>NaN</td>
+      <td>11734</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>When a doctor gets jailed for a string of shoc...</td>
+    </tr>
+    <tr>
+      <th>10324144</th>
+      <td>Article 15</td>
+      <td>130</td>
+      <td>2019</td>
+      <td>8.2</td>
+      <td>NaN</td>
+      <td>21888</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>In the rural heartlands of India, an upright p...</td>
+    </tr>
+    <tr>
+      <th>10431500</th>
+      <td>Yedinci Kogustaki Mucize</td>
+      <td>132</td>
+      <td>2019</td>
+      <td>8.3</td>
+      <td>NaN</td>
+      <td>30002</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A story of love between a mentally-ill father ...</td>
+    </tr>
+    <tr>
+      <th>10481868</th>
+      <td>Black Christmas</td>
+      <td>92</td>
+      <td>2019</td>
+      <td>3.2</td>
+      <td>49.0</td>
+      <td>8890</td>
+      <td>NaN</td>
+      <td>PG-13</td>
+      <td>A group of female students are stalked by a st...</td>
+    </tr>
+    <tr>
+      <th>10886166</th>
+      <td>365 dni</td>
+      <td>114</td>
+      <td>2020</td>
+      <td>3.3</td>
+      <td>NaN</td>
+      <td>39803</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Massimo is a member of the Sicilian Mafia fami...</td>
+    </tr>
+  </tbody>
+</table>
+<p>662 rows × 9 columns</p>
+</div></div></div>
 </div>
 <div class="section" id="naloga">
 <h3>Naloga<a class="headerlink" href="#naloga" title="Permalink to this headline">¶</a></h3>
@@ -479,6 +1247,100 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>118688</th>
+      <td>Batman in Robin</td>
+      <td>125</td>
+      <td>1997</td>
+      <td>3.8</td>
+      <td>28.0</td>
+      <td>231499</td>
+      <td>107325195.0</td>
+      <td>PG-13</td>
+      <td>Batman and Robin try to keep their relationshi...</td>
+    </tr>
+    <tr>
+      <th>120179</th>
+      <td>Hitrost 2 - Brez zavor</td>
+      <td>121</td>
+      <td>1997</td>
+      <td>3.9</td>
+      <td>23.0</td>
+      <td>73855</td>
+      <td>48608066.0</td>
+      <td>PG-13</td>
+      <td>A computer hacker breaks into the computer sys...</td>
+    </tr>
+    <tr>
+      <th>2574698</th>
+      <td>Gunday</td>
+      <td>152</td>
+      <td>2014</td>
+      <td>2.4</td>
+      <td>NaN</td>
+      <td>57521</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The lives of Calcutta's most powerful Gunday, ...</td>
+    </tr>
+    <tr>
+      <th>7886848</th>
+      <td>Sadak 2</td>
+      <td>133</td>
+      <td>2020</td>
+      <td>1.1</td>
+      <td>NaN</td>
+      <td>57957</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The film picks up where Sadak left off, revolv...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 </div>
@@ -491,6 +1353,185 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>15324</th>
+      <td>Sherlock Jr.</td>
+      <td>45</td>
+      <td>1924</td>
+      <td>8.2</td>
+      <td>NaN</td>
+      <td>40303</td>
+      <td>977375.0</td>
+      <td>NaN</td>
+      <td>A film projectionist longs to be a detective, ...</td>
+    </tr>
+    <tr>
+      <th>2061702</th>
+      <td>Hotarubi no mori e</td>
+      <td>45</td>
+      <td>2011</td>
+      <td>7.9</td>
+      <td>NaN</td>
+      <td>13082</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Hotaru is rescued by a spirit when she gets lo...</td>
+    </tr>
+    <tr>
+      <th>2591814</th>
+      <td>Koto no ha no niwa</td>
+      <td>46</td>
+      <td>2013</td>
+      <td>7.5</td>
+      <td>NaN</td>
+      <td>33162</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A 15-year-old boy and 27-year-old woman find a...</td>
+    </tr>
+    <tr>
+      <th>275230</th>
+      <td>Blood: The Last Vampire</td>
+      <td>48</td>
+      <td>2000</td>
+      <td>6.7</td>
+      <td>44.0</td>
+      <td>11847</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Saya is a Japanese vampire slayer whose next m...</td>
+    </tr>
+    <tr>
+      <th>142236</th>
+      <td>Dragon Ball Z: Fukkatsu no Fusion!! Gokuu to V...</td>
+      <td>51</td>
+      <td>1995</td>
+      <td>7.7</td>
+      <td>NaN</td>
+      <td>9262</td>
+      <td>NaN</td>
+      <td>PG</td>
+      <td>The universe is thrown into dimensional chaos ...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>425637</th>
+      <td>Chi bi</td>
+      <td>288</td>
+      <td>2008</td>
+      <td>7.4</td>
+      <td>73.0</td>
+      <td>43267</td>
+      <td>627047.0</td>
+      <td>R</td>
+      <td>The first chapter of a two-part story centered...</td>
+    </tr>
+    <tr>
+      <th>74084</th>
+      <td>Novecento</td>
+      <td>317</td>
+      <td>1976</td>
+      <td>7.7</td>
+      <td>70.0</td>
+      <td>22091</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The epic tale of a class struggle in twentieth...</td>
+    </tr>
+    <tr>
+      <th>1954470</th>
+      <td>Gangs of Wasseypur</td>
+      <td>321</td>
+      <td>2012</td>
+      <td>8.2</td>
+      <td>89.0</td>
+      <td>79426</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A clash between Sultan and Shahid Khan leads t...</td>
+    </tr>
+    <tr>
+      <th>346336</th>
+      <td>La meglio gioventù</td>
+      <td>366</td>
+      <td>2003</td>
+      <td>8.5</td>
+      <td>89.0</td>
+      <td>20280</td>
+      <td>254224.0</td>
+      <td>R</td>
+      <td>An Italian epic that follows the lives of two ...</td>
+    </tr>
+    <tr>
+      <th>111341</th>
+      <td>Sátántangó</td>
+      <td>439</td>
+      <td>1994</td>
+      <td>8.4</td>
+      <td>NaN</td>
+      <td>9144</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>On the eve of a large payment, residents of a ...</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 9 columns</p>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -499,6 +1540,185 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>252487</th>
+      <td>Hababam Sinifi</td>
+      <td>87</td>
+      <td>1975</td>
+      <td>9.3</td>
+      <td>NaN</td>
+      <td>36468</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Lazy, uneducated students share a very close b...</td>
+    </tr>
+    <tr>
+      <th>111161</th>
+      <td>Kaznilnica odrešitve</td>
+      <td>142</td>
+      <td>1994</td>
+      <td>9.3</td>
+      <td>80.0</td>
+      <td>2293163</td>
+      <td>28341469.0</td>
+      <td>R</td>
+      <td>Two imprisoned men bond over a number of years...</td>
+    </tr>
+    <tr>
+      <th>68646</th>
+      <td>Boter</td>
+      <td>175</td>
+      <td>1972</td>
+      <td>9.2</td>
+      <td>100.0</td>
+      <td>1582906</td>
+      <td>134966411.0</td>
+      <td>NaN</td>
+      <td>The aging patriarch of an organized crime dyna...</td>
+    </tr>
+    <tr>
+      <th>5354160</th>
+      <td>Aynabaji</td>
+      <td>147</td>
+      <td>2016</td>
+      <td>9.1</td>
+      <td>NaN</td>
+      <td>21429</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Ayna is an actor and the prison is his stage. ...</td>
+    </tr>
+    <tr>
+      <th>71562</th>
+      <td>Boter, II. del</td>
+      <td>202</td>
+      <td>1974</td>
+      <td>9.0</td>
+      <td>90.0</td>
+      <td>1105879</td>
+      <td>57300000.0</td>
+      <td>NaN</td>
+      <td>The early life and career of Vito Corleone in ...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>4009460</th>
+      <td>Saving Christmas</td>
+      <td>79</td>
+      <td>2014</td>
+      <td>1.4</td>
+      <td>18.0</td>
+      <td>14855</td>
+      <td>2783970.0</td>
+      <td>PG</td>
+      <td>His annual Christmas party faltering thanks to...</td>
+    </tr>
+    <tr>
+      <th>6038600</th>
+      <td>Smolensk</td>
+      <td>120</td>
+      <td>2016</td>
+      <td>1.4</td>
+      <td>NaN</td>
+      <td>7630</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Inspired by true events of 2010 Polish Air For...</td>
+    </tr>
+    <tr>
+      <th>5988370</th>
+      <td>Reis</td>
+      <td>108</td>
+      <td>2017</td>
+      <td>1.4</td>
+      <td>NaN</td>
+      <td>72207</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A drama about the early life of Recep Tayyip E...</td>
+    </tr>
+    <tr>
+      <th>7886848</th>
+      <td>Sadak 2</td>
+      <td>133</td>
+      <td>2020</td>
+      <td>1.1</td>
+      <td>NaN</td>
+      <td>57957</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The film picks up where Sadak left off, revolv...</td>
+    </tr>
+    <tr>
+      <th>7221896</th>
+      <td>Cumali Ceber: Allah Seni Alsin</td>
+      <td>100</td>
+      <td>2017</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>37659</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Cumali Ceber goes to a vacation with his child...</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 9 columns</p>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="zdruzevanje">
@@ -517,11 +1737,33 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pandas.core.groupby.generic.DataFrameGroupBy object at 0x7f55c8dad0d0&gt;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># povprečna ocena vsakega leta</span>
 <span class="n">filmi_po_letih</span><span class="o">.</span><span class="n">ocena</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>leto
+1915    6.300000
+1916    7.700000
+1919    7.300000
+1920    8.100000
+1921    8.200000
+          ...   
+2016    6.513889
+2017    6.401127
+2018    6.458333
+2019    6.525000
+2020    5.950526
+Name: ocena, Length: 104, dtype: float64
 </pre></div>
 </div>
 </div>
@@ -540,6 +1782,198 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+      <th>desetletje</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4972</th>
+      <td>The Birth of a Nation</td>
+      <td>195</td>
+      <td>1915</td>
+      <td>6.3</td>
+      <td>NaN</td>
+      <td>22363</td>
+      <td>10000000.0</td>
+      <td>NaN</td>
+      <td>The Stoneman family finds its friendship with ...</td>
+      <td>1910</td>
+    </tr>
+    <tr>
+      <th>6864</th>
+      <td>Intolerance: Love's Struggle Throughout the Ages</td>
+      <td>163</td>
+      <td>1916</td>
+      <td>7.7</td>
+      <td>99.0</td>
+      <td>13970</td>
+      <td>2180000.0</td>
+      <td>NaN</td>
+      <td>The story of a poor young woman, separated by ...</td>
+      <td>1910</td>
+    </tr>
+    <tr>
+      <th>9968</th>
+      <td>Broken Blossoms or The Yellow Man and the Girl</td>
+      <td>90</td>
+      <td>1919</td>
+      <td>7.3</td>
+      <td>NaN</td>
+      <td>9296</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A frail waif, abused by her brutal boxer fathe...</td>
+      <td>1910</td>
+    </tr>
+    <tr>
+      <th>10323</th>
+      <td>Das Cabinet des Dr. Caligari</td>
+      <td>76</td>
+      <td>1920</td>
+      <td>8.1</td>
+      <td>NaN</td>
+      <td>56089</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Hypnotist Dr. Caligari uses a somnambulist, Ce...</td>
+      <td>1920</td>
+    </tr>
+    <tr>
+      <th>12349</th>
+      <td>The Kid</td>
+      <td>68</td>
+      <td>1921</td>
+      <td>8.3</td>
+      <td>NaN</td>
+      <td>110278</td>
+      <td>5450000.0</td>
+      <td>NaN</td>
+      <td>The Tramp cares for an abandoned child, but ev...</td>
+      <td>1920</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>11390036</th>
+      <td>A Fall from Grace</td>
+      <td>115</td>
+      <td>2020</td>
+      <td>5.8</td>
+      <td>34.0</td>
+      <td>10414</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Disheartened since her ex-husband's affair, Gr...</td>
+      <td>2020</td>
+    </tr>
+    <tr>
+      <th>11905962</th>
+      <td>Sputnik</td>
+      <td>113</td>
+      <td>2020</td>
+      <td>6.3</td>
+      <td>61.0</td>
+      <td>8285</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The lone survivor of an enigmatic spaceship in...</td>
+      <td>2020</td>
+    </tr>
+    <tr>
+      <th>12393526</th>
+      <td>Bulbbul</td>
+      <td>94</td>
+      <td>2020</td>
+      <td>6.6</td>
+      <td>NaN</td>
+      <td>8381</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>A man returns home after years to find his bro...</td>
+      <td>2020</td>
+    </tr>
+    <tr>
+      <th>12567088</th>
+      <td>Raat Akeli Hai</td>
+      <td>149</td>
+      <td>2020</td>
+      <td>7.3</td>
+      <td>NaN</td>
+      <td>12232</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>The film follows a small town cop who is summo...</td>
+      <td>2020</td>
+    </tr>
+    <tr>
+      <th>12749596</th>
+      <td>Host</td>
+      <td>57</td>
+      <td>2020</td>
+      <td>6.6</td>
+      <td>72.0</td>
+      <td>8713</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Six friends hire a medium to hold a seance via...</td>
+      <td>2020</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 10 columns</p>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -555,11 +1989,219 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>naslov</th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+      <th>oznaka</th>
+      <th>opis</th>
+    </tr>
+    <tr>
+      <th>desetletje</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1910</th>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1920</th>
+      <td>27</td>
+      <td>27</td>
+      <td>27</td>
+      <td>27</td>
+      <td>3</td>
+      <td>27</td>
+      <td>17</td>
+      <td>1</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>1930</th>
+      <td>88</td>
+      <td>88</td>
+      <td>88</td>
+      <td>88</td>
+      <td>36</td>
+      <td>88</td>
+      <td>31</td>
+      <td>5</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <th>1940</th>
+      <td>149</td>
+      <td>149</td>
+      <td>149</td>
+      <td>149</td>
+      <td>51</td>
+      <td>149</td>
+      <td>50</td>
+      <td>9</td>
+      <td>149</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>224</td>
+      <td>224</td>
+      <td>224</td>
+      <td>224</td>
+      <td>91</td>
+      <td>224</td>
+      <td>90</td>
+      <td>20</td>
+      <td>224</td>
+    </tr>
+    <tr>
+      <th>1960</th>
+      <td>319</td>
+      <td>319</td>
+      <td>319</td>
+      <td>319</td>
+      <td>161</td>
+      <td>319</td>
+      <td>154</td>
+      <td>52</td>
+      <td>319</td>
+    </tr>
+    <tr>
+      <th>1970</th>
+      <td>444</td>
+      <td>444</td>
+      <td>444</td>
+      <td>444</td>
+      <td>316</td>
+      <td>444</td>
+      <td>271</td>
+      <td>48</td>
+      <td>444</td>
+    </tr>
+    <tr>
+      <th>1980</th>
+      <td>875</td>
+      <td>875</td>
+      <td>875</td>
+      <td>875</td>
+      <td>722</td>
+      <td>875</td>
+      <td>748</td>
+      <td>62</td>
+      <td>875</td>
+    </tr>
+    <tr>
+      <th>1990</th>
+      <td>1536</td>
+      <td>1536</td>
+      <td>1536</td>
+      <td>1536</td>
+      <td>1041</td>
+      <td>1536</td>
+      <td>1420</td>
+      <td>1231</td>
+      <td>1536</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>2777</td>
+      <td>2777</td>
+      <td>2777</td>
+      <td>2777</td>
+      <td>2296</td>
+      <td>2777</td>
+      <td>2322</td>
+      <td>2325</td>
+      <td>2777</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>3463</td>
+      <td>3463</td>
+      <td>3463</td>
+      <td>3463</td>
+      <td>2797</td>
+      <td>3463</td>
+      <td>2412</td>
+      <td>2533</td>
+      <td>3463</td>
+    </tr>
+    <tr>
+      <th>2020</th>
+      <td>95</td>
+      <td>95</td>
+      <td>95</td>
+      <td>95</td>
+      <td>76</td>
+      <td>95</td>
+      <td>8</td>
+      <td>58</td>
+      <td>95</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>Če želimo dobiti le število članov posamezne skupine, uporabimo metodo <code class="docutils literal notranslate"><span class="pre">.size()</span></code>. V tem primeru dobimo le stolpec, ne razpredelnice.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi_po_desetletjih</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>desetletje
+1910       3
+1920      27
+1930      88
+1940     149
+1950     224
+1960     319
+1970     444
+1980     875
+1990    1536
+2000    2777
+2010    3463
+2020      95
+dtype: int64
 </pre></div>
 </div>
 </div>
@@ -571,6 +2213,154 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dolzina</th>
+      <th>leto</th>
+      <th>ocena</th>
+      <th>metascore</th>
+      <th>glasovi</th>
+      <th>zasluzek</th>
+    </tr>
+    <tr>
+      <th>desetletje</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1910</th>
+      <td>149.333333</td>
+      <td>1916.666667</td>
+      <td>7.100000</td>
+      <td>99.000000</td>
+      <td>15209.666667</td>
+      <td>6.090000e+06</td>
+    </tr>
+    <tr>
+      <th>1920</th>
+      <td>88.555556</td>
+      <td>1925.296296</td>
+      <td>7.892593</td>
+      <td>84.666667</td>
+      <td>36366.851852</td>
+      <td>2.077247e+06</td>
+    </tr>
+    <tr>
+      <th>1930</th>
+      <td>97.056818</td>
+      <td>1935.272727</td>
+      <td>7.610227</td>
+      <td>87.083333</td>
+      <td>35382.784091</td>
+      <td>1.466444e+07</td>
+    </tr>
+    <tr>
+      <th>1940</th>
+      <td>105.677852</td>
+      <td>1944.704698</td>
+      <td>7.644966</td>
+      <td>86.039216</td>
+      <td>36569.973154</td>
+      <td>1.165745e+07</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>108.665179</td>
+      <td>1954.897321</td>
+      <td>7.540179</td>
+      <td>82.318681</td>
+      <td>43097.950893</td>
+      <td>1.549802e+07</td>
+    </tr>
+    <tr>
+      <th>1960</th>
+      <td>118.282132</td>
+      <td>1964.620690</td>
+      <td>7.440752</td>
+      <td>75.546584</td>
+      <td>42448.840125</td>
+      <td>2.082776e+07</td>
+    </tr>
+    <tr>
+      <th>1970</th>
+      <td>112.191441</td>
+      <td>1974.763514</td>
+      <td>7.234459</td>
+      <td>67.515823</td>
+      <td>55681.234234</td>
+      <td>3.059132e+07</td>
+    </tr>
+    <tr>
+      <th>1980</th>
+      <td>106.811429</td>
+      <td>1985.125714</td>
+      <td>6.732114</td>
+      <td>57.404432</td>
+      <td>57676.565714</td>
+      <td>3.320314e+07</td>
+    </tr>
+    <tr>
+      <th>1990</th>
+      <td>109.961589</td>
+      <td>1995.000651</td>
+      <td>6.581510</td>
+      <td>56.834774</td>
+      <td>78348.498698</td>
+      <td>3.588821e+07</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>108.387829</td>
+      <td>2004.993878</td>
+      <td>6.456068</td>
+      <td>53.987369</td>
+      <td>88156.186892</td>
+      <td>3.791655e+07</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>109.803350</td>
+      <td>2014.449321</td>
+      <td>6.454981</td>
+      <td>56.086164</td>
+      <td>79023.464049</td>
+      <td>4.348670e+07</td>
+    </tr>
+    <tr>
+      <th>2020</th>
+      <td>108.778947</td>
+      <td>2020.000000</td>
+      <td>5.950526</td>
+      <td>53.447368</td>
+      <td>31318.936842</td>
+      <td>9.320018e+07</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="section" id="id1">
 <h3>Naloga<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
@@ -586,6 +2376,12 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;desetletje&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/03-knjiznica-pandas_40_1.png" src="_images/03-knjiznica-pandas_40_1.png" />
+</div>
 </div>
 <p>Razsevni diagram dobimo z metodo <code class="docutils literal notranslate"><span class="pre">plot.scatter</span></code>. Uporabljamo ga, če želimo ugotoviti povezavo med dvema spremenljivkama.</p>
 <div class="cell docutils container">
@@ -594,12 +2390,24 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;ocena&#39;, ylabel=&#39;metascore&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/03-knjiznica-pandas_42_1.png" src="_images/03-knjiznica-pandas_42_1.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="p">[</span><span class="n">filmi</span><span class="o">.</span><span class="n">dolzina</span> <span class="o">&lt;</span> <span class="mi">250</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;dolzina&#39;</span><span class="p">,</span> <span class="s1">&#39;ocena&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;dolzina&#39;, ylabel=&#39;ocena&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/03-knjiznica-pandas_43_1.png" src="_images/03-knjiznica-pandas_43_1.png" />
 </div>
 </div>
 <p>Stolpčni diagram dobimo z metodo <code class="docutils literal notranslate"><span class="pre">plot.bar</span></code>. Uporabljamo ga, če želimo primerjati vrednosti pri diskretnih (običajno kategoričnih) spremenljivkah. Pogosto je koristno, da graf uredimo po vrednostih.</p>
@@ -608,6 +2416,12 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filmi</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;naslov&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;zasluzek&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;naslov&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/03-knjiznica-pandas_45_1.png" src="_images/03-knjiznica-pandas_45_1.png" />
 </div>
 </div>
 <div class="section" id="id2">
@@ -637,6 +2451,70 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>film</th>
+      <th>oseba</th>
+      <th>vloga</th>
+      <th>mesto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20</th>
+      <td>12349</td>
+      <td>122</td>
+      <td>I</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>12349</td>
+      <td>701012</td>
+      <td>I</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>12349</td>
+      <td>1067</td>
+      <td>I</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>12349</td>
+      <td>588033</td>
+      <td>I</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>12349</td>
+      <td>122</td>
+      <td>R</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -644,6 +2522,48 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>film</th>
+      <th>zanr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10</th>
+      <td>12349</td>
+      <td>Comedy</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12349</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12349</td>
+      <td>Family</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -651,6 +2571,196 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>film</th>
+      <th>oseba</th>
+      <th>vloga</th>
+      <th>mesto</th>
+      <th>zanr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>War</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4972</td>
+      <td>550615</td>
+      <td>I</td>
+      <td>2</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4972</td>
+      <td>550615</td>
+      <td>I</td>
+      <td>2</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>4972</td>
+      <td>550615</td>
+      <td>I</td>
+      <td>2</td>
+      <td>War</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>4972</td>
+      <td>910400</td>
+      <td>I</td>
+      <td>3</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>4972</td>
+      <td>910400</td>
+      <td>I</td>
+      <td>3</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4972</td>
+      <td>910400</td>
+      <td>I</td>
+      <td>3</td>
+      <td>War</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>4972</td>
+      <td>178270</td>
+      <td>I</td>
+      <td>4</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>4972</td>
+      <td>178270</td>
+      <td>I</td>
+      <td>4</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>4972</td>
+      <td>178270</td>
+      <td>I</td>
+      <td>4</td>
+      <td>War</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>4972</td>
+      <td>428</td>
+      <td>R</td>
+      <td>1</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>4972</td>
+      <td>428</td>
+      <td>R</td>
+      <td>1</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>4972</td>
+      <td>428</td>
+      <td>R</td>
+      <td>1</td>
+      <td>War</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>6864</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>6864</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>6864</td>
+      <td>366008</td>
+      <td>I</td>
+      <td>2</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>6864</td>
+      <td>366008</td>
+      <td>I</td>
+      <td>2</td>
+      <td>History</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>6864</td>
+      <td>550615</td>
+      <td>I</td>
+      <td>3</td>
+      <td>Drama</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>V osnovi vsebuje staknjena razpredelnica le tiste vnose, ki se pojavijo v obeh tabelah. Temu principu pravimo notranji stik (<em>inner join</em>). Lahko pa se odločimo, da izberemo tudi tiste vnose, ki imajo podatke le v levi tabeli (<em>left join</em>), le v desni tabeli (<em>right join</em>) ali v vsaj eni tabeli (<em>outer join</em>). Če v eni tabeli ni vnosov, bodo v staknjeni tabeli označene manjkajoče vrednosti. Ker smo v našem primeru podatke jemali iz IMDBja, kjer so za vsak film določeni tako žanri kot vloge, do razlik ne pride.</p>
 <p>Včasih želimo stikati tudi po stolpcih z različnimi imeni. V tem primeru funkciji <code class="docutils literal notranslate"><span class="pre">merge</span></code> podamo argumenta <code class="docutils literal notranslate"><span class="pre">left_on</span></code> in <code class="docutils literal notranslate"><span class="pre">right_on</span></code>.</p>
@@ -660,6 +2770,137 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>film</th>
+      <th>oseba</th>
+      <th>vloga</th>
+      <th>mesto</th>
+      <th>zanr</th>
+      <th>ime</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>Drama</td>
+      <td>Lillian Gish</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>History</td>
+      <td>Lillian Gish</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4972</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>War</td>
+      <td>Lillian Gish</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6864</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>Drama</td>
+      <td>Lillian Gish</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6864</td>
+      <td>1273</td>
+      <td>I</td>
+      <td>1</td>
+      <td>History</td>
+      <td>Lillian Gish</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>130132</th>
+      <td>12749596</td>
+      <td>8772807</td>
+      <td>I</td>
+      <td>3</td>
+      <td>Mystery</td>
+      <td>Emma Louise Webb</td>
+    </tr>
+    <tr>
+      <th>130133</th>
+      <td>12749596</td>
+      <td>7525711</td>
+      <td>I</td>
+      <td>4</td>
+      <td>Horror</td>
+      <td>Radina Drandova</td>
+    </tr>
+    <tr>
+      <th>130134</th>
+      <td>12749596</td>
+      <td>7525711</td>
+      <td>I</td>
+      <td>4</td>
+      <td>Mystery</td>
+      <td>Radina Drandova</td>
+    </tr>
+    <tr>
+      <th>130135</th>
+      <td>12749596</td>
+      <td>3699074</td>
+      <td>R</td>
+      <td>1</td>
+      <td>Horror</td>
+      <td>Rob Savage</td>
+    </tr>
+    <tr>
+      <th>130136</th>
+      <td>12749596</td>
+      <td>3699074</td>
+      <td>R</td>
+      <td>1</td>
+      <td>Mystery</td>
+      <td>Rob Savage</td>
+    </tr>
+  </tbody>
+</table>
+<p>130137 rows × 6 columns</p>
+</div></div></div>
 </div>
 <p>Poglejmo, katera osebe so nastopale v največ komedijah.</p>
 <div class="cell docutils container">
@@ -674,6 +2915,32 @@
 <span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
     <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ime
+Adam Sandler        39
+Eddie Murphy        36
+Jackie Chan         34
+Owen Wilson         32
+Will Ferrell        32
+Ben Stiller         32
+Steve Martin        31
+Robin Williams      31
+Woody Allen         29
+Bill Murray         28
+Tom Hanks           28
+Steve Carell        26
+Cameron Diaz        26
+Jennifer Aniston    26
+Julia Roberts       25
+Akshay Kumar        25
+Jack Black          24
+Paul Rudd           24
+Danny DeVito        24
+Bruce Willis        24
+dtype: int64
 </pre></div>
 </div>
 </div>
