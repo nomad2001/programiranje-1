@@ -40,6 +40,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <script src="_static/togglebutton.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -169,7 +170,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="12-dinamicno-programiranje.html">
-   Dinamicno programiranje
+   Dinamično programiranje
   </a>
  </li>
  <li class="toctree-l1">
@@ -215,7 +216,10 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="_sources/05-uvod-v-ocaml.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="_sources/05-uvod-v-ocaml.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -237,10 +241,131 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/matijapretnar/programiranje-1/zapiski?urlpath=tree/05-uvod-v-ocaml.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#delo-z-ocamlom">
+   Delo z OCamlom
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#vgrajeni-tipi">
+   Vgrajeni tipi
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tip-int">
+     Tip
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       int
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tip-float">
+     Tip
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       float
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tipa-string-in-char">
+     Tipa
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       string
+      </span>
+     </code>
+     in
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       char
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tip-bool">
+     Tip
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       bool
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tipi-naborov">
+     Tipi naborov
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tip-seznamov">
+     Tip seznamov
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tipi-funkcij">
+     Tipi funkcij
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#definicije-funkcij">
+   Definicije funkcij
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vzorci">
+     Vzorci
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rekurzivne-funkcije">
+     Rekurzivne funkcije
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#polimorfizem">
+   Polimorfizem
+  </a>
+ </li>
+</ul>
+
+        </nav>
         
     </div>
 </div>
@@ -251,6 +376,1199 @@
                 
   <div class="section" id="uvod-v-ocaml">
 <h1>Uvod v OCaml<a class="headerlink" href="#uvod-v-ocaml" title="Permalink to this headline">¶</a></h1>
+<p><em>Funkcijsko programiranje</em> je pristop k pisanju programov prek sestavljanja funkcij in njihove uporabe na vrednostih. Nasproten pristop bi bilo na primer <em>imperativno programiranje</em>, v katerem programe pišemo kot zaporedja ukazov, ki spreminjajo računalnikovo stanje. Programi, napisani v funkcijskem stilu, so dostikrat krajši in preglednejši, poleg tega pa dostikrat omogočajo porazdeljeno računanje. Zaradi vseh teh lastnosti veliko modernih programskih jezikov vpeljuje ideje iz funkcijskega programiranja. Da se bomo lahko osredotočili na te ideje, si bomo ogledali programski jezik OCaml, ki je bil eden prvih in je še danes eden najbolj popularnih funkcijskih jezikov.</p>
+<div class="section" id="delo-z-ocamlom">
+<h2>Delo z OCamlom<a class="headerlink" href="#delo-z-ocamlom" title="Permalink to this headline">¶</a></h2>
+<p>Poženimo prvi program v OCamlu:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">odgovor</span> <span class="o">=</span> <span class="n">min</span> <span class="mi">8</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">6</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val odgovor : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vidimo lahko več stvari:</p>
+<ul class="simple">
+<li><p>vrednosti definiramo s ključno besedo <code class="docutils literal notranslate"><span class="pre">let</span></code></p></li>
+<li><p>OCaml je poleg končne vrednosti izračunal tudi njen tip <code class="docutils literal notranslate"><span class="pre">int</span></code></p></li>
+<li><p>funkcije kličemo tako, da argumente naštejemo brez oklepajev</p></li>
+<li><p>pri tem ima uporaba funkcij (<em>aplikacija</em>) višjo prioriteto kot računske operacije</p></li>
+</ul>
+<p>Vrednosti lahko definiramo tudi lokalno z izrazom <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">...</span> <span class="pre">in</span> <span class="pre">...</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">odgovor</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="n">prvi_delni_izracun</span> <span class="o">=</span> <span class="n">min</span> <span class="mi">8</span> <span class="mi">7</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="n">drugi_delni_izracun</span> <span class="o">=</span> <span class="mi">6</span> <span class="k">in</span>
+    <span class="n">prvi_delni_izracun</span> <span class="o">*</span> <span class="n">drugi_delni_izracun</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val odgovor : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<p>V tem primeru bodo definicije na voljo v delu <code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">...</span></code>, izven pa ne:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">prvi_delni_izracun</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;[4]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">0</span><span class="o">-</span><span class="mi">18</span><span class="p">:</span>
+<span class="mi">1</span> <span class="o">|</span> <span class="n">prvi_delni_izracun</span>
+    <span class="o">^^^^^^^^^^^^^^^^^^</span>
+<span class="ne">Error</span>: Unbound value prvi_delni_izracun
+</pre></div>
+</div>
+</div>
+</div>
+<p>Če želimo, lahko več lokalnih definicij hkrati podamo tako, da jih ločimo z <code class="docutils literal notranslate"><span class="pre">and</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">odgovor</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="n">prvi_delni_izracun</span> <span class="o">=</span> <span class="n">min</span> <span class="mi">8</span> <span class="mi">7</span>
+    <span class="ow">and</span> <span class="n">drugi_delni_izracun</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="k">in</span>
+    <span class="n">prvi_delni_izracun</span> <span class="o">*</span> <span class="n">drugi_delni_izracun</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val odgovor : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<p>Razlika med tem in gnezdenimi <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">...</span> <span class="pre">in</span> <span class="pre">...</span></code> je v tem, da so vrednosti definirane hkrati, zato se ne morejo nanašati ena na drugo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">6</span> <span class="k">in</span>
+<span class="k">let</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">in</span>
+<span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="ow">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">in</span>
+<span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;[7]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">2</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">8</span><span class="o">-</span><span class="mi">9</span><span class="p">:</span>
+<span class="mi">2</span> <span class="o">|</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">in</span>
+            <span class="o">^</span>
+<span class="ne">Error</span>: Unbound value a
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="vgrajeni-tipi">
+<h2>Vgrajeni tipi<a class="headerlink" href="#vgrajeni-tipi" title="Permalink to this headline">¶</a></h2>
+<p>Ena izmed največjih prednosti OCamla je njegov bogat in dovršen sistem tipov. Vsak pravilen program v OCamlu ima svoj tip, ki ga OCaml samodejno preveri pred vsakim izvajanjem, kar polovi ogromno napak.</p>
+<div class="section" id="tip-int">
+<h3>Tip <code class="docutils literal notranslate"><span class="pre">int</span></code><a class="headerlink" href="#tip-int" title="Permalink to this headline">¶</a></h3>
+<p>Cela števila pripadajo tipu <code class="docutils literal notranslate"><span class="pre">int</span></code>, z njimi pa delamo podobno kot v Pythonu:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">12</span> <span class="o">*</span> <span class="o">(</span><span class="mi">34</span> <span class="o">+</span> <span class="mi">67</span><span class="o">)</span> <span class="o">-</span> <span class="mi">89</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 1123
+</pre></div>
+</div>
+</div>
+</div>
+<p>Za razliko od Pythona celoštevilsko delimo z <code class="docutils literal notranslate"><span class="pre">/</span></code>, ostanek pa izračunamo z <code class="docutils literal notranslate"><span class="pre">mod</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">22</span> <span class="o">/</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">22</span> <span class="ow">mod</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>OCamlov tip <code class="docutils literal notranslate"><span class="pre">int</span></code> ne podpira poljubno velikih števil, zato lahko pri nekaterih operacijah pride do prekoračitve obsega:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">4611686018427387902</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 4611686018427387903
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">4611686018427387902</span> <span class="o">+</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = -4611686018427387904
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="tip-float">
+<h3>Tip <code class="docutils literal notranslate"><span class="pre">float</span></code><a class="headerlink" href="#tip-float" title="Permalink to this headline">¶</a></h3>
+<p>Tipu <code class="docutils literal notranslate"><span class="pre">float</span></code> pripadajo števila s plavajočo vejico, ki jih pišemo kot v Pythonu, razlika pa se pojavi pri operacijah. Kot smo že omenili, OCaml preverja ustreznost tipov, in tako na primer operacija <code class="docutils literal notranslate"><span class="pre">*</span></code> sprejme dva argumenta tipa <code class="docutils literal notranslate"><span class="pre">int</span></code> in <code class="docutils literal notranslate"><span class="pre">int</span></code> tudi vrne. Če ji damo argumente tipa <code class="docutils literal notranslate"><span class="pre">float</span></code>, se bo OCaml pritožil, saj med tema dvema tipoma strogo loči:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span><span class="o">.</span><span class="mi">141592</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;[13]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">4</span><span class="o">-</span><span class="mi">12</span><span class="p">:</span>
+<span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">*</span> <span class="mf">3.141592</span>
+        <span class="o">^^^^^^^^</span>
+<span class="ne">Error</span>: This expression has type float but an expression was expected of type
+         <span class="nb">int</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Operacije, ki sprejemajo števila s plavajočo vejico, se končajo s piko:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">12</span><span class="o">.</span><span class="mi">0</span> <span class="o">*.</span> <span class="o">(</span><span class="mi">34</span><span class="o">.</span><span class="mi">0</span> <span class="o">+.</span> <span class="mi">67</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span> <span class="o">-.</span> <span class="mi">89</span><span class="o">.</span><span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : float = 1123.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">22</span><span class="o">.</span> <span class="o">/.</span> <span class="mi">7</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : float = 3.14285714285714279
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">pi</span> <span class="o">=</span> <span class="mi">4</span><span class="o">.</span> <span class="o">*.</span> <span class="n">atan</span> <span class="mi">1</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val pi : float = 3.14159265358979312
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">cos</span> <span class="n">pi</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : float = -1.
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="tipa-string-in-char">
+<h3>Tipa <code class="docutils literal notranslate"><span class="pre">string</span></code> in <code class="docutils literal notranslate"><span class="pre">char</span></code><a class="headerlink" href="#tipa-string-in-char" title="Permalink to this headline">¶</a></h3>
+<p>Nizi pripadajo tipu <code class="docutils literal notranslate"><span class="pre">string</span></code>, pišemo pa jih med dvojne narekovaje. Pogosta operacija na nizih je stikanje, ki ga pišemo kot <code class="docutils literal notranslate"><span class="pre">^</span></code>. Na voljo imamo tudi funkcije za pretvorbo v nize in iz nizov, pri čemer slednje lahko sprožijo napako:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Programiranje &quot;</span> <span class="o">^</span> <span class="n">string_of_int</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : string = &quot;Programiranje 1&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">6</span> <span class="o">*</span> <span class="n">int_of_string</span> <span class="s2">&quot;7&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">6</span> <span class="o">*</span> <span class="n">int_of_string</span> <span class="s2">&quot;sedem&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">Exception</span>: Failure &quot;int_of_string&quot;.
+<span class="n">Raised</span> <span class="n">by</span> <span class="n">primitive</span> <span class="n">operation</span> <span class="n">at</span> <span class="n">unknown</span> <span class="n">location</span>
+<span class="n">Called</span> <span class="kn">from</span> <span class="nn">Toploop.load_lambda</span> <span class="ow">in</span> <span class="n">file</span> <span class="s2">&quot;toplevel/toploop.ml&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">212</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">17</span><span class="o">-</span><span class="mi">27</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Tipu <code class="docutils literal notranslate"><span class="pre">char</span></code> pripadajo posamezni znaki, ki jih pišemo med enojne narekovaje.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="sc">&#39;a&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : char = &#39;a&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="tip-bool">
+<h3>Tip <code class="docutils literal notranslate"><span class="pre">bool</span></code><a class="headerlink" href="#tip-bool" title="Permalink to this headline">¶</a></h3>
+<p>Tipu <code class="docutils literal notranslate"><span class="pre">bool</span></code> pripadajo logične vrednosti, kjer imamo na voljo obe logični konstanti ter običajne logične operacije, pri čemer konjunkcijo pišemo kot <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>, disjunkcijo pa kot <code class="docutils literal notranslate"><span class="pre">||</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="bp">false</span> <span class="o">&amp;&amp;</span> <span class="n">not</span> <span class="o">(</span><span class="bp">false</span> <span class="o">||</span> <span class="bp">true</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : bool = false
+</pre></div>
+</div>
+</div>
+</div>
+<p>Na voljo imamo tudi običajne relacije za primerjavo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">||</span> <span class="mi">3</span> <span class="o">&gt;=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : bool = true
+</pre></div>
+</div>
+</div>
+</div>
+<p>Za primerjavo enakosti uporabljamo operaciji <code class="docutils literal notranslate"><span class="pre">=</span></code> in <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code>, ki argumente primerjata glede na vrednosti. Na voljo sta tudi primerjavi <code class="docutils literal notranslate"><span class="pre">==</span></code> in <code class="docutils literal notranslate"><span class="pre">!=</span></code>, ki gledata identičnost argumentov in ju uporabljamo le takrat, kadar smo v to popolnoma prepričani, saj nam sicer dajeta nepričakovane odgovore:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;A&quot;</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : bool = false
+</pre></div>
+</div>
+</div>
+</div>
+<p>Dobili smo <code class="docutils literal notranslate"><span class="pre">false</span></code>, ker je OCaml naredil dva različna niza in ju shranil na dve različni mesti v pomnilniku. Če si naredimo en sam niz, pa enakost velja:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val a : string = &quot;A&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">==</span> <span class="n">a</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : bool = true
+</pre></div>
+</div>
+</div>
+</div>
+<p>Logične vrednosti lahko uporabljamo v pogojnih izrazih:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="mi">3</span> <span class="o">&lt;&gt;</span> <span class="mi">5</span> <span class="k">then</span> <span class="mi">10</span> <span class="k">else</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 10
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pogojni izrazi so lahko tudi vsebovani v drugih izrazih. Na primer, funkcija v spodnjem izrazu je rezultat pogojnega izraza:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="k">if</span> <span class="mi">3</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">then</span> <span class="n">cos</span> <span class="k">else</span> <span class="n">sin</span><span class="o">)</span> <span class="n">pi</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : float = 1.22464679914735321e-16
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="tipi-naborov">
+<h3>Tipi naborov<a class="headerlink" href="#tipi-naborov" title="Permalink to this headline">¶</a></h3>
+<p>Nabore v OCamlu pišemo med navadne oklepaje, komponente pa ločimo z vejico. Včasih lahko oklepaje tudi izpustimo, vendar tega raje ne počnimo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">,</span> <span class="n">cos</span> <span class="n">pi</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int * bool * float = (1, true, -1.)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int * int * int = (1, 2, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Kot vidimo, imajo nabori tip označen s kartezičnim produktom <code>τ<sub>1</sub> * τ<sub>2</sub> * … * τ<sub>n</sub></code>, kjer so <code>τ<sub>i</sub></code> tipi posameznih komponent. Naborov velikosti ena ni, ker niso potrebni, nabor velikosti 0 pa je natanko en:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="bp">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : unit = ()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ker kartezičnega produkta nič tipov ne moremo zapisati, tip praznega nabora označujemo z <code class="docutils literal notranslate"><span class="pre">unit</span></code>.</p>
+</div>
+<div class="section" id="tip-seznamov">
+<h3>Tip seznamov<a class="headerlink" href="#tip-seznamov" title="Permalink to this headline">¶</a></h3>
+<p>Sezname v OCamlu pišemo med oglate oklepaje, vrednosti pa ločimo s podpičji. Vse vrednosti v seznamih morajo biti enakega tipa, seznam pa ima potem tip oblike <code>tip<sub>el</sub> list</code>, kjer je <code>tip<sub>el</sub></code> tip komponent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">;</span> <span class="mi">3</span><span class="o">;</span> <span class="mi">4</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list = [1; 2; 3; 4]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="sc">&#39;a&#39;</span><span class="o">;</span> <span class="sc">&#39;b&#39;</span><span class="o">;</span> <span class="sc">&#39;c&#39;</span><span class="o">;</span> <span class="sc">&#39;d&#39;</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : char list = [&#39;a&#39;; &#39;b&#39;; &#39;c&#39;; &#39;d&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Če se zatipkamo in namesto podpičij pišemo vejice, dobimo seznam z enim elementom, ki je nabor (spomnimo se, da lahko nabore pišemo brez oklepajev):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : (int * int * int * int) list = [(1, 2, 3, 4)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sezname sestavljamo z dvema operacijama. Z <code class="docutils literal notranslate"><span class="pre">::</span></code> sestavimo nov seznam z dano glavo in repom:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">::</span> <span class="o">[</span><span class="mi">2</span><span class="o">;</span> <span class="mi">3</span><span class="o">;</span> <span class="mi">4</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list = [1; 2; 3; 4]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Kasneje bomo videli, da ima <code class="docutils literal notranslate"><span class="pre">::</span></code> prav posebno vlogo, saj je tako imenovani <em>konstruktor</em> seznamov. Vsak neprazen seznam je namreč prek <code class="docutils literal notranslate"><span class="pre">::</span></code> sestavljen iz glave in repa. Tudi <code class="docutils literal notranslate"><span class="pre">[1;</span> <span class="pre">2;</span> <span class="pre">3;</span> <span class="pre">4]</span></code> je v resnici samo okrajšava za <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">::</span> <span class="pre">(2</span> <span class="pre">::</span> <span class="pre">(3</span> <span class="pre">::</span> <span class="pre">4)))</span></code>.</p>
+<p>Če želimo stakniti dva seznama, pa uporabimo funkcijo <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">;</span> <span class="mi">3</span><span class="o">]</span> <span class="o">@</span> <span class="o">[</span><span class="mi">4</span><span class="o">;</span> <span class="mi">5</span><span class="o">;</span> <span class="mi">6</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list = [1; 2; 3; 4; 5; 6]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Za vajo lahko preverite, kateri izmed spodnjih seznamov so veljavni:</p>
+<details>
+    <summary><code>[1; 2] :: [3; 4]</code></summary>
+    NE
+</details>
+<details>
+    <summary><code>1 :: 2 :: 3 :: []</code></summary>
+    DA
+</details>
+<details>
+    <summary><code>[1; 2] @ [3; 4]</code></summary>
+    DA
+</details>
+<details>
+    <summary><code>1 @ 2 @ [3]</code></summary>
+    NE
+</details>
+<details>
+    <summary><code>[1, 2] @ [3]</code></summary>
+    NE
+</details>
+<details>
+    <summary><code>1 :: 2 :: 3</code></summary>
+    NE
+</details>
+<details>
+    <summary><code>[1; 2] @ []</code></summary>
+    DA
+</details>
+<details>
+    <summary><code>[1; 2] :: []</code></summary>
+    DA
+</details>
+</div>
+<div class="section" id="tipi-funkcij">
+<h3>Tipi funkcij<a class="headerlink" href="#tipi-funkcij" title="Permalink to this headline">¶</a></h3>
+<p>Vsaka vrednost v OCamlu ima svoj tip, tudi funkcije. Tip funkcije je oblike <code>tip<sub>arg</sub> -&gt; tip<sub>rez</sub></code>, kjer je <code>tip<sub>arg</sub></code> tip argumenta funkcije, tip<sub>rez</sub></code> pa tip njenega rezultata. Na primer <code class="docutils literal notranslate"><span class="pre">string_of_int</span></code> vzame <code class="docutils literal notranslate"><span class="pre">int</span></code> in vrne <code class="docutils literal notranslate"><span class="pre">string</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">string_of_int</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Podoben tip imajo tudi funkcije več argumentov (kaj točno pa ta tip predstavlja, pa bomo še videli):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">atan2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : float -&gt; float -&gt; float = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="definicije-funkcij">
+<h2>Definicije funkcij<a class="headerlink" href="#definicije-funkcij" title="Permalink to this headline">¶</a></h2>
+<p>Funkcije v OCamlu definiramo podobno kot vrednosti, le da za njihovim imenom naštejemo še imena argumentov:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">kvadriraj</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val kvadriraj : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Funkcije potem uporabimo kot običajno:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">kvadriraj</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Na podoben način lahko definiramo funkcije več argumentov:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">zmnozi</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val zmnozi : int -&gt; int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">zmnozi</span> <span class="mi">6</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 42
+</pre></div>
+</div>
+</div>
+</div>
+<p>Funkcije so lahko tudi argumenti drugih funkcij. Na primer, spodnja funkcija vzame funkcijo <code class="docutils literal notranslate"><span class="pre">f</span></code> ter jo dvakrat zaporedoma uporabi na <code class="docutils literal notranslate"><span class="pre">0</span></code>. Iz tega sledi, da mora <code class="docutils literal notranslate"><span class="pre">f</span></code> sprejeti argument tipa <code class="docutils literal notranslate"><span class="pre">0</span></code>. Ker rezultat <code class="docutils literal notranslate"><span class="pre">f</span> <span class="pre">0</span></code> znova podamo <code class="docutils literal notranslate"><span class="pre">f</span></code>, mora tudi ta biti <code class="docutils literal notranslate"><span class="pre">int</span></code>, zato je tip funkcije <code class="docutils literal notranslate"><span class="pre">f</span></code> enak <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">-&gt;</span> <span class="pre">int</span></code>, kar OCaml sam izračuna:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">dvakrat_na_nic</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">f</span> <span class="mi">0</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val dvakrat_na_nic : (int -&gt; int) -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">dvakrat_na_nic</span> <span class="n">succ</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">podvoji_in_pristej_ena</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val podvoji_in_pristej_ena : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">dvakrat_na_nic</span> <span class="n">podvoji_in_pristej_ena</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3
+</pre></div>
+</div>
+</div>
+</div>
+<p>Včasih majhnih funkcij kot je zgornja ni smiselno poimenovati. V tem primeru lahko pišemo anonimne funkcije oblike <code class="docutils literal notranslate"><span class="pre">fun</span> <span class="pre">arg</span> <span class="pre">-&gt;</span> <span class="pre">...</span></code>, na primer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">dvakrat_na_nic</span> <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="vzorci">
+<h3>Vzorci<a class="headerlink" href="#vzorci" title="Permalink to this headline">¶</a></h3>
+<p>V lokalnih definicijah in argumentih funkcij lahko argumente razstavimo s pomočjo vzorcev. Na primer, namesto:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">razdalja</span> <span class="n">koord1</span> <span class="n">koord2</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">fst</span> <span class="n">koord1</span> <span class="o">-.</span> <span class="n">fst</span> <span class="n">koord2</span>
+  <span class="ow">and</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">snd</span> <span class="n">koord1</span> <span class="o">-.</span> <span class="n">snd</span> <span class="n">koord2</span>
+  <span class="k">in</span>
+  <span class="n">sqrt</span> <span class="o">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.</span> <span class="o">+.</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val razdalja : float * float -&gt; float * float -&gt; float = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>kjer sta <code class="docutils literal notranslate"><span class="pre">fst</span></code> in <code class="docutils literal notranslate"><span class="pre">snd</span></code> projekciji na prvo in drugo komponento para, lahko pišemo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">razdalja</span> <span class="n">koord1</span> <span class="n">koord2</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="n">y1</span><span class="o">)</span> <span class="o">=</span> <span class="n">koord1</span>
+  <span class="ow">and</span> <span class="o">(</span><span class="n">x2</span><span class="o">,</span> <span class="n">y2</span><span class="o">)</span> <span class="o">=</span> <span class="n">koord2</span> <span class="k">in</span>
+  <span class="n">sqrt</span> <span class="o">((</span><span class="n">x1</span> <span class="o">-.</span> <span class="n">x2</span><span class="o">)</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.</span> <span class="o">+.</span> <span class="o">(</span><span class="n">y1</span> <span class="o">-.</span> <span class="n">y2</span><span class="o">)</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val razdalja : float * float -&gt; float * float -&gt; float = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>ali še bolje kot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">razdalja</span> <span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="n">y1</span><span class="o">)</span> <span class="o">(</span><span class="n">x2</span><span class="o">,</span> <span class="n">y2</span><span class="o">)</span> <span class="o">=</span>
+  <span class="n">sqrt</span> <span class="o">((</span><span class="n">x1</span> <span class="o">-.</span> <span class="n">x2</span><span class="o">)</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.</span> <span class="o">+.</span> <span class="o">(</span><span class="n">y1</span> <span class="o">-.</span> <span class="n">y2</span><span class="o">)</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val razdalja : float * float -&gt; float * float -&gt; float = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Med večimi vzorci se lahko odločimo s pomočjo konstrukta <code class="docutils literal notranslate"><span class="pre">match</span></code>, ki sprejme več vej, ločenih z <code class="docutils literal notranslate"><span class="pre">|</span></code>, nato pa vrne prvo, ki ustreza danemu vzorcu. Na primer, namesto</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">ustrezen_pozdrav</span> <span class="n">ime</span> <span class="o">=</span>
+  <span class="k">if</span> <span class="n">ime</span> <span class="o">=</span> <span class="s2">&quot;Matija&quot;</span> <span class="k">then</span>
+    <span class="s2">&quot;Dober dan, gospod predavatelj!&quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="n">ime</span> <span class="o">=</span> <span class="s2">&quot;Filip&quot;</span> <span class="o">||</span> <span class="n">ime</span> <span class="o">=</span> <span class="s2">&quot;Žiga&quot;</span> <span class="k">then</span>
+    <span class="s2">&quot;Oj!&quot;</span>
+  <span class="k">else</span>
+    <span class="s2">&quot;Dober dan, &quot;</span> <span class="o">^</span> <span class="n">ime</span> <span class="o">^</span> <span class="s2">&quot;!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val ustrezen_pozdrav : string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>raje pišemo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">ustrezen_pozdrav</span> <span class="n">ime</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">ime</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="s2">&quot;Matija&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, gospod predavatelj!&quot;</span>
+  <span class="o">|</span> <span class="s2">&quot;Filip&quot;</span> <span class="o">|</span> <span class="s2">&quot;Žiga&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Oj!&quot;</span>
+  <span class="o">|</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, &quot;</span> <span class="o">^</span> <span class="n">ime</span> <span class="o">^</span> <span class="s2">&quot;!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val ustrezen_pozdrav : string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Z vzorci lahko razstavljamo tudi sezname, pri čemer lahko z <code class="docutils literal notranslate"><span class="pre">::</span></code> seznam razstavimo na glavo in rep. Pozor: <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> v vzorcih ne more nastopati, saj je funkcija in ne konstruktor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">citiraj_knjigo</span> <span class="n">avtorji</span> <span class="n">naslov</span> <span class="o">=</span>
+  <span class="k">match</span> <span class="n">avtorji</span> <span class="k">with</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="n">naslov</span>
+  <span class="o">|</span> <span class="o">[</span><span class="n">avtor</span><span class="o">]</span> <span class="o">-&gt;</span> <span class="n">avtor</span> <span class="o">^</span> <span class="s2">&quot;: &quot;</span> <span class="o">^</span> <span class="n">naslov</span>
+  <span class="o">|</span> <span class="n">prvi</span> <span class="o">::</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="n">prvi</span> <span class="o">^</span> <span class="s2">&quot; in ostali: &quot;</span> <span class="o">^</span> <span class="n">naslov</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val citiraj_knjigo : string list -&gt; string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">citiraj_knjigo</span> <span class="bp">[]</span> <span class="s2">&quot;Skrivnosti podzemlja&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : string = &quot;Skrivnosti podzemlja&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">citiraj_knjigo</span> <span class="o">[</span><span class="s2">&quot;Kos&quot;</span><span class="o">;</span> <span class="s2">&quot;Golob&quot;</span><span class="o">]</span> <span class="s2">&quot;Fizika 1&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : string = &quot;Kos in ostali: Fizika 1&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vzorce lahko tudi gnezdimo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">za_lase_privlecena_funkcija</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="mi">0</span>
+  <span class="o">|</span> <span class="o">[(</span><span class="n">x</span><span class="o">,</span> <span class="o">_);</span> <span class="o">(</span><span class="n">y</span><span class="o">,</span> <span class="n">z</span><span class="o">)]</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+  <span class="o">|</span> <span class="o">((_,</span> <span class="n">x</span><span class="o">)</span> <span class="o">::</span> <span class="o">_)</span> <span class="o">-&gt;</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val za_lase_privlecena_funkcija : (int * int) list -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">za_lase_privlecena_funkcija</span> <span class="bp">[]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">za_lase_privlecena_funkcija</span> <span class="o">[(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 6
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">za_lase_privlecena_funkcija</span> <span class="o">[(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 8
+</pre></div>
+</div>
+</div>
+</div>
+<p>Za funkcije, ki takoj izvedejo <code class="docutils literal notranslate"><span class="pre">match</span></code> na svojem zadnjem argumentu, lahko uporabimo bližnjico <code class="docutils literal notranslate"><span class="pre">function</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">ustrezen_pozdrav</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="s2">&quot;Matija&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, gospod predavatelj!&quot;</span>
+  <span class="o">|</span> <span class="s2">&quot;Filip&quot;</span> <span class="o">|</span> <span class="s2">&quot;Žiga&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Oj!&quot;</span>
+  <span class="o">|</span> <span class="n">ime</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, &quot;</span> <span class="o">^</span> <span class="n">ime</span> <span class="o">^</span> <span class="s2">&quot;!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val ustrezen_pozdrav : string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vsakič, ko pišemo <code class="docutils literal notranslate"><span class="pre">match</span></code> ali <code class="docutils literal notranslate"><span class="pre">function</span></code> moramo biti pozorni na vrstni red vzorcev:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">neustrezen_pozdrav</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="n">ime</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, &quot;</span> <span class="o">^</span> <span class="n">ime</span> <span class="o">^</span> <span class="s2">&quot;!&quot;</span>
+  <span class="o">|</span> <span class="s2">&quot;Matija&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, gospod predavatelj!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File &quot;[61]&quot;, line 3, characters 4-12:
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 |   | &quot;Matija&quot; -&gt; &quot;Dober dan, gospod predavatelj!&quot;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        ^^^^^^^^
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning 11: this match case is unused.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val neustrezen_pozdrav : string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>OCaml nas je opozoril, da druga veja nikoli ne bo uporabljena, saj bo prvi vzorec ustrezal vsem primerom.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">neustrezen_pozdrav</span> <span class="s2">&quot;Matija&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : string = &quot;Dober dan, Matija!&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Prav tako nas OCaml opozori, če na kakšen primer pozabimo, saj bo ob izvajanju sicer lahko prišlo do napake:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">nepopoln_pozdrav</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="s2">&quot;Matija&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Dober dan, gospod predavatelj!&quot;</span>
+  <span class="o">|</span> <span class="s2">&quot;Filip&quot;</span> <span class="o">|</span> <span class="s2">&quot;Žiga&quot;</span> <span class="o">-&gt;</span> <span class="s2">&quot;Oj!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File &quot;[63]&quot;, lines 1-3, characters 23-30:
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 | .......................function
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 |   | &quot;Matija&quot; -&gt; &quot;Dober dan, gospod predavatelj!&quot;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 |   | &quot;Filip&quot; | &quot;Žiga&quot; -&gt; &quot;Oj!&quot;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning 8: this pattern-matching is not exhaustive.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Here is an example of a case that is not matched:
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;&quot;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val nepopoln_pozdrav : string -&gt; string = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">nepopoln_pozdrav</span> <span class="s2">&quot;naključni študent&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">Exception</span>: Match_failure (&quot;[63]&quot;, 1, 23).
+<span class="n">Raised</span> <span class="n">at</span> <span class="n">nepopoln_pozdrav</span> <span class="ow">in</span> <span class="n">file</span> <span class="s2">&quot;[63]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">23</span><span class="o">-</span><span class="mi">111</span>
+<span class="n">Called</span> <span class="kn">from</span> <span class="nn">Toploop.load_lambda</span> <span class="ow">in</span> <span class="n">file</span> <span class="s2">&quot;toplevel/toploop.ml&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">212</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">17</span><span class="o">-</span><span class="mi">27</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="rekurzivne-funkcije">
+<h3>Rekurzivne funkcije<a class="headerlink" href="#rekurzivne-funkcije" title="Permalink to this headline">¶</a></h3>
+<p>Če želimo definirati rekurzivno funkcijo, jo moramo podati z <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">rec</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">rec</span> <span class="n">fakulteta</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">n</span> <span class="o">*</span> <span class="n">fakulteta</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val fakulteta : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">fakulteta</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3628800
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">rec</span> <span class="n">fib</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">0</span>
+  <span class="o">|</span> <span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">fib</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="n">fib</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val fib : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Zgornja definicija je precej neučinkovita, zato si lahko pomagamo s pomožno funkcijo, ki deluje veliko hitreje:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">hitri_fib</span> <span class="n">n</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="k">rec</span> <span class="n">aux</span> <span class="n">n</span> <span class="n">a</span> <span class="n">b</span> <span class="o">=</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="n">a</span> <span class="k">else</span> <span class="n">aux</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="n">b</span> <span class="o">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+  <span class="k">in</span> <span class="n">aux</span> <span class="n">n</span> <span class="mi">0</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val hitri_fib : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Hkrati lahko definiramo tudi več rekurzivnih funkcij:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">rec</span> <span class="n">je_sodo</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="bp">true</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">je_liho</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+
+<span class="ow">and</span> <span class="n">je_liho</span> <span class="o">=</span> <span class="k">function</span>
+  <span class="o">|</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="bp">false</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">je_sodo</span> <span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val je_sodo : int -&gt; bool = &lt;fun&gt;
+val je_liho : int -&gt; bool = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="polimorfizem">
+<h2>Polimorfizem<a class="headerlink" href="#polimorfizem" title="Permalink to this headline">¶</a></h2>
+<p>Vsaka vrednost v OCamlu ima natančno določen tip. Kakšen pa je tip funkcije <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, saj lahko z njo stikamo tako sezname logičnih vrednosti, sezname števil, sezname seznamov števil, …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="bp">true</span><span class="o">;</span> <span class="bp">false</span><span class="o">]</span> <span class="o">@</span> <span class="o">[</span><span class="bp">false</span><span class="o">;</span> <span class="bp">true</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : bool list = [true; false; false; true]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">]</span> <span class="o">@</span> <span class="o">[</span><span class="mi">3</span><span class="o">;</span> <span class="mi">4</span><span class="o">;</span> <span class="mi">5</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list = [1; 2; 3; 4; 5]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">[[</span><span class="mi">1</span><span class="o">]]</span> <span class="o">@</span> <span class="o">[[</span><span class="mi">2</span><span class="o">;</span> <span class="mi">3</span><span class="o">];</span> <span class="o">[</span><span class="mi">4</span><span class="o">;</span> <span class="mi">5</span><span class="o">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list list = [[1]; [2; 3]; [4; 5]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Je <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> torej tipa <code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">bool</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">bool</span> <span class="pre">list</span></code> ali <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">int</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">int</span> <span class="pre">list</span></code> ali <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">list</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">int</span> <span class="pre">list</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">int</span> <span class="pre">list</span> <span class="pre">list</span></code>? V resnici je lahko tipa <code class="docutils literal notranslate"><span class="pre">α</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">α</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">α</span> <span class="pre">list</span></code> za poljuben tip <code class="docutils literal notranslate"><span class="pre">α</span></code>. To v OCamlu označimo kot <code class="docutils literal notranslate"><span class="pre">'a</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">'a</span> <span class="pre">list</span> <span class="pre">-&gt;</span> <span class="pre">'a</span> <span class="pre">list</span></code>. In res:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">(@)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : &#39;a list -&gt; &#39;a list -&gt; &#39;a list = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vrednostim, ki imajo v tipih spremenljivke, pravimo <em>parametrično polimorfne</em>. Polimorfne zaradi tega, ker lahko delujejo pri več tipih, parametrično pa zato, ker pri vseh tipih delujejo na enak način. Poznamo tudi tako imenovani <em>ad hoc</em> polimorfizem, kjer pri nekaterih tipih funkcije delujejo na en način, pri nekaterih na drugačen, pri tretjih pa sploh ne. Primer takega polimorfizma je na primer <code class="docutils literal notranslate"><span class="pre">+</span></code> v Pythonu: števila množi, sezname in nize stika, na funkcijah pa ne deluje. OCaml ad hoc polimorfizma nima, ker povzroča težave pri določanju tipov.</p>
+<p>V parametrično polimorfnih funkcijah lahko nastopa več parametrov. Na primer, projekcija na prvo komponento vzame par iz kartezičnega produkta poljubnih dveh tipov in slika v prvega:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">fst</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : &#39;a * &#39;b -&gt; &#39;a = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Tudi nekatere vrednosti so parametrično polimorfne:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="bp">[]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : &#39;a list = []
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="bp">[]</span><span class="o">,</span> <span class="o">[</span><span class="bp">[]</span><span class="o">],</span> <span class="o">(</span><span class="bp">[]</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : &#39;a list * &#39;b list list * (&#39;c list * int) = ([], [[]], ([], 3))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Seveda pa so najbolj koristne polimorfne funkcije, na primer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">rec</span> <span class="n">dolzina</span> <span class="o">=</span>
+  <span class="k">function</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="mi">0</span>
+  <span class="o">|</span> <span class="o">_</span> <span class="o">::</span> <span class="n">xs</span> <span class="o">-&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">dolzina</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val dolzina : &#39;a list -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">dolzina</span> <span class="o">[</span><span class="mi">10</span><span class="o">;</span> <span class="mi">20</span><span class="o">;</span> <span class="mi">30</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">rec</span> <span class="n">preslikaj</span> <span class="n">f</span> <span class="o">=</span>
+  <span class="k">function</span>
+  <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="bp">[]</span>
+  <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">::</span> <span class="n">preslikaj</span> <span class="n">f</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val preslikaj : (&#39;a -&gt; &#39;b) -&gt; &#39;a list -&gt; &#39;b list = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">preslikaj</span> <span class="n">succ</span> <span class="o">[</span><span class="mi">10</span><span class="o">;</span> <span class="mi">20</span><span class="o">;</span> <span class="mi">30</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int list = [11; 21; 31]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -262,16 +1580,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "ocaml-jupyter"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "ocaml-jupyter",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ocaml-jupyter'</script>
 
               </div>
               
