@@ -444,42 +444,6 @@
 <span class="gr">RecursionError</span>: <span class="n">maximum recursion depth exceeded</span>
 </pre></div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="mi">1000</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int -&gt; int = &lt;fun&gt;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="mi">100000</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int -&gt; int = &lt;fun&gt;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="mi">10000000</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int -&gt; int = &lt;fun&gt;
-</pre></div>
-</div>
-</div>
-</div>
 <div class="section" id="funkcije-visjega-reda">
 <h2>Funkcije višjega reda<a class="headerlink" href="#funkcije-visjega-reda" title="Permalink to this headline">¶</a></h2>
 <p>Kadar funkcija za argument sprejme drugo funkcijo, govorimo o funkcijah višjega reda. Na primer funkcija <code class="docutils literal notranslate"><span class="pre">trikrat</span></code> sprejme funkcijo <code class="docutils literal notranslate"><span class="pre">f</span></code> in argument <code class="docutils literal notranslate"><span class="pre">x</span></code> ter <code class="docutils literal notranslate"><span class="pre">f</span></code> trikrat zaporedoma uporabi na njem:</p>
@@ -528,7 +492,7 @@
 <li><p>osnovni modul <a class="reference external" href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/Stdlib.html"><code class="docutils literal notranslate"><span class="pre">Stdlib</span></code></a>, ki je vedno naložen in ga ni treba posebej navajati,</p></li>
 <li><p>modul <a class="reference external" href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/String.html"><code class="docutils literal notranslate"><span class="pre">String</span></code></a> za delo z nizi,</p></li>
 <li><p>modul <a class="reference external" href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/List.html"><code class="docutils literal notranslate"><span class="pre">List</span></code></a> za delo s seznami ali</p></li>
-<li><p>modul <a class="reference external" href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/Random.html"><code class="docutils literal notranslate"><span class="pre">Random</span></code></a> za delo z naključnimi vrednostmi.</p></li>
+<li><p>modul <a class="reference external" href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/Random.html"><code class="docutils literal notranslate"><span class="pre">Random</span></code></a> za delo s psevdonaključnimi vrednostmi.</p></li>
 </ul>
 <p>Do funkcij v modulih dostopamo s klici oblike <code class="docutils literal notranslate"><span class="pre">Modul.funkcija</span></code>. Na primer, funkcija <code class="docutils literal notranslate"><span class="pre">preslikaj</span></code> je dostopna kot:</p>
 <div class="cell docutils container">
@@ -788,7 +752,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;[31]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">8</span><span class="o">-</span><span class="mi">9</span><span class="p">:</span>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;[28]&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="n">characters</span> <span class="mi">8</span><span class="o">-</span><span class="mi">9</span><span class="p">:</span>
 <span class="mi">1</span> <span class="o">|</span> <span class="n">zmnozi</span><span class="s1">&#39; 2</span>
             <span class="o">^</span>
 <span class="ne">Error</span>: This expression has type int but an expression was expected of type

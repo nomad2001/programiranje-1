@@ -675,9 +675,6 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello, world!
-</pre></div>
-</div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : unit = ()
 </pre></div>
 </div>
@@ -765,7 +762,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 26778
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 32774
 </pre></div>
 </div>
 </div>
@@ -842,6 +839,12 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val seznam : int list = [1; 2; 3]
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val f : int -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val g : int -&gt; int = &lt;fun&gt;
 </pre></div>
 </div>
 </div>
@@ -1193,11 +1196,11 @@ Na primer, če definiramo tip dvojiških dreves:</p>
   <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="o">-&gt;</span> <span class="n">obrni</span> <span class="n">xs</span> <span class="o">@</span> <span class="o">[</span><span class="n">x</span><span class="o">]</span>
 </pre></div>
 </div>
-<p>časovno zahtevnost <code class="docutils literal notranslate"><span class="pre">O(n²)</span></code>, saj se mora zapeljati čez ves seznam, da mu na konec doda <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<p>časovno zahtevnost <span class="math notranslate nohighlight">\(O(n^2)\)</span>, saj se mora zapeljati čez ves seznam, da mu na konec doda <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <p>Bolje je, če uporabimo funkcijo <code class="docutils literal notranslate"><span class="pre">obrni'</span></code>, ki uporablja akumulator in je definirana kot:</p>
 <div class="highlight-ocaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">obrni&#39;</span> <span class="o">=</span>
   <span class="k">let</span> <span class="k">rec</span> <span class="n">aux</span> <span class="n">acc</span> <span class="o">=</span> <span class="k">function</span>
-    <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="n">aux</span>
+    <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="n">acc</span>
     <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="o">-&gt;</span> <span class="n">aux</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">acc</span><span class="o">)</span> <span class="n">xs</span>
   <span class="k">in</span>
   <span class="n">aux</span> <span class="bp">[]</span>
