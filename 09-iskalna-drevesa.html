@@ -174,8 +174,13 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="13-memoizacija.html">
-   Memoizacija
+  <a class="reference internal" href="13-1-memoizacija-v-pythonu.html">
+   Memoizacija v Pythonu
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="13-2-memoizacija-v-ocamlu.html">
+   Memoizacija v OCamlu
   </a>
  </li>
 </ul>
@@ -216,7 +221,10 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="_sources/09-iskalna-drevesa.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="_sources/09-iskalna-drevesa.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -238,10 +246,46 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/matijapretnar/programiranje-1/zapiski?urlpath=tree/09-iskalna-drevesa.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#avl-drevesa">
+   AVL drevesa
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rotacije">
+   Rotacije
+  </a>
+ </li>
+</ul>
+
+        </nav>
         
     </div>
 </div>
@@ -252,6 +296,103 @@
                 
   <div class="section" id="iskalna-drevesa">
 <h1>Iskalna drevesa<a class="headerlink" href="#iskalna-drevesa" title="Permalink to this headline">¶</a></h1>
+<p>Izračunajmo, koliko različnih elementov vsebuje dani seznam. Ena izmed možnosti je, da se sprehajamo čez seznam ter beležimo seznam elementov, ki smo jih že videli, začenši s praznim seznamom. Vsak element primerjamo z že videnimi in če ga še nismo videli, ga dodamo v seznam.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">stevilo_razlicnih</span> <span class="n">xs</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="k">rec</span> <span class="n">aux</span> <span class="n">ze_videni</span> <span class="o">=</span> <span class="k">function</span>
+    <span class="o">|</span> <span class="bp">[]</span> <span class="o">-&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">length</span> <span class="n">ze_videni</span>
+    <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="o">-&gt;</span>
+        <span class="k">if</span> <span class="nn">List</span><span class="p">.</span><span class="n">mem</span> <span class="n">x</span> <span class="n">ze_videni</span>
+        <span class="k">then</span> <span class="n">aux</span> <span class="n">ze_videni</span> <span class="n">xs</span>
+        <span class="k">else</span> <span class="n">aux</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">ze_videni</span><span class="o">)</span> <span class="n">xs</span>
+  <span class="k">in</span>
+  <span class="n">aux</span> <span class="bp">[]</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>val stevilo_razlicnih : &#39;a list -&gt; int = &lt;fun&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-OCaml notranslate"><div class="highlight"><pre><span></span><span class="n">stevilo_razlicnih</span> <span class="o">[</span><span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">;</span> <span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">;</span> <span class="mi">1</span><span class="o">;</span> <span class="mi">2</span><span class="o">;</span> <span class="mi">3</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>- : int = 3
+</pre></div>
+</div>
+</div>
+</div>
+<p>Rešitev deluje pravilno, vendar ne preveč učinkovito, saj se moramo vsakič sprehajati čez celoten seznam do sedaj videnih elementov. Vendar ni treba, da si videne elemente shranjujemo v seznam, saj nas njihov vrstni red ne zanima. Potrebujemo drugačno strukturo, pri kateri je pomembna le vsebovanost, operacije na njej pa so hitre. Taka struktura so <em>iskalna</em> drevesa. Pravimo, da je dvojiško drevo iskalno, če:</p>
+<ul class="simple">
+<li><p>so vsi elementi <strong>levega</strong> otroka <strong>manjši</strong> od korena</p></li>
+<li><p>so vsi elementi <strong>desnega</strong> otroka <strong>večji</strong> od korena</p></li>
+<li><p>sta <strong>oba</strong> otroka tudi <strong>iskalni</strong> drevesi</p></li>
+</ul>
+<p><img alt="" src="_images/iskalno-drevo.png" /></p>
+<p>Če imamo iskalno drevo lahko s spustom v ustrezno vejo ugotovimo, ali vsebuje dani element. Na primer, število 15 je manjše od korena 21, zato mora biti v levem otroku. Ker je večje od korena 9, mora biti v desnem otroku, kjer potem tudi je v korenu.</p>
+<p><img alt="" src="_images/iskalno-drevo-najdi.png" /></p>
+<p>Podobno bi število 41 moralo biti desno od 21, levo od 53, desno od 40 in levo od 42, kjer pa ni ničesar. Tako števila 41 v drevesu ni.</p>
+<p><img alt="" src="_images/iskalno-drevo-ne-najdi.png" /></p>
+<p>Vidimo, da nam ni treba preiskati vseh elementov v drevesu, temveč največ toliko, kolikor je drevo globoko.</p>
+<p>Podobno poteka vstavljanje elementov v drevo. Potujemo po isti poti, kjer bi pričakovali element. Če pridemo do konca, ne da bi element našli, ga vstavimo na ustrezno prosto mesto.</p>
+<p><img alt="" src="_images/iskalno-drevo-vstavi.png" /></p>
+<p>Tudi brisanje elementov poteka podobno. Najprej element poiščemo. Če ga najdemo šele v listu, je brisanje enostavno:</p>
+<p><img alt="" src="_images/iskalno-drevo-brisi-list.png" /></p>
+<p>Če pa je element, ki ga želimo odstraniti, v korenu, ga ne moremo preprosto pobrisati, saj ima neprazne otroke.</p>
+<p><img alt="" src="_images/iskalno-drevo-brisi-koren.png" /></p>
+<p>V tem primeru ga zamenjamo z ustreznim namestnikom, ki bo večji od vseh elementov v levem in manjši od vseh elementov v desnem otroku. Možna kandidata sta predhodnik, torej največji element v levem, in naslednik, torej najmanjši element v desnem otroku.</p>
+<p><img alt="" src="_images/iskalno-drevo-zamenjaj-koren-s-predhodnikom.png" /></p>
+<p><img alt="" src="_images/iskalno-drevo-zamenjaj-koren-z-naslednikom.png" /></p>
+<div class="section" id="avl-drevesa">
+<h2>AVL drevesa<a class="headerlink" href="#avl-drevesa" title="Permalink to this headline">¶</a></h2>
+<p>Operacije v iskalnem drevesu imajo časovno zahtevnost <span class="math notranslate nohighlight">\(O(h)\)</span>, kjer je <span class="math notranslate nohighlight">\(h\)</span> globina drevesa. Če nismo dovolj pozorni, pa lahko hitro končamo z drevesom, ki je zelo redko poseljeno, zato je lahko ta časovna zahtevnost tudi <span class="math notranslate nohighlight">\(O(n)\)</span>, kar ni nič boljše kot v seznamih.</p>
+<p><img alt="" src="_images/neuravnotezeno-drevo.png" /></p>
+<p>Izkoristiti želimo dejstvo, da z globino število možnih mest za elemente narašča eksponentno. Če bo večina teh mest zasedenih, bo globina torej logaritem števila elementov in operacije bodo imele časovno zahtevnost <span class="math notranslate nohighlight">\(O(\log n)\)</span>. Drevesom, v katerih lahko dosežemo tako gosto poselitev, pravimo <em>uravnotežena</em>. Do uravnoteženih dreves lahko pridemo na več načinov, mi pa si bomo ogledali <em>AVL drevesa</em>.</p>
+<p>Iskalno drevo je <em>AVL drevo</em>, če:</p>
+<ul class="simple">
+<li><p>je razlika višin otrok <strong>največ 1</strong></p></li>
+<li><p>sta <strong>oba</strong> otroka tudi <strong>AVL</strong> drevesi</p></li>
+</ul>
+<p><img alt="" src="_images/avl-drevo.png" /></p>
+<p>Iz definicije je videti, da bi moralo biti AVL drevo bolj ali manj uravnoteženo. Pomembno pa je, da lahko to lastnost tudi dokažemo.</p>
+<p>Naj bo <span class="math notranslate nohighlight">\(N(h)\)</span> najmanjše število vozlišč v kakršnemkoli AVL drevesu višine vsaj <span class="math notranslate nohighlight">\(h\)</span>. Nekaj hitrih opazk:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N(0) = 0\)</span>, saj je prazno drevo najmanjše AVL drevo višine vsaj <span class="math notranslate nohighlight">\(0\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(N(1) = 1\)</span>, saj mora drevo višine vsaj <span class="math notranslate nohighlight">\(1\)</span> vsebovati vsaj en element, drevo s samo enim elementom pa je AVL drevo;</p></li>
+<li><p>če je <span class="math notranslate nohighlight">\(h \ge h'\)</span>, je <span class="math notranslate nohighlight">\(N(h) \ge N(h')\)</span>, saj ima vsako drevo z višino vsaj <span class="math notranslate nohighlight">\(h\)</span> tudi višino vsaj <span class="math notranslate nohighlight">\(h'\)</span>.</p></li>
+</ul>
+<p>Vzemimo poljubno AVL drevo <span class="math notranslate nohighlight">\(T\)</span> višine <span class="math notranslate nohighlight">\(h\)</span> s poddrevesoma <span class="math notranslate nohighlight">\(L\)</span> in <span class="math notranslate nohighlight">\(D\)</span>. Vsaj eden od njegovih otrok ima višino <span class="math notranslate nohighlight">\(h - 1\)</span>. Brez škode za splošnost privzemimo, da je to <span class="math notranslate nohighlight">\(L\)</span>. Ker je <span class="math notranslate nohighlight">\(T\)</span> AVL drevo, se morata višini <span class="math notranslate nohighlight">\(L\)</span> in <span class="math notranslate nohighlight">\(D\)</span> razlikovati za največ <span class="math notranslate nohighlight">\(1\)</span>, torej ima drevo <span class="math notranslate nohighlight">\(D\)</span> lahko le višini <span class="math notranslate nohighlight">\(h - 1\)</span> ali <span class="math notranslate nohighlight">\(h - 2\)</span>. Po definiciji funkcije <span class="math notranslate nohighlight">\(N\)</span> ima drevo <span class="math notranslate nohighlight">\(L\)</span> vsaj <span class="math notranslate nohighlight">\(N(h - 1)\)</span>, drevo <span class="math notranslate nohighlight">\(D\)</span> pa vsaj <span class="math notranslate nohighlight">\(N(h - 2)\)</span> elementov. Tedaj ima drevo <span class="math notranslate nohighlight">\(T\)</span> vsaj <span class="math notranslate nohighlight">\(1 + N(h - 1) + N(h - 2)\)</span> elementov. Torej velja</p>
+<div class="math notranslate nohighlight">
+\[N(h) \ge 1 + N(h - 1) + N(h - 2)\]</div>
+<p>oziroma</p>
+<div class="math notranslate nohighlight">
+\[N(h) + 1 \ge (N(h - 1) + 1) + (N(h - 2) + 1)\]</div>
+<p>iz česar hitro sledi, da velja <span class="math notranslate nohighlight">\(N(h) + 1 \ge F_h\)</span>, kjer smo s <span class="math notranslate nohighlight">\(F_h\)</span> označili <span class="math notranslate nohighlight">\(h\)</span>-to Fibonaccijevo število. Torej ima vsako drevo višine vsaj <span class="math notranslate nohighlight">\(h\)</span> vsaj <span class="math notranslate nohighlight">\(O(\left(\frac{1 + \sqrt{5}}{2}\right)^h)\)</span> vozlišč.</p>
+</div>
+<div class="section" id="rotacije">
+<h2>Rotacije<a class="headerlink" href="#rotacije" title="Permalink to this headline">¶</a></h2>
+<p>Če imamo AVL drevo, moramo poskrbeti, da bo tako ostalo tudi ob spreminjanju elementov. Na primer, uravnoteženost se lahko pokvari, če element dodamo:</p>
+<p><img alt="" src="_images/dodajanje-pokvari-avl-drevo.png" /></p>
+<p>Prej je desno podddrevo imelo višino 2, po dodatnem elementu pa je višina postala 3, kar se za 2 razlikuje od višine levega poddrevesa. Podobno težavo bi imeli, če bi element levega poddrevesa pobrisali.</p>
+<p><img alt="" src="_images/brisanje-pokvari-avl-drevo.png" /></p>
+<p>Če dodajamo ali odstranjujemo po en element naenkrat, se nam ne more zgoditi, da bi razlika višin postala 3, saj bi že prej morala biti 2, kar pa ni v skladu s tem, da smo prej imeli AVL drevo. V splošnem tako lahko naletimo na dve možni neuravnoteženosti: bodisi je po operaciji za 2 večje levo bodisi desno poddrevo.</p>
+<p><img alt="" src="_images/mozni-neuravnotezenosti.png" /></p>
+<p>Brez škode za splošnost poglejmo možnost, kjer se drevo nagiba v desno. Tudi ta ima dve različici. Lahko se nagiba v desno zaradi skrajno desnega ali zaradi srednjega poddrevesa. Ostalih možnosti ni - če bi bili obe drevesi višine <span class="math notranslate nohighlight">\(h\)</span>, ni težav, če pa bi bili obe višine <span class="math notranslate nohighlight">\(h + 1\)</span>, pa smo imeli težave že pred spremembo elementa.</p>
+<p><img alt="" src="_images/mozni-desni-neuravnotezenosti.png" /></p>
+<p>V prvem primeru uporabimo tako imenovano <em>levo rotacijo</em>, kjer drevo nagnemo v levo. Koren desnega poddrevesa postavimo za koren celotnega drevesa in ustrezno prevežemo vsa poddrevesa.</p>
+<p><img alt="" src="_images/leva-rotacija.png" /></p>
+<p>Hitro lahko preverimo, da je drevo še vedno iskalno ter da neuravnoteženosti ni več. Torej smo dobili AVL drevo. V drugem primeru je malce več dela. Uporabiti moramo <em>desno-levo</em> rotacijo, kjer najprej poddrevo nagnemo v desno, s čimer neuravnoteženost premaknemo čisto na rob, nato pa uporabimo še levo rotacijo.</p>
+<p><img alt="" src="_images/desna-rotacija.png" /></p>
+<p>Tudi tu hitro lahko preverimo, da smo dobili AVL drevo.</p>
+<p>Kljub temu, da je videti da pri rotacijah premikamo vse podatke v drevesu, moramo popraviti le nekaj kazalcev, zaradi česar je časovna zahtevnost rotacij <span class="math notranslate nohighlight">\(O(1)\)</span>, pri vsaki operaciji pa jih moramo narediti največ dvakrat toliko, kolikor je drevo globoko. Tako imajo operacije na AVL drevesih časovno zahtevnost <span class="math notranslate nohighlight">\(O(\log n)\)</span>.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -263,16 +404,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "ocaml-jupyter"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "ocaml-jupyter",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ocaml-jupyter'</script>
 
               </div>
               

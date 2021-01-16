@@ -23,7 +23,6 @@ kernelspec:
 
 _Funkcijsko programiranje_ je pristop k pisanju programov prek sestavljanja funkcij in njihove uporabe na vrednostih. Nasproten pristop bi bilo na primer _imperativno programiranje_, v katerem programe pišemo kot zaporedja ukazov, ki spreminjajo računalnikovo stanje. Programi, napisani v funkcijskem stilu, so dostikrat krajši in preglednejši, poleg tega pa dostikrat omogočajo porazdeljeno računanje. Zaradi vseh teh lastnosti veliko modernih programskih jezikov vpeljuje ideje iz funkcijskega programiranja. Da se bomo lahko osredotočili na te ideje, si bomo ogledali programski jezik OCaml, ki je bil eden prvih in je še danes eden najbolj popularnih funkcijskih jezikov.
 
-
 ## Delo z OCamlom
 
 Poženimo prvi program v OCamlu:
@@ -33,11 +32,11 @@ let odgovor = min 8 7 * 6
 ```
 
 Vidimo lahko več stvari:
+
 - vrednosti definiramo s ključno besedo `let`
 - OCaml je poleg končne vrednosti izračunal tudi njen tip `int`
 - funkcije kličemo tako, da argumente naštejemo brez oklepajev
 - pri tem ima uporaba funkcij (_aplikacija_) višjo prioriteto kot računske operacije
-
 
 Vrednosti lahko definiramo tudi lokalno z izrazom `let ... in ...`
 
@@ -51,11 +50,12 @@ let odgovor =
 V tem primeru bodo definicije na voljo v delu `in ...`, izven pa ne:
 
 ```{code-cell}
-:tags: ["raises-exception"]
+:tags: [raises-exception]
+
 prvi_delni_izracun
 ```
 
-Če želimo, lahko več lokalnih definicij hkrati podamo tako, da jih ločimo z `and`. 
+Če želimo, lahko več lokalnih definicij hkrati podamo tako, da jih ločimo z `and`.
 
 ```{code-cell}
 let odgovor =
@@ -74,7 +74,8 @@ a * b
 ```
 
 ```{code-cell}
-:tags: ["raises-exception"]
+:tags: [raises-exception]
+
 let a = 6
 and b = a + 1 in
 a * b
@@ -83,7 +84,6 @@ a * b
 ## Vgrajeni tipi
 
 Ena izmed največjih prednosti OCamla je njegov bogat in dovršen sistem tipov. Vsak pravilen program v OCamlu ima svoj tip, ki ga OCaml samodejno preveri pred vsakim izvajanjem, kar polovi ogromno napak.
-
 
 ### Tip `int`
 
@@ -118,7 +118,8 @@ OCamlov tip `int` ne podpira poljubno velikih števil, zato lahko pri nekaterih 
 Tipu `float` pripadajo števila s plavajočo vejico, ki jih pišemo kot v Pythonu, razlika pa se pojavi pri operacijah. Kot smo že omenili, OCaml preverja ustreznost tipov, in tako na primer operacija `*` sprejme dva argumenta tipa `int` in `int` tudi vrne. Če ji damo argumente tipa `float`, se bo OCaml pritožil, saj med tema dvema tipoma strogo loči:
 
 ```{code-cell}
-:tags: ["raises-exception"]
+:tags: [raises-exception]
+
 2 * 3.141592
 ```
 
@@ -142,7 +143,6 @@ cos pi
 
 ### Tipa `string` in `char`
 
-
 Nizi pripadajo tipu `string`, pišemo pa jih med dvojne narekovaje. Pogosta operacija na nizih je stikanje, ki ga pišemo kot `^`. Na voljo imamo tudi funkcije za pretvorbo v nize in iz nizov, pri čemer slednje lahko sprožijo napako:
 
 ```{code-cell}
@@ -154,7 +154,8 @@ Nizi pripadajo tipu `string`, pišemo pa jih med dvojne narekovaje. Pogosta oper
 ```
 
 ```{code-cell}
-:tags: ["raises-exception"]
+:tags: [raises-exception]
+
 6 * int_of_string "sedem"
 ```
 
@@ -226,10 +227,7 @@ Kot vidimo, imajo nabori tip označen s kartezičnim produktom <code>τ<sub>1</s
 
 Ker kartezičnega produkta nič tipov ne moremo zapisati, tip praznega nabora označujemo z `unit`.
 
-
 ### Tip seznamov
-
-
 
 Sezname v OCamlu pišemo med oglate oklepaje, vrednosti pa ločimo s podpičji. Vse vrednosti v seznamih morajo biti enakega tipa, seznam pa ima potem tip oblike <code>tip<sub>el</sub> list</code>, kjer je <code>tip<sub>el</sub></code> tip komponent.
 
@@ -254,7 +252,6 @@ Sezname sestavljamo z dvema operacijama. Z `::` sestavimo nov seznam z dano glav
 ```
 
 Kasneje bomo videli, da ima `::` prav posebno vlogo, saj je tako imenovani _konstruktor_ seznamov. Vsak neprazen seznam je namreč prek `::` sestavljen iz glave in repa. Tudi `[1; 2; 3; 4]` je v resnici samo okrajšava za `1 :: (2 :: (3 :: 4)))`.
-
 
 Če želimo stakniti dva seznama, pa uporabimo funkcijo `@`:
 
@@ -297,9 +294,7 @@ Za vajo lahko preverite, kateri izmed spodnjih seznamov so veljavni:
     DA
 </details>
 
-
 ### Tipi funkcij
-
 
 Vsaka vrednost v OCamlu ima svoj tip, tudi funkcije. Tip funkcije je oblike <code>tip<sub>arg</sub> -> tip<sub>rez</sub></code>, kjer je <code>tip<sub>arg</sub></code> tip argumenta funkcije, tip<sub>rez</sub></code> pa tip njenega rezultata. Na primer `string_of_int` vzame `int` in vrne `string`:
 
@@ -314,7 +309,6 @@ atan2
 ```
 
 ## Definicije funkcij
-
 
 Funkcije v OCamlu definiramo podobno kot vrednosti, le da za njihovim imenom naštejemo še imena argumentov:
 
@@ -363,7 +357,6 @@ dvakrat_na_nic (fun x -> 2 * x + 1)
 ```
 
 ### Vzorci
-
 
 V lokalnih definicijah in argumentih funkcij lahko argumente razstavimo s pomočjo vzorcev. Na primer, namesto:
 
@@ -484,7 +477,8 @@ let nepopoln_pozdrav = function
 ```
 
 ```{code-cell}
-:tags: ["raises-exception"]
+:tags: [raises-exception]
+
 nepopoln_pozdrav "naključni študent"
 ```
 
@@ -530,10 +524,81 @@ and je_liho = function
   | n -> je_sodo (n - 1)
 ```
 
+## Primerjava s Pythonom
+
+Kljub temu, da Python in OCaml podpirata precej podobnih konceptov (funkcije, pogojne stavke, sezname, nabore, tipe, ...) pa imata tudi kar nekaj razlik. Ena izmed njih je način, na katerega te konstrukte uporabljamo. OCaml je _deklarativni_ jezik, kar pomeni, da programe sestavljamo s pomočjo definicij vrednosti. Natančneje, OCaml je _funkcijski jezik_, saj pri sestavljanju ključno vlogo igrajo funkcije (poznamo tudi _logične_ deklarativne jezike, kot na primer Prolog, kjer vrednosti opisujemo s pogoji, ki računalnik vodijo do končne rešitve). Na primer, $10!$ v OCamlu najenostavneje izračunamo tako, da napišemo njeno matematično definicijo:
+
+```ocaml
+let rec fakulteta n =
+  if n = 0 then 1 else n * fakulteta (n - 1)
+in fakulteta 10
+```
+
+Kljub temu, da tudi Python vsebuje prvine funkcijskega programiranja, pa je v osnovi _imperativni_ (zaradi vloge objektov pa tudi _objektni_) jezik, kjer računalnik usmerjamo prek zaporedja ukazov, ki začetno stanje spravijo v želeno stanje. Na primer, fakulteto bi izračunali tako, da bi si izbrali spremenljivko za hranjenje vrednosti, nato pa to spremenljivko postopoma spreminjali, dokler ne bi dobili iskanega števila:
+
+```python
+fakulteta = 1
+for i in range(1, 11):
+    fakulteta *= i
+```
+
+Ena izmed razlik med jezikoma je tudi v sistemu tipov. OCaml tipe preverja _statično_, torej še pred izvajanjem. Če napišemo:
+
+```{code-cell}
+:tags: [raises-exception]
+let je_majhen x =
+  if x < 10 then "Da" else false
+```
+
+dobimo napako še preden funkcijo pokličemo. V nasprotju z OCamlom bo Python enako definicijo sprejel:
+
+```python
+def je_majhen(x):
+    return 'Da' if x < 10 else False
+```
+
+vendar bo ta v nekaterih primerih delala uspešno, v drugih pa ne:
+
+```python
+>>> je_majhen(3) + '!'
+'Da!'
+
+>>> je_majhen(10) + '!'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s)
+  for +: 'bool' and 'str'
+```
+
+Kot vidimo v opozorilu, je Python tipe sicer preveril (zato računalnik ni na slepo delal z ničlami in enicami, kar bi lahko vodilo do hujših napak), vendar šele takrat, ko smo program izvedli. Pravimo, da ima Python _dinamičen_ sistem tipov.
+
+Prav tako so OCamlovi tipi precej bogatejši, na primer za spodnji seznam in funkcijo OCaml zelo natančno pove, kakšne oblike sta:
+
+```{code-cell}
+[(1, ['a']); (10, []); (0, ['x'; 'y'])]
+```
+
+```{code-cell}
+fun x -> [(x ^ "!", 0)]
+```
+
+Python pa sporoči le to, da sta seznam in funkcija:
+
+```python
+>>> type([(1, ['a']), (10, []), (0, ['x', 'y'])])
+<type 'list'>
+
+>>> type(lambda x: [(x + '!', 0)])
+<type 'function'>
+```
+
+```{code-cell}
+
+```
+
 ## Polimorfizem
 
-
-Vsaka vrednost v OCamlu ima natančno določen tip. Kakšen pa je tip funkcije `@`, saj lahko z njo stikamo tako sezname logičnih vrednosti, sezname števil, sezname seznamov števil, …
+Vsaka vrednost v OCamlu ima natančno določen tip. Kakšen pa je tip funkcije `@`, saj lahko z njo stikamo tako sezname logičnih vrednosti, sezname števil, sezname seznamov števil, ...
 
 ```{code-cell}
 [true; false] @ [false; true]

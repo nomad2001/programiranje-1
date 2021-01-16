@@ -57,7 +57,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Memoizacija" href="13-memoizacija.html" />
+    <link rel="next" title="Memoizacija v Pythonu" href="13-1-memoizacija-v-pythonu.html" />
     <link rel="prev" title="Deli in vladaj" href="11-deli-in-vladaj.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -174,8 +174,13 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="13-memoizacija.html">
-   Memoizacija
+  <a class="reference internal" href="13-1-memoizacija-v-pythonu.html">
+   Memoizacija v Pythonu
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="13-2-memoizacija-v-ocamlu.html">
+   Memoizacija v OCamlu
   </a>
  </li>
 </ul>
@@ -246,7 +251,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/matijapretnar/programiranje-1/zapiski?urlpath=tree/12-dinamicno-programiranje.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/matijapretnar/programiranje-1/zapiski?urlpath=tree/12-dinamicno-programiranje.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -273,11 +278,6 @@
    Najcenejša pot v matriki
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#krcenje-slik">
-   Krčenje slik
-  </a>
- </li>
 </ul>
 
         </nav>
@@ -291,7 +291,7 @@
                 
   <div class="section" id="dinamicno-programiranje">
 <h1>Dinamično programiranje<a class="headerlink" href="#dinamicno-programiranje" title="Permalink to this headline">¶</a></h1>
-<p>Recimo, da imamo veliko kock velikosti 1, 2 in 3, vsake v svoji barvi. Zanima nas, koliko različnih stolpov lahko sestavimo iz njih.</p>
+<p>Recimo, da imamo veliko kock velikosti 1, 2 in 3, vsako v svoji barvi. Zanima nas, koliko različnih stolpov lahko sestavimo iz njih.</p>
 <p><img alt="" src="_images/stolpi.png" /></p>
 <p>Na primer, sestavimo lahko štiri različne stolpe višine 3: <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">1</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">1</span></code> in <code class="docutils literal notranslate"><span class="pre">3</span></code>. V splošnem lahko vidimo, da so stolpi višine <span class="math notranslate nohighlight">\(n\)</span> treh različnih oblik:</p>
 <ol class="simple">
@@ -345,7 +345,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>666 µs ± 21.4 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>746 µs ± 157 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
 </div>
@@ -357,7 +357,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.78 ms ± 433 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.21 ms ± 127 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
 </div>
@@ -369,7 +369,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.1 ms ± 1.08 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.39 ms ± 531 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 </pre></div>
 </div>
 </div>
@@ -378,7 +378,7 @@
 <p><img alt="" src="_images/stolpi-klici.png" /></p>
 <p>Funkcijo moramo poklicati trinajstkrat. Število klicev bi s posebnimi primeri lahko zmanjšali, vendar je eksponentna rast neizogibna. Vidimo, da pri klicih prihaja do podvojitev. Strategiji, s katero se jim izognemo, pravimo <em>dinamično programiranje</em>. Intuitivno je struktura podnalog videti približno takole:</p>
 <p><img alt="" src="_images/dinamicno-programiranje.png" /></p>
-<p>Podvojevanju se lahko izognemo na dva načina. Prvi je <em>memoizacija</em>, pri kateri si računalnik samodejno shranjuje izračunane rezulate in jo bomo pogledali naslednjič. Drugi pa je, da rešitve pripravimo v ustreznem vrstnem redu. Takih vrstnih redov je lahko več, saj moramo poskrbeti le za to, da so vse podnaloge pravočasno rešene:</p>
+<p>Podvojevanju se lahko izognemo na dva načina. Prvi je <em>memoizacija</em>, pri kateri si računalnik samodejno shranjuje izračunane rezulate in jo bomo pogledali naslednjič. Drugi pa je pristop <em>od spodaj navzgor</em>, v katerem rešitve pripravimo v ustreznem vrstnem redu. Takih vrstnih redov je lahko več, saj moramo poskrbeti le za to, da so vse podnaloge pravočasno rešene:</p>
 <p><img alt="" src="_images/izracun-vnaprej1.png" />
 <img alt="" src="_images/izracun-vnaprej2.png" /></p>
 <p>V primeru računanja števila stolpov je tak vrstni red samo en: od <span class="math notranslate nohighlight">\(1\)</span> do <span class="math notranslate nohighlight">\(n\)</span>, zato ni vprašanja, kako se bomo lotili dela. Vsako izračunano vrednost si bomo shranili v seznam in nadaljevali z naslednjo. V resnici ne rabimo vseh izračunanih vrednosti, temveč samo zadnje tri:</p>
@@ -426,7 +426,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.09 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.12 µs ± 532 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
 </pre></div>
 </div>
 </div>
@@ -438,7 +438,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>46.5 µs ± 14.8 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>27.9 µs ± 3.65 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
 </pre></div>
 </div>
 </div>
@@ -450,7 +450,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>445 µs ± 38.6 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>349 µs ± 61.5 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
 </div>
@@ -630,9 +630,6 @@
 </div>
 </div>
 </div>
-<div class="section" id="krcenje-slik">
-<h2>Krčenje slik<a class="headerlink" href="#krcenje-slik" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -664,7 +661,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="11-deli-in-vladaj.html" title="previous page">Deli in vladaj</a>
-    <a class='right-next' id="next-link" href="13-memoizacija.html" title="next page">Memoizacija</a>
+    <a class='right-next' id="next-link" href="13-1-memoizacija-v-pythonu.html" title="next page">Memoizacija v Pythonu</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
