@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Napaka, verjetno commitaš na napačen repo"
+
+exit 0
