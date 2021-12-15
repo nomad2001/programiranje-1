@@ -191,13 +191,13 @@ $$T(n) = O(n) + 2 \cdot T(n / 2)$$
 kjer s $T(n)$ označimo čas, ki ga potrebujemo, da uredimo seznam dolžine $n$. Rešitev te enačbe je $T(n) = O(n \log n)$, kar je precej hitreje od naivnih algoritmov za urejanje, ki delujejo v času $O(n^2)$. Reševanje takih enačb presega obseg tega predmeta, intuicija za njim pa ni preveč zapletena. Enačbo postopoma razpisujemo:
 
 
-\begin{align}
+$$\begin{align}
   T(n)
   &= O(n) + 2 T(n / 2) \\
   &= O(n) + 2 (O(n / 2) + 2 T(n / 4)) \\
   &= O(n) + 2 O(n / 2) + 4 T(n / 4) \\
   &= O(n) + 2 O(n / 2) + 4 O(n / 4) + 8 T(n / 8)
-\end{align}
+\end{align}$$
 
 Vidimo, da v vsakem koraku dobimo dodaten člen z zahtevnostjo $O(n)$, kar po $k$ korakih znaša
 
