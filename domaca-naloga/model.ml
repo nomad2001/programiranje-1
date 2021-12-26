@@ -134,14 +134,14 @@ let print_solution solution = print_grid string_of_int solution
 let is_valid_solution problem solution = 
   (* Preveri, ali so v vsaki vrstici vse številke *)
   let rows_correct solution = List.for_all (fun row -> Array.for_all (fun ind -> 
-          Array.exists (fun x -> x = ind) row) (Array.init 9 (fun i -> i))) (rows solution) in
+          Array.exists (fun x -> x = ind) row) (Array.init 9 (fun i -> i + 1))) (rows solution) in
   (* Preveri, ali so v vsakem stolpcu vse številke *)
   let columns_correct solution = List.for_all (fun column -> Array.for_all (fun ind -> 
-          Array.exists (fun x -> x = ind) column) (Array.init 9 (fun i -> i))) (columns solution) in
+          Array.exists (fun x -> x = ind) column) (Array.init 9 (fun i -> i + 1))) (columns solution) in
   (* Preveri, ali so v vsaki škatli vse številke *)  
   let boxes_correct solution = List.for_all (fun box -> Array.for_all (fun ind -> 
           Array.exists (fun lst -> 
-          Array.exists (fun x -> x = ind) lst) box) (Array.init 9 (fun i -> i))) (boxes solution) in
+          Array.exists (fun x -> x = ind) lst) box) (Array.init 9 (fun i -> i + 1))) (boxes solution) in
   (* Preveri, ali sta problem in rešitev skladni. *)
   let sol_prob_same solution problem = Array.exists (fun i ->
                                       Array.exists (fun j -> (match problem.initial_grid.(i).(j) with
