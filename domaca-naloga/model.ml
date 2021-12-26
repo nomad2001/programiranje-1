@@ -111,7 +111,11 @@ let grid_of_string cell_of_char str =
 
 type problem = { initial_grid : int option grid }
 
-let print_problem problem : unit = print_grid string_of_int problem
+let string_of_int_option = function
+  | None -> " "
+  | Some x -> string_of_int x
+
+let print_problem (problem : problem) : unit = print_grid string_of_int_option problem.initial_grid
 
 let problem_of_string str =
   let cell_of_char = function
