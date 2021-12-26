@@ -140,7 +140,7 @@ let is_valid_solution problem solution =
           Array.exists (fun x -> x = ind) lst) box) (Array.init 9 (fun i -> i))) (boxes solution) in
   (* Preveri, ali sta problem in rešitev skladni. *)
   let sol_prob_same solution problem = Array.exists (fun i ->
-                                      Array.exists (fun j -> (match problem.(i).(j) with
+                                      Array.exists (fun j -> (match problem.initial_grid.(i).(j) with
                                         | None -> false
                                         | Some x -> solution.(i).(j) != x
                                       )) (Array.init 9 (fun j -> j))) (Array.init 9 (fun i -> i)) in
