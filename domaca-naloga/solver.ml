@@ -1,11 +1,10 @@
 type available = { loc : int * int; possible : int list }
 
-(* TODO: tip stanja ustrezno popravite, saj boste med reševanjem zaradi učinkovitosti
-   želeli imeti še kakšno dodatno informacijo *)
 (* V atributu [problem] je shranjen začetni problem, v [current_grid] sudoku kot je izpolnjen v
-trenutnem stanju, v [rows_taken], [cols_taken] in [boxes_taken] so označene številke, ki so že
-uporabljene v posameznih vrsticah, stolpcih in škatlah, v [cur_index] je shranjeno mesto celice,
-ki jo trenutno izpoljnjujemo, v [options] pa številke, ki po posameznih celicah še pridejo v poštev*)
+trenutnem stanju, v [rows_taken], [cols_taken] in [boxes_taken] je označeno, kolikokrat se posamezne 
+številke v trenutni postavitivi, pojavljajo v posameznih vrsticah, stolpcih in škatlah, v [cur_index] 
+je shranjeno mesto celice,ki jo trenutno izpoljnjujemo, v [options] pa številke, ki po posameznih 
+celicah še pridejo v poštev*)
 type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
               cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cur_index : int * int;
               options : available Array.t Array.t}
@@ -26,17 +25,20 @@ let exists_in_box box x = bool_to_int (Array.exists (
     ) box 
   )
 
-(* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
-števke, sicer vrne prazen seznam *)
+(* Naključno premeša seznam. Funkcija kopirana s strani 
+https://stackoverflow.com/questions/15095541/how-to-shuffle-list-in-on-in-ocaml*)
 let shuffle d =
     let nd = List.map (fun c -> (Random.bits (), c)) d in
     let sond = List.sort compare nd in
     List.map snd sond
 
+(* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
+števke, sicer vrne prazen seznam *)
 let generate_possible grid i j = match grid.(i).(j) with
   | Some x -> [x]
   | None -> shuffle (List.init 9 (fun i -> i + 1))
 
+(* Inicializira začetno stanje*)
 let initialize_state (problem : Model.problem) : state =
   let cur_grid = Model.copy_grid problem.initial_grid in
   let cols = Array.init 9 (fun col_ind -> 
@@ -55,6 +57,7 @@ let initialize_state (problem : Model.problem) : state =
   {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes;
   cur_index = (0, 0); options = opts}
 
+(* Preveri, ali smo popolnili tabelo in če smo, preveri še, ali trenutna postavitev reši sudoku. *)
 let validate_state (state : state) : response =
   let unsolved =
     Array.exists (Array.exists Option.is_none) state.current_grid
@@ -74,12 +77,11 @@ let copy_array_of_lists arr = Array.init 9 (fun i ->
                                 (Array.init 9 (fun j -> {loc = (i, j);
                                     possible = (List.map (fun x -> x) arr.(i).(j).possible)})))
 
+(* Razvejimo stanje na 1.možnost - prva izmed možnih števk v [possible] za trenutno mesto je pravilna, 
+izberemo jo in rešimo preostali sudoku - in 2. možnost - prva izmed možnih števk za trenutno mesto je 
+nepravilna in z njo ne moremo rešiti preostalega sudokuja, zato je pravilna števka med preostalimi 
+elementi [possible] ali pa sploh ne obstaja, zato jo lahko iščemo med preostalimi števili v [possible]*)
 let branch_state (state : state) : (state * state) option =
-  (* TODO: Pripravite funkcijo, ki v trenutnem stanju poišče hipotezo, glede katere
-     se je treba odločiti. Če ta obstaja, stanje razveji na dve stanji:
-     v prvem predpostavi, da hipoteza velja, v drugem pa ravno obratno.
-     Če bo vaš algoritem najprej poizkusil prvo možnost, vam morda pri drugi
-     za začetek ni treba zapravljati preveč časa, saj ne bo nujno prišla v poštev. *)
     let (i, j) = state.cur_index in 
     match state.options.(i).(j).possible with
       | [] -> None
@@ -110,10 +112,10 @@ let branch_state (state : state) : (state * state) option =
               cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
               options = options2})
       )
+
 (* pogledamo, če trenutno stanje vodi do rešitve *)
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
-  (* TODO: na tej točki je stanje smiselno počistiti in zožiti možne rešitve *)
   (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
   Model.print_problem {initial_grid = state.current_grid};*)
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.rows_taken in
