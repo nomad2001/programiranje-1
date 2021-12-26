@@ -2,7 +2,8 @@ type available = { loc : int * int; possible : int list }
 
 (* TODO: tip stanja ustrezno popravite, saj boste med reševanjem zaradi učinkovitosti
    želeli imeti še kakšno dodatno informacijo *)
-type state = { problem : Model.problem; current_grid : int option Model.grid }
+type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : bool Array.t Array.t;
+                                          cols_taken : bool Array.t Array.t; boxes_taken : bool Array.t Array.t}
 
 let print_state (state : state) : unit =
   Model.print_grid
@@ -11,8 +12,18 @@ let print_state (state : state) : unit =
 
 type response = Solved of Model.solution | Unsolved of state | Fail of state
 
+let exists_in_box box x = Array.exists (fun sub -> (Array.exists (fun y -> y = x) sub)) box
+
 let initialize_state (problem : Model.problem) : state =
-  { current_grid = Model.copy_grid problem.initial_grid; problem }
+  let cur_grid = Model.copy_grid problem.initial_grid in
+  { current_grid = cur_grid; problem; 
+  rows_taken = Array.init 9 (fun row_ind -> 
+    (Array.init 9 (fun i -> 
+      (List.exists (fun x -> x = i + 1) (Model.get_row cur_grid row_ind))))); 
+  cols_taken = Array.init 9 (fun col_ind -> 
+    (Array.init 9 (fun i -> 
+      (List.exists (fun x -> x = i + 1) (Model.get_col cur_grid col_ind))))); boxes_taken = 
+  Array.init 9 (fun box_ind -> (Array.init 9 (fun i -> exists_in_box (Model.get_box cur_grid box_ind) (i + 1))))}
 
 let validate_state (state : state) : response =
   let unsolved =
@@ -31,8 +42,8 @@ let branch_state (state : state) : (state * state) option =
      v prvem predpostavi, da hipoteza velja, v drugem pa ravno obratno.
      Če bo vaš algoritem najprej poizkusil prvo možnost, vam morda pri drugi
      za začetek ni treba zapravljati preveč časa, saj ne bo nujno prišla v poštev. *)
-  failwith "TODO"
-
+  
+  
 (* pogledamo, če trenutno stanje vodi do rešitve *)
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
