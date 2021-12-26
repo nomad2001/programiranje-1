@@ -29,8 +29,8 @@ let exists_in_box box x = bool_to_int (Array.exists (
 (* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
 števke, sicer vrne prazen seznam *)
 let generate_possible grid i j = match grid.(i).(j) with
-  | None -> []
-  | Some x -> List.init 9 (fun i -> i + 1)
+  | Some x -> [x]
+  | None -> List.init 9 (fun i -> i + 1)
 
 let initialize_state (problem : Model.problem) : state =
   let cur_grid = Model.copy_grid problem.initial_grid in
@@ -62,7 +62,7 @@ let validate_state (state : state) : response =
     else Fail state
 
 let find_next_index i j = if j = 8 then (
-  if i = 8 then (8, 8)  else (i + 1, 0)
+  if i = 8 then (8, 8) else (i + 1, 0)
 ) else (i, j + 1)
 
 let branch_state (state : state) : (state * state) option =
@@ -72,43 +72,59 @@ let branch_state (state : state) : (state * state) option =
      Če bo vaš algoritem najprej poizkusil prvo možnost, vam morda pri drugi
      za začetek ni treba zapravljati preveč časa, saj ne bo nujno prišla v poštev. *)
     let (i, j) = state.cur_index in 
-    match state.options.(i).(j) .possible with
+    match state.options.(i).(j).possible with
       | [] -> None
       | x :: xs -> (
         let grid2 = Model.copy_grid state.current_grid in
-        grid2.(i).(j) <- Some x;
-        let rows2 = Array.copy state.rows_taken in
-        rows2.(i).(x) <- rows2.(i).(x) + 1 ;
-        let cols2 = Array.copy state.cols_taken in
-        cols2.(j).(x) <- cols2.(j).(x) + 1;
-        let box2 = Array.copy state.boxes_taken in
-        box2.(3 * (i/3) + j/3).(x) <- box2.(3 * (i/3) + j/3).(x) + 1;
+        let rows2 = Model.copy_grid state.rows_taken in
+        let cols2 = Model.copy_grid state.cols_taken in
+        let box2 = Model.copy_grid state.boxes_taken in
         let options2 = Array.copy state.options in
         options2.(i).(j) <- {loc = (i, j); possible = xs};
-        Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-        boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
-        {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
-        cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
-        options = options2})
+
+        match state.problem.initial_grid.(i).(j) with
+          | None -> (
+              grid2.(i).(j) <- Some x;
+              rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
+              cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
+              box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
+              Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
+              boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
+              {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
+              cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
+              options = options2})
+          )
+          | Some y -> 
+              Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
+              boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
+              {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
+              cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
+              options = options2})
       )
 (* pogledamo, če trenutno stanje vodi do rešitve *)
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
   (* TODO: na tej točki je stanje smiselno počistiti in zožiti možne rešitve *)
+  Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
+  Model.print_problem {initial_grid = state.current_grid};
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.rows_taken in
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.cols_taken in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.boxes_taken in
-
-  if wrong_row || wrong_col || wrong_box then None else (
+  Model.print_grid string_of_int state.rows_taken;
+  Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);
+  if (wrong_row || wrong_col || wrong_box) then None else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
+        Printf.printf "Solved\n";
         Some solution
     | Fail fail ->
         (* prav tako končamo, če smo odkrili, da rešitev ni *)
+        Printf.printf "Fail\n";
         None
     | Unsolved state' ->
         (* če še nismo končali, raziščemo stanje, v katerem smo končali *)
+        Printf.printf "Unsolved\n";
         explore_state state'
   )
 
@@ -117,6 +133,7 @@ and explore_state (state : state) =
   match branch_state state with
   | None ->
       (* če stanja ne moremo razvejiti, ga ne moremo raziskati *)
+      Printf.printf "Couldn't branch.\n";
       None
   | Some (st1, st2) -> (
       (* če stanje lahko razvejimo na dve možnosti, poizkusimo prvo *)
