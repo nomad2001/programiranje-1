@@ -20,7 +20,11 @@ type response = Solved of Model.solution | Unsolved of state | Fail of state
 let bool_to_int = function | true -> 1 | false -> 0
 
 (* Preveri, ali nek element obstaja v dani škatli. *)
-let exists_in_box box x = bool_to_int (Array.exists (fun sub -> (Array.exists (fun y -> y = x) sub)) box )
+let exists_in_box box x = bool_to_int (Array.exists (
+  fun sub -> (
+    Array.exists (function | None -> false | Some y -> y = x) sub)
+    ) box 
+  )
 
 (* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
 števke, sicer vrne prazen seznam *)
@@ -30,17 +34,21 @@ let generate_possible grid i j = match grid.(i).(j) with
 
 let initialize_state (problem : Model.problem) : state =
   let cur_grid = Model.copy_grid problem.initial_grid in
-  { current_grid = cur_grid; problem; 
-  rows_taken = Array.init 9 (fun row_ind -> 
+  let cols = Array.init 9 (fun col_ind -> 
     (Array.init 9 (fun i -> 
-      bool_to_int ((List.exists (fun x -> x = i + 1) (Model.get_row cur_grid row_ind)))))); 
-  cols_taken = Array.init 9 (fun col_ind -> 
+      bool_to_int ((Array.exists ( 
+       function | None -> false | Some x -> x = i + 1) (Model.get_column cur_grid col_ind)))))) in
+  let rows = Array.init 9 (fun row_ind -> 
     (Array.init 9 (fun i -> 
-      bool_to_int ((List.exists (fun x -> x = i + 1) (Model.get_col cur_grid col_ind)))))); boxes_taken = 
-  Array.init 9 (fun box_ind -> (Array.init 9 (fun i -> exists_in_box (Model.get_box cur_grid box_ind) (i + 1))));
-  cur_index = (0, 0); options = Array.init 9 (fun i -> 
-                          (Array.init 9 (fun j -> {loc = (i,j); possible =
-                                generate_possible cur_grid i j})))}
+      bool_to_int ((Array.exists (
+        function | None -> false | Some x -> x = i + 1) (Model.get_row cur_grid row_ind)))))) in
+  let boxes = Array.init 9 (fun box_ind -> 
+          (Array.init 9 (fun i -> exists_in_box (Model.get_box cur_grid box_ind) (i + 1)))) in
+  let opts = Array.init 9 (fun i -> 
+              (Array.init 9 (fun j -> {loc = (i,j); possible = generate_possible cur_grid i j}))) in 
+
+  {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes;
+  cur_index = (0, 0); options = opts}
 
 let validate_state (state : state) : response =
   let unsolved =
@@ -54,7 +62,7 @@ let validate_state (state : state) : response =
     else Fail state
 
 let find_next_index i j = if j = 8 then (
-  if i = 8 then None else (i + 1, 0)
+  if i = 8 then (8, 8)  else (i + 1, 0)
 ) else (i, j + 1)
 
 let branch_state (state : state) : (state * state) option =
@@ -64,22 +72,22 @@ let branch_state (state : state) : (state * state) option =
      Če bo vaš algoritem najprej poizkusil prvo možnost, vam morda pri drugi
      za začetek ni treba zapravljati preveč časa, saj ne bo nujno prišla v poštev. *)
     let (i, j) = state.cur_index in 
-    match state.options.(i).(j) with
+    match state.options.(i).(j) .possible with
       | [] -> None
       | x :: xs -> (
         let grid2 = Model.copy_grid state.current_grid in
-        grid2.(i).(j) <- x;
+        grid2.(i).(j) <- Some x;
         let rows2 = Array.copy state.rows_taken in
-        rows2.(i).(x) <- rows2.(i).(x) + 1 
+        rows2.(i).(x) <- rows2.(i).(x) + 1 ;
         let cols2 = Array.copy state.cols_taken in
-        cols2.(j).(x) <- cols2.(j).(x) + 1
+        cols2.(j).(x) <- cols2.(j).(x) + 1;
         let box2 = Array.copy state.boxes_taken in
-        box2.(3 * (i/3) + j/3).(x) <- box2.(3 * (i/3) + j/3).(x) + 1
+        box2.(3 * (i/3) + j/3).(x) <- box2.(3 * (i/3) + j/3).(x) + 1;
         let options2 = Array.copy state.options in
-        options2.(i).(j) <- {loc = (i, j); possible = xs}
-        ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
+        options2.(i).(j) <- {loc = (i, j); possible = xs};
+        Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
         boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
-        {current_grid = state.current_grid; problem = state.problem; rows_taken = state_rows_taken;
+        {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
         cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
         options = options2})
       )
@@ -91,7 +99,7 @@ let rec solve_state (state : state) =
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.cols_taken in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.boxes_taken in
 
-  if wrong_row || wrong col || wrong_box then None else (
+  if wrong_row || wrong_col || wrong_box then None else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
