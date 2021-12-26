@@ -6,8 +6,8 @@ type available = { loc : int * int; possible : int list }
 trenutnem stanju, v [rows_taken], [cols_taken] in [boxes_taken] so označene številke, ki so že
 uporabljene v posameznih vrsticah, stolpcih in škatlah, v [cur_index] je shranjeno mesto celice,
 ki jo trenutno izpoljnjujemo, v [options] pa številke, ki po posameznih celicah še pridejo v poštev*)
-type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : bool Array.t Array.t;
-              cols_taken : bool Array.t Array.t; boxes_taken : bool Array.t Array.t; cur_index : int * int;
+type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
+              cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cur_index : int * int;
               options : available Array.t Array.t}
 
 let print_state (state : state) : unit =
@@ -17,8 +17,10 @@ let print_state (state : state) : unit =
 
 type response = Solved of Model.solution | Unsolved of state | Fail of state
 
+let bool_to_int = function | true -> 1 | false -> 0
+
 (* Preveri, ali nek element obstaja v dani škatli. *)
-let exists_in_box box x = Array.exists (fun sub -> (Array.exists (fun y -> y = x) sub)) box
+let exists_in_box box x = bool_to_int (Array.exists (fun sub -> (Array.exists (fun y -> y = x) sub)) box )
 
 (* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
 števke, sicer vrne prazen seznam *)
@@ -31,10 +33,10 @@ let initialize_state (problem : Model.problem) : state =
   { current_grid = cur_grid; problem; 
   rows_taken = Array.init 9 (fun row_ind -> 
     (Array.init 9 (fun i -> 
-      (List.exists (fun x -> x = i + 1) (Model.get_row cur_grid row_ind))))); 
+      bool_to_int ((List.exists (fun x -> x = i + 1) (Model.get_row cur_grid row_ind)))))); 
   cols_taken = Array.init 9 (fun col_ind -> 
     (Array.init 9 (fun i -> 
-      (List.exists (fun x -> x = i + 1) (Model.get_col cur_grid col_ind))))); boxes_taken = 
+      bool_to_int ((List.exists (fun x -> x = i + 1) (Model.get_col cur_grid col_ind)))))); boxes_taken = 
   Array.init 9 (fun box_ind -> (Array.init 9 (fun i -> exists_in_box (Model.get_box cur_grid box_ind) (i + 1))));
   cur_index = (0, 0); options = Array.init 9 (fun i -> 
                           (Array.init 9 (fun j -> {loc = (i,j); possible =
@@ -68,11 +70,11 @@ let branch_state (state : state) : (state * state) option =
         let grid2 = Model.copy_grid state.current_grid in
         grid2.(i).(j) <- x;
         let rows2 = Array.copy state.rows_taken in
-        rows2.(i).(x) <- true 
+        rows2.(i).(x) <- rows2.(i).(x) + 1 
         let cols2 = Array.copy state.cols_taken in
-        cols2.(j).(x) <- true
+        cols2.(j).(x) <- cols2.(j).(x) + 1
         let box2 = Array.copy state.boxes_taken in
-        box2.(3 * (i/3) + j/3).(x) <- true
+        box2.(3 * (i/3) + j/3).(x) <- box2.(3 * (i/3) + j/3).(x) + 1
         let options2 = Array.copy state.options in
         options2.(i).(j) <- {loc = (i, j); possible = xs}
         ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
@@ -85,17 +87,22 @@ let branch_state (state : state) : (state * state) option =
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
   (* TODO: na tej točki je stanje smiselno počistiti in zožiti možne rešitve *)
-  
-  match validate_state state with
-  | Solved solution ->
-      (* če smo našli rešitev, končamo *)
-      Some solution
-  | Fail fail ->
-      (* prav tako končamo, če smo odkrili, da rešitev ni *)
-      None
-  | Unsolved state' ->
-      (* če še nismo končali, raziščemo stanje, v katerem smo končali *)
-      explore_state state'
+  let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.rows_taken in
+  let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.cols_taken in
+  let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.boxes_taken in
+
+  if wrong_row || wrong col || wrong_box then None else (
+    match validate_state state with
+    | Solved solution ->
+        (* če smo našli rešitev, končamo *)
+        Some solution
+    | Fail fail ->
+        (* prav tako končamo, če smo odkrili, da rešitev ni *)
+        None
+    | Unsolved state' ->
+        (* če še nismo končali, raziščemo stanje, v katerem smo končali *)
+        explore_state state'
+  )
 
 and explore_state (state : state) =
   (* pri raziskovanju najprej pogledamo, ali lahko trenutno stanje razvejimo *)
