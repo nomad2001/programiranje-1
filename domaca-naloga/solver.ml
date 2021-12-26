@@ -65,6 +65,10 @@ let find_next_index i j = if j = 8 then (
   if i = 8 then (8, 8) else (i + 1, 0)
 ) else (i, j + 1)
 
+let copy_array_of_lists arr = Array.init 9 (fun i -> 
+                                (Array.init 9 (fun j -> {loc = (i, j);
+                                    possible = (List.map (fun x -> x) arr.(i).(j).possible)})))
+
 let branch_state (state : state) : (state * state) option =
   (* TODO: Pripravite funkcijo, ki v trenutnem stanju poišče hipotezo, glede katere
      se je treba odločiti. Če ta obstaja, stanje razveji na dve stanji:
@@ -79,7 +83,7 @@ let branch_state (state : state) : (state * state) option =
         let rows2 = Model.copy_grid state.rows_taken in
         let cols2 = Model.copy_grid state.cols_taken in
         let box2 = Model.copy_grid state.boxes_taken in
-        let options2 = Array.copy state.options in
+        let options2 = copy_array_of_lists state.options in
         options2.(i).(j) <- {loc = (i, j); possible = xs};
 
         match state.problem.initial_grid.(i).(j) with
@@ -105,26 +109,26 @@ let branch_state (state : state) : (state * state) option =
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
   (* TODO: na tej točki je stanje smiselno počistiti in zožiti možne rešitve *)
-  Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
-  Model.print_problem {initial_grid = state.current_grid};
+  (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
+  Model.print_problem {initial_grid = state.current_grid};*)
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.rows_taken in
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.cols_taken in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.boxes_taken in
-  Model.print_grid string_of_int state.rows_taken;
-  Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);
+  (*Model.print_grid string_of_int state.rows_taken;*)
+  (*Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);*)
   if (wrong_row || wrong_col || wrong_box) then None else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
-        Printf.printf "Solved\n";
+        (*Printf.printf "Solved\n";*)
         Some solution
     | Fail fail ->
         (* prav tako končamo, če smo odkrili, da rešitev ni *)
-        Printf.printf "Fail\n";
+        (*Printf.printf "Fail\n";*)
         None
     | Unsolved state' ->
         (* če še nismo končali, raziščemo stanje, v katerem smo končali *)
-        Printf.printf "Unsolved\n";
+        (*Printf.printf "Unsolved\n";*)
         explore_state state'
   )
 
@@ -133,7 +137,7 @@ and explore_state (state : state) =
   match branch_state state with
   | None ->
       (* če stanja ne moremo razvejiti, ga ne moremo raziskati *)
-      Printf.printf "Couldn't branch.\n";
+      (*Printf.printf "Couldn't branch.\n";*)
       None
   | Some (st1, st2) -> (
       (* če stanje lahko razvejimo na dve možnosti, poizkusimo prvo *)
