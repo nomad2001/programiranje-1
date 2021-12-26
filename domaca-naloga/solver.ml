@@ -28,9 +28,14 @@ let exists_in_box box x = bool_to_int (Array.exists (
 
 (* Generira seznam s prvimi devetimi naravnimi števili, če na [i,j]-tem mestu v sudokuju ni
 števke, sicer vrne prazen seznam *)
+let shuffle d =
+    let nd = List.map (fun c -> (Random.bits (), c)) d in
+    let sond = List.sort compare nd in
+    List.map snd sond
+
 let generate_possible grid i j = match grid.(i).(j) with
   | Some x -> [x]
-  | None -> List.init 9 (fun i -> i + 1)
+  | None -> shuffle (List.init 9 (fun i -> i + 1))
 
 let initialize_state (problem : Model.problem) : state =
   let cur_grid = Model.copy_grid problem.initial_grid in
