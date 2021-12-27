@@ -1,4 +1,5 @@
 (* Pomožni tip, ki predstavlja mrežo *)
+(*#load "str.cma";;*)
 
 type 'a grid = 'a Array.t Array.t
 
@@ -109,7 +110,8 @@ let grid_of_string cell_of_char str =
 
 (* Model za vhodne probleme *)
 
-type problem = { initial_grid : int option grid }
+type problem = { initial_grid : int option grid; arrows: ((int * int) * ((int * int) List.t)) List.t; 
+thermometers : (int * int) List.t List.t; cages: (int * ((int * int) List.t)) List.t}
 
 let string_of_int_option = function
   | None -> " "
@@ -117,13 +119,57 @@ let string_of_int_option = function
 
 let print_problem (problem : problem) : unit = print_grid string_of_int_option problem.initial_grid
 
+(* Koordinate zapisane v nizu spremeni v nabor. *)
+let index_from_string str = ((int_of_char str.[1]) - (int_of_char '0'), (int_of_char str.[3]) - (int_of_char '0'))
+
+(* Poišče vse koordinate, ki se pojavijo v nizu [str] od mesta [start] dalje. *)
+let rec search_indices_from str start list = 
+  let next_index = 
+    try Some (Str.search_forward (Str.regexp "([0-9],[0-9])") str start) with
+      Not_found -> None
+  in
+
+  match next_index with
+    | None -> list
+    | Some i -> (
+      let new_index = index_from_string (Str.matched_string str) in
+      search_indices_from str (i + 1) (new_index :: list)
+      )
+
+(* Predela posebne sudokuje iz niza v obliko, s katero lahko lažje delamo. *)
+let rec procces_special special proccesed = 
+  let (arrow, thermo, cage) = proccesed in
+  match special with
+    | [] -> proccesed
+    | x :: xs -> (
+      match x.[0] with
+        | 'K' -> (
+          let start = Str.search_forward (Str.regexp "[0-9]+") x 0 in
+          procces_special xs (arrow, thermo, (int_of_string (Str.matched_string x), search_indices_from x start []) :: cage)
+        )
+        | 'A' -> (
+          let start = Str.search_forward (Str.regexp "([0-9],[0-9])") x 0 in
+          let first = index_from_string (Str.matched_string x) in
+          procces_special xs ((first, search_indices_from x (start + 1) []) :: arrow, thermo, cage)
+        )
+        | 'T' -> procces_special xs (arrow, (List.rev (search_indices_from x 0 [])) :: thermo, cage)
+        | _ -> procces_special xs proccesed
+    )
+
 let problem_of_string str =
+  Printf.printf "%s\n" str;
+  let str2 = Str.split (Str.regexp "\r\n\r\n") str in 
+
   let cell_of_char = function
     | ' ' -> Some None
     | c when '1' <= c && c <= '9' -> Some (Some (Char.code c - Char.code '0'))
     | _ -> None
   in
-  { initial_grid = grid_of_string cell_of_char str }
+
+  let [ordinary; special] = str2 in 
+  let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
+  { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = thermo;
+  cages = cage }
 
 (* Model za izhodne rešitve *)
 
