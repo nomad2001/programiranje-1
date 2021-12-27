@@ -7,7 +7,7 @@ je shranjeno mesto celice,ki jo trenutno izpoljnjujemo, v [options] pa številke
 celicah še pridejo v poštev*)
 type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
               cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cur_index : int * int;
-              options : available Array.t Array.t}
+              options : available Array.t Array.t; wrong : bool}
 
 let print_state (state : state) : unit =
   Model.print_grid
@@ -54,8 +54,11 @@ let initialize_state (problem : Model.problem) : state =
   let opts = Array.init 9 (fun i -> 
               (Array.init 9 (fun j -> {loc = (i,j); possible = generate_possible cur_grid i j}))) in 
 
+  let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) rows in
+  let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cols in
+  let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) boxes in
   {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes;
-  cur_index = (0, 0); options = opts}
+  cur_index = (0, 0); options = opts; wrong = (wrong_row || wrong_col || wrong_box)}
 
 (* Preveri, ali smo popolnili tabelo in če smo, preveri še, ali trenutna postavitev reši sudoku. *)
 let validate_state (state : state) : response =
@@ -99,18 +102,19 @@ let branch_state (state : state) : (state * state) option =
               rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
               cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
               box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
+              let wrong2 = ((rows2.(i).(x - 1) > 1) || (cols2.(j).(x - 1) > 1) || (box2.(3 * (i/3) + j/3).(x - 1) > 1)) in
               Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-              boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
+              boxes_taken = box2; cur_index = (find_next_index i j); options = options2; wrong = (state.wrong || wrong2)},
               {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
               cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
-              options = options2})
+              options = options2; wrong = state.wrong})
           )
           | Some y -> 
               Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-              boxes_taken = box2; cur_index = (find_next_index i j); options = options2},
+              boxes_taken = box2; cur_index = (find_next_index i j); options = options2; wrong = state.wrong},
               {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
               cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
-              options = options2})
+              options = options2; wrong = state.wrong})
       )
 
 (* pogledamo, če trenutno stanje vodi do rešitve *)
@@ -118,12 +122,9 @@ let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
   (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
   Model.print_problem {initial_grid = state.current_grid};*)
-  let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.rows_taken in
-  let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.cols_taken in
-  let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) state.boxes_taken in
   (*Model.print_grid string_of_int state.rows_taken;*)
   (*Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);*)
-  if (wrong_row || wrong_col || wrong_box) then None else (
+  if state.wrong then None else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
