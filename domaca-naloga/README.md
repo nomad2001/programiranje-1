@@ -72,7 +72,7 @@ Pripravljeno ogrodje domače naloge se nahaja v treh `.ml` datotekah:
 
 V ukazni vrstici poženite:
 
-    ocamlc -g model.ml solver.ml main.ml -o sudoku.exe
+    ocamlc -g str.cma model.ml solver.ml main.ml -o sudoku.exe
 
 Če ste si OCaml namestili na sistemu Windows s pomočjo `fdopen` namesto `ocamlc` uporabite:
 
