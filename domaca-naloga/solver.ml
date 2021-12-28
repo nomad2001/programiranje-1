@@ -6,8 +6,8 @@ trenutnem stanju, v [rows_taken], [cols_taken] in [boxes_taken] je označeno, ko
 je shranjeno mesto celice,ki jo trenutno izpoljnjujemo, v [options] pa številke, ki po posameznih 
 celicah še pridejo v poštev*)
 type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
-              cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cur_index : int * int;
-              options : available Array.t Array.t; wrong : bool}
+              cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cages_taken : int Array.t Array.t; 
+              cages_sum : int Array.t; cur_index : int * int; options : available Array.t Array.t; wrong : bool}
 
 let print_state (state : state) : unit =
   Model.print_grid
@@ -24,6 +24,30 @@ let exists_in_box box x = bool_to_int (Array.exists (
     Array.exists (function | None -> false | Some y -> y = x) sub)
     ) box 
   )
+
+let initialize_cages_sum_taken (problem : Model.problem) sum taken =
+  let rec one_cage (problem : Model.problem) i sum taken = function
+    | [] -> (sum, taken)
+    | x :: xs -> (
+      let (c1, c2) = x in
+      match problem.initial_grid.(c1).(c2) with
+        | None -> one_cage problem i sum taken xs
+        | Some y -> (
+          sum.(i) <- sum.(i) + y;
+          taken.(i).(y - 1) <- taken.(i).(y - 1) + 1;
+          one_cage problem i sum taken xs
+        )
+    )
+  in 
+
+  let rec all_cages i (problem : Model.problem) sum taken = 
+    if i >= Array.length sum then (sum, taken) else (
+      let (sum2, taken2) = one_cage problem i sum taken (snd problem.cages.(i)) in
+      all_cages (i + 1) problem sum2 taken2
+  ) 
+  in
+
+  all_cages 0 problem sum taken
 
 (* Naključno premeša seznam. Funkcija kopirana s strani 
 https://stackoverflow.com/questions/15095541/how-to-shuffle-list-in-on-in-ocaml*)
@@ -53,12 +77,18 @@ let initialize_state (problem : Model.problem) : state =
           (Array.init 9 (fun i -> exists_in_box (Model.get_box cur_grid box_ind) (i + 1)))) in
   let opts = Array.init 9 (fun i -> 
               (Array.init 9 (fun j -> {loc = (i,j); possible = generate_possible cur_grid i j}))) in 
+  let (cages_s, cages_t) = initialize_cages_sum_taken problem (Array.init (Array.length problem.cages)
+  (fun i -> 0)) (Array.init (Array.length problem.cages) (fun i -> (Array.init 9 (fun j -> 0)))) in
 
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) rows in
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cols in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) boxes in
-  {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes;
-  cur_index = (0, 0); options = opts; wrong = (wrong_row || wrong_col || wrong_box)}
+  let wrong_cage = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cages_t in
+  let wrong_sum = Array.exists (fun i -> cages_s.(i) > (fst problem.cages.(i))) (Array.init 
+  (Array.length problem.cages) (fun j -> j)) in
+  {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes; 
+  cages_sum = cages_s; cages_taken = cages_t; cur_index = (0, 0); options = opts; 
+  wrong = (wrong_row || wrong_col || wrong_box || wrong_cage || wrong_sum)}
 
 (* Preveri, ali smo popolnili tabelo in če smo, preveri še, ali trenutna postavitev reši sudoku. *)
 let validate_state (state : state) : response =
@@ -80,48 +110,84 @@ let copy_array_of_lists arr = Array.init 9 (fun i ->
                                 (Array.init 9 (fun j -> {loc = (i, j);
                                     possible = (List.map (fun x -> x) arr.(i).(j).possible)})))
 
+let copy_cages cages = Array.init (Array.length cages) (fun i -> (Array.map (fun x -> x) cages.(i)))
+
+let rec update_cages x sum taken cages = function
+  | [] -> false
+  | y :: ys -> (
+    sum.(y) <- sum.(y) + x;
+    taken.(y).(x - 1) <- taken.(y).(x - 1) + 1;
+    if (sum.(y) > (fst cages.(y))) || (taken.(y).(x - 1) > 1) then true else (
+      update_cages x sum taken cages ys
+    )
+  )
+
 (* Razvejimo stanje na 1.možnost - prva izmed možnih števk v [possible] za trenutno mesto je pravilna, 
 izberemo jo in rešimo preostali sudoku - in 2. možnost - prva izmed možnih števk za trenutno mesto je 
 nepravilna in z njo ne moremo rešiti preostalega sudokuja, zato je pravilna števka med preostalimi 
 elementi [possible] ali pa sploh ne obstaja, zato jo lahko iščemo med preostalimi števili v [possible]*)
 let branch_state (state : state) : (state * state) option =
-    let (i, j) = state.cur_index in 
-    match state.options.(i).(j).possible with
-      | [] -> None
-      | x :: xs -> (
-        let grid2 = Model.copy_grid state.current_grid in
-        let rows2 = Model.copy_grid state.rows_taken in
-        let cols2 = Model.copy_grid state.cols_taken in
-        let box2 = Model.copy_grid state.boxes_taken in
-        let options2 = copy_array_of_lists state.options in
-        options2.(i).(j) <- {loc = (i, j); possible = xs};
+  let (i, j) = state.cur_index in 
+  match state.options.(i).(j).possible with
+    | [] -> None
+    | x :: xs -> (
+      let grid2 = Model.copy_grid state.current_grid in
+      let rows2 = Model.copy_grid state.rows_taken in
+      let cols2 = Model.copy_grid state.cols_taken in
+      let box2 = Model.copy_grid state.boxes_taken in
+      let cages2 = copy_cages state.cages_taken in
+      let sum_cages2 = Array.copy state.cages_sum in
+      let options2 = copy_array_of_lists state.options in
+      options2.(i).(j) <- {loc = (i, j); possible = xs};
 
-        match state.problem.initial_grid.(i).(j) with
-          | None -> (
-              grid2.(i).(j) <- Some x;
-              rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
-              cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
-              box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
-              let wrong2 = ((rows2.(i).(x - 1) > 1) || (cols2.(j).(x - 1) > 1) || (box2.(3 * (i/3) + j/3).(x - 1) > 1)) in
-              Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-              boxes_taken = box2; cur_index = (find_next_index i j); options = options2; wrong = (state.wrong || wrong2)},
-              {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
-              cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
-              options = options2; wrong = state.wrong})
-          )
-          | Some y -> 
-              Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-              boxes_taken = box2; cur_index = (find_next_index i j); options = options2; wrong = state.wrong},
-              {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
-              cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cur_index = state.cur_index;
-              options = options2; wrong = state.wrong})
-      )
+      match state.problem.initial_grid.(i).(j) with
+        | None -> (
+            grid2.(i).(j) <- Some x;
+            rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
+            cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
+            box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
+            let wrong_cages = update_cages x sum_cages2 cages2 state.problem.cages state.problem.in_cages.(i).(j) in
+            let wrong2 = ((rows2.(i).(x - 1) > 1) || (cols2.(j).(x - 1) > 1) || 
+            (box2.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages) in
+
+            Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
+            boxes_taken = box2; cages_taken = cages2; cages_sum = sum_cages2; cur_index = (find_next_index i j); 
+            options = options2; wrong = (state.wrong || wrong2)},
+            {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
+            cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
+            cages_sum = state.cages_sum; cur_index = state.cur_index; options = options2; wrong = state.wrong})
+        )
+        | Some y -> 
+            Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
+            boxes_taken = box2; cages_taken = cages2; cages_sum = sum_cages2; cur_index = (find_next_index i j); 
+            options = options2; wrong = state.wrong},
+            {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
+            cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
+            cages_sum = state.cages_sum; cur_index = state.cur_index; options = options2; wrong = state.wrong})
+    )
 
 (* pogledamo, če trenutno stanje vodi do rešitve *)
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
-  (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));
-  Model.print_problem {initial_grid = state.current_grid};*)
+  (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));*)
+  (*Model.print_problem {initial_grid = state.current_grid; arrows = []; thermometers = []; cages = [||]; in_cages = [||]};
+  for i = 0 to ((Array.length state.cages_taken) - 1) do
+    for j = 0 to 8 do 
+      Printf.printf "%d " state.cages_taken.(i).(j)
+    done;
+    Printf.printf "\n";
+  done;
+  *)
+  let x = match state.current_grid.(0).(0) with
+    | None -> -1
+    | Some x -> x
+  in
+  Printf.printf "%d\n" x;
+  (*for i = 0 to ((Array.length state.cages_sum) - 1) do
+    Printf.printf "%d " state.cages_sum.(i)
+  done;
+  Printf.printf "\n";
+  *)
   (*Model.print_grid string_of_int state.rows_taken;*)
   (*Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);*)
   if state.wrong then None else (
