@@ -122,6 +122,20 @@ let rec update_cages x sum taken cages = function
     )
   )
 
+let rec check_thermometers grid thermometers =
+  | [] -> false
+  | x : xs -> (
+    let rec check_one previous = function
+      | [] -> false
+      | y :: ys -> (
+        let (c1, c2) = y in
+        match grid.(c1).(c2) with
+          | None -> check_one previous ys
+          | Some x -> if x > previous then check_one x ys else true
+      ) 
+    (check_one (-1) thermometers.(x)) || (check_thermometers grid thermometers xs)
+  ) 
+
 (* Razvejimo stanje na 1.možnost - prva izmed možnih števk v [possible] za trenutno mesto je pravilna, 
 izberemo jo in rešimo preostali sudoku - in 2. možnost - prva izmed možnih števk za trenutno mesto je 
 nepravilna in z njo ne moremo rešiti preostalega sudokuja, zato je pravilna števka med preostalimi 
@@ -147,8 +161,9 @@ let branch_state (state : state) : (state * state) option =
             cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
             box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
             let wrong_cages = update_cages x sum_cages2 cages2 state.problem.cages state.problem.in_cages.(i).(j) in
+            let wrong_thermos = check_thermometers state.current_grid state.problem.thermometers state.problem.in_thermos.(i).(j) in
             let wrong2 = ((rows2.(i).(x - 1) > 1) || (cols2.(j).(x - 1) > 1) || 
-            (box2.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages) in
+            (box2.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos) in
 
             Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
             boxes_taken = box2; cages_taken = cages2; cages_sum = sum_cages2; cur_index = (find_next_index i j); 
@@ -178,11 +193,11 @@ let rec solve_state (state : state) =
     Printf.printf "\n";
   done;
   *)
-  let x = match state.current_grid.(0).(0) with
+  (*let x = match state.current_grid.(0).(0) with
     | None -> -1
     | Some x -> x
   in
-  Printf.printf "%d\n" x;
+  Printf.printf "%d\n" x;*)
   (*for i = 0 to ((Array.length state.cages_sum) - 1) do
     Printf.printf "%d " state.cages_sum.(i)
   done;

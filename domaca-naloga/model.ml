@@ -111,8 +111,8 @@ let grid_of_string cell_of_char str =
 (* Model za vhodne probleme *)
 
 type problem = { initial_grid : int option grid; arrows: ((int * int) * ((int * int) List.t)) List.t; 
-thermometers : (int * int) List.t List.t; cages: (int * ((int * int) List.t)) Array.t; 
-in_cages: (int List.t) Array.t Array.t}
+thermometers : (int * int) List.t Array.t; in_thermos: (int List.t) Array.t Array.t; 
+cages: (int * ((int * int) List.t)) Array.t; in_cages: (int List.t) Array.t Array.t}
 
 let string_of_int_option = function
   | None -> " "
@@ -175,6 +175,38 @@ let rec generate_in_cages i arr = function
     generate_in_cages (i + 1) (one_cage i arr (snd x)) xs
   )
 
+let rec generate_in_thermos i arr = function
+  | [] -> arr
+  | x :: xs -> (
+    let rec one_cage i arr = function
+      | [] -> arr
+      | y :: ys -> (
+        let (c1, c2) = y in
+        arr.(c1).(c2) <- (i :: arr.(c1).(c2));
+        one_cage i arr ys
+      )
+    in
+
+    generate_in_cages (i + 1) (one_cage i arr x) xs
+  )
+
+(*let rec generate_predecessors_thermos predecessors = function
+  | [] -> predecessors
+  | x :: xs -> (
+    let rec one_thermo predecessors predecessor = function
+      | [] -> predecessors
+      | y :: ys -> (
+        let (c1, c2) = y in
+        predessors.(c1).(c2) <- (predecessor :: predessors.(c1).(c2));
+        one_thermo predecessors y ys
+      )
+    in
+
+    match x with
+      | [] -> generate_predecessors_thermos predecessors xs
+      | y :: ys -> generate_predecessors_thermos (one_thermo predecessors y ys) xs
+  )*)
+
 let rec sum_of_cage solution sum = function
   | [] -> sum
   | x :: xs -> (
@@ -194,9 +226,9 @@ let problem_of_string str =
 
   let [ordinary; special] = str2 in 
   let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
-  { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = thermo;
-  cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> 
-  (Array.init 9 (fun j -> [])))) cage }
+  { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = Array.of_list thermo;
+  in_thermos = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) thermo; 
+  cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
 
 (* Model za izhodne rešitve *)
 
@@ -222,7 +254,8 @@ let is_valid_solution problem solution =
                                         | Some x -> solution.(i).(j) != x
                                       )) (Array.init 9 (fun j -> j))) (Array.init 9 (fun i -> i)) in
   (* Ni treba preverjati, ali so v vseh kletkah same različne številke, ker to sproti preverjamo
-  v datoteki [Solver.ml] *)
+  v datoteki [Solver.ml]. Prav tako ni treba preverjati, ali so v termometrih naraščajoča zaporedja,
+  saj tudi to sproti preverjamo v [Solver.ml] *)
   let sum_correct solution problem = Array.for_all (fun sub -> 
     (fst sub) = (sum_of_cage solution 0 (snd sub))) problem.cages in
 
