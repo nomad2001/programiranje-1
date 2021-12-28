@@ -111,7 +111,8 @@ let grid_of_string cell_of_char str =
 (* Model za vhodne probleme *)
 
 type problem = { initial_grid : int option grid; arrows: ((int * int) * ((int * int) List.t)) List.t; 
-thermometers : (int * int) List.t List.t; cages: (int * ((int * int) List.t)) List.t}
+thermometers : (int * int) List.t List.t; cages: (int * ((int * int) List.t)) Array.t; 
+in_cages: (int List.t) Array.t Array.t}
 
 let string_of_int_option = function
   | None -> " "
@@ -132,7 +133,8 @@ let rec search_indices_from str start list =
   match next_index with
     | None -> list
     | Some i -> (
-      let new_index = index_from_string (Str.matched_string str) in
+      let matched = Str.matched_string str in
+      let new_index = index_from_string matched in
       search_indices_from str (i + 1) (new_index :: list)
       )
 
@@ -145,16 +147,40 @@ let rec procces_special special proccesed =
       match x.[0] with
         | 'K' -> (
           let start = Str.search_forward (Str.regexp "[0-9]+") x 0 in
-          procces_special xs (arrow, thermo, (int_of_string (Str.matched_string x), search_indices_from x start []) :: cage)
+          let matched = Str.matched_string x in
+          procces_special xs (arrow, thermo, (int_of_string matched, search_indices_from x start []) :: cage)
         )
         | 'A' -> (
           let start = Str.search_forward (Str.regexp "([0-9],[0-9])") x 0 in
-          let first = index_from_string (Str.matched_string x) in
+          let matched = Str.matched_string x in
+          let first = index_from_string (matched) in
           procces_special xs ((first, search_indices_from x (start + 1) []) :: arrow, thermo, cage)
         )
         | 'T' -> procces_special xs (arrow, (List.rev (search_indices_from x 0 [])) :: thermo, cage)
         | _ -> procces_special xs proccesed
     )
+
+let rec generate_in_cages i arr = function
+  | [] -> arr
+  | x :: xs -> (
+    let rec one_cage i arr = function
+      | [] -> arr
+      | y :: ys -> (
+        let (c1, c2) = y in
+        arr.(c1).(c2) <- (i :: arr.(c1).(c2));
+        one_cage i arr ys
+      )
+    in
+
+    generate_in_cages (i + 1) (one_cage i arr (snd x)) xs
+  )
+
+let rec sum_of_cage solution sum = function
+  | [] -> sum
+  | x :: xs -> (
+    let (c1, c2) = x in
+    sum_of_cage solution (sum + solution.(c1).(c2)) xs
+  )
 
 let problem_of_string str =
   Printf.printf "%s\n" str;
@@ -169,7 +195,8 @@ let problem_of_string str =
   let [ordinary; special] = str2 in 
   let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
   { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = thermo;
-  cages = cage }
+  cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> 
+  (Array.init 9 (fun j -> [])))) cage }
 
 (* Model za izhodne rešitve *)
 
@@ -194,8 +221,13 @@ let is_valid_solution problem solution =
                                         | None -> false
                                         | Some x -> solution.(i).(j) != x
                                       )) (Array.init 9 (fun j -> j))) (Array.init 9 (fun i -> i)) in
-  
-  (rows_correct solution) && (columns_correct solution) && (boxes_correct solution) && (not (sol_prob_same solution problem))
+  (* Ni treba preverjati, ali so v vseh kletkah same različne številke, ker to sproti preverjamo
+  v datoteki [Solver.ml] *)
+  let sum_correct solution problem = Array.for_all (fun sub -> 
+    (fst sub) = (sum_of_cage solution 0 (snd sub))) problem.cages in
+
+  (rows_correct solution) && (columns_correct solution) && (boxes_correct solution) && 
+  (not (sol_prob_same solution problem)) && (sum_correct solution problem)
 
 
 (*┏━━━┯━━━┯━━━┓
