@@ -116,15 +116,15 @@ let rec update_cages x sum taken cages = function
   | [] -> false
   | y :: ys -> (
     sum.(y) <- sum.(y) + x;
-    taken.(y).(x - 1) <- taken.(y).(x - 1) + 1;
-    if (sum.(y) > (fst cages.(y))) || (taken.(y).(x - 1) > 1) then true else (
+    taken.(y).((Int.abs x) - 1) <- taken.(y).((Int.abs x) - 1) + (x / (Int.abs x));
+    if (sum.(y) > (fst cages.(y))) || (taken.(y).((Int.abs x) - 1) > 1) then true else (
       update_cages x sum taken cages ys
     )
   )
 
-let rec check_thermometers grid thermometers =
+let rec check_thermometers grid thermometers = function
   | [] -> false
-  | x : xs -> (
+  | x :: xs -> (
     let rec check_one previous = function
       | [] -> false
       | y :: ys -> (
@@ -133,6 +133,7 @@ let rec check_thermometers grid thermometers =
           | None -> check_one previous ys
           | Some x -> if x > previous then check_one x ys else true
       ) 
+    in
     (check_one (-1) thermometers.(x)) || (check_thermometers grid thermometers xs)
   ) 
 
@@ -145,40 +146,46 @@ let branch_state (state : state) : (state * state) option =
   match state.options.(i).(j).possible with
     | [] -> None
     | x :: xs -> (
-      let grid2 = Model.copy_grid state.current_grid in
+      (*let grid2 = Model.copy_grid state.current_grid in
       let rows2 = Model.copy_grid state.rows_taken in
       let cols2 = Model.copy_grid state.cols_taken in
-      let box2 = Model.copy_grid state.boxes_taken in
-      let cages2 = copy_cages state.cages_taken in
-      let sum_cages2 = Array.copy state.cages_sum in
-      let options2 = copy_array_of_lists state.options in
-      options2.(i).(j) <- {loc = (i, j); possible = xs};
+      let box2 = Model.copy_grid state.boxes_taken in*)
+      state.current_grid.(i).(j) <- Some x;
+      state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) + 1 ;
+      state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) + 1;
+      state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) + 1;
+      (*let cages2 = copy_cages state.cages_taken in
+      let sum_cages2 = Array.copy state.cages_sum in*)
+      (*let options2 = copy_array_of_lists state.options in*)
+      state.options.(i).(j) <- {loc = (i, j); possible = xs};
 
       match state.problem.initial_grid.(i).(j) with
         | None -> (
-            grid2.(i).(j) <- Some x;
+            (*grid2.(i).(j) <- Some x;
             rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
             cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
-            box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;
-            let wrong_cages = update_cages x sum_cages2 cages2 state.problem.cages state.problem.in_cages.(i).(j) in
+            box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;*)
+            let wrong_cages = update_cages x state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j) in
             let wrong_thermos = check_thermometers state.current_grid state.problem.thermometers state.problem.in_thermos.(i).(j) in
-            let wrong2 = ((rows2.(i).(x - 1) > 1) || (cols2.(j).(x - 1) > 1) || 
-            (box2.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos) in
+            let wrong2 = ((state.rows_taken.(i).(x - 1) > 1) || (state.cols_taken.(j).(x - 1) > 1) || 
+            (state.boxes_taken.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos) in
 
-            Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-            boxes_taken = box2; cages_taken = cages2; cages_sum = sum_cages2; cur_index = (find_next_index i j); 
-            options = options2; wrong = (state.wrong || wrong2)},
+            Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
+            cols_taken = state.cols_taken;
+            boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; cages_sum = state.cages_sum; cur_index = (find_next_index i j); 
+            options = state.options; wrong = (state.wrong || wrong2)},
             {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
             cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
-            cages_sum = state.cages_sum; cur_index = state.cur_index; options = options2; wrong = state.wrong})
+            cages_sum = state.cages_sum; cur_index = state.cur_index; options = state.options; wrong = state.wrong})
         )
         | Some y -> 
-            Some ({current_grid = grid2; problem = state.problem; rows_taken = rows2; cols_taken = cols2;
-            boxes_taken = box2; cages_taken = cages2; cages_sum = sum_cages2; cur_index = (find_next_index i j); 
-            options = options2; wrong = state.wrong},
+            Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
+            cols_taken = state.cols_taken;
+            boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; cages_sum = state.cages_sum; cur_index = (find_next_index i j); 
+            options = state.options; wrong = state.wrong},
             {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
             cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
-            cages_sum = state.cages_sum; cur_index = state.cur_index; options = options2; wrong = state.wrong})
+            cages_sum = state.cages_sum; cur_index = state.cur_index; options = state.options; wrong = state.wrong})
     )
 
 (* pogledamo, če trenutno stanje vodi do rešitve *)
@@ -205,7 +212,9 @@ let rec solve_state (state : state) =
   *)
   (*Model.print_grid string_of_int state.rows_taken;*)
   (*Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);*)
-  if state.wrong then None else (
+  if state.wrong then ( 
+    None
+  ) else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
@@ -223,6 +232,7 @@ let rec solve_state (state : state) =
 
 and explore_state (state : state) =
   (* pri raziskovanju najprej pogledamo, ali lahko trenutno stanje razvejimo *)
+  let (i, j) = state.cur_index in
   match branch_state state with
   | None ->
       (* če stanja ne moremo razvejiti, ga ne moremo raziskati *)
@@ -234,9 +244,19 @@ and explore_state (state : state) =
       | Some solution ->
           (* če prva možnost vodi do rešitve, do nje vodi tudi prvotno stanje *)
           Some solution
-      | None ->
+      | None -> (
           (* če prva možnost ne vodi do rešitve, raziščemo še drugo možnost *)
-          solve_state st2 )
+          let x = match state.current_grid.(i).(j) with | Some y -> y in
+          state.current_grid.(i).(j) <- None;
+          state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) - 1 ;
+          state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) - 1;
+          state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) - 1;
+          update_cages (-x) state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j);
+          let answer = solve_state st2 in
+          state.options.(i).(j) <- {loc = (i, j); possible = (x :: state.options.(i).(j).possible)};
+          answer
+        )
+      )
 
 let solve_problem (problem : Model.problem) =
   problem |> initialize_state |> solve_state
