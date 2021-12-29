@@ -178,16 +178,16 @@ let rec generate_in_cages i arr = function
 let rec generate_in_thermos i arr = function
   | [] -> arr
   | x :: xs -> (
-    let rec one_cage i arr = function
+    let rec one_thermo i arr = function
       | [] -> arr
       | y :: ys -> (
         let (c1, c2) = y in
         arr.(c1).(c2) <- (i :: arr.(c1).(c2));
-        one_cage i arr ys
+        one_thermo i arr ys
       )
     in
 
-    generate_in_cages (i + 1) (one_cage i arr x) xs
+    generate_in_thermos (i + 1) (one_thermo i arr x) xs
   )
 
 (*let rec generate_predecessors_thermos predecessors = function
@@ -224,12 +224,19 @@ let problem_of_string str =
     | _ -> None
   in
 
-  let [ordinary; special] = str2 in 
-  let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
-  { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = Array.of_list thermo;
-  in_thermos = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) thermo; 
-  cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
-
+  match str2 with
+    | [ordinary; special] -> (
+        let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
+        { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = Array.of_list thermo;
+        in_thermos = generate_in_thermos 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) thermo; 
+        cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
+      )
+    | [ordinary] -> (
+        { initial_grid = grid_of_string cell_of_char ordinary; arrows = []; thermometers = [||];
+        in_thermos = (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))); cages = [||]; 
+        in_cages = (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) }
+      )
+  
 (* Model za izhodne rešitve *)
 
 type solution = int grid
