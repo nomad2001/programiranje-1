@@ -7,7 +7,8 @@ je shranjeno mesto celice,ki jo trenutno izpoljnjujemo, v [options] pa številke
 celicah še pridejo v poštev*)
 type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
               cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cages_taken : int Array.t Array.t; 
-              cages_sum : int Array.t; cur_index : int * int; options : available Array.t Array.t; wrong : bool}
+              cages_sum : int Array.t; cur_index : int * int; order : (int * int) option Array.t; 
+              index_in_order : int option Array.t Array.t; options : available Array.t Array.t; wrong : bool}
 
 let print_state (state : state) : unit =
   Model.print_grid
@@ -49,6 +50,83 @@ let initialize_cages_sum_taken (problem : Model.problem) sum taken =
 
   all_cages 0 problem sum taken
 
+let rec count_one indices order start count = function
+  | [] -> count
+  | x :: xs -> (
+    let (c1, c2) = x in
+    match indices.(c1).(c2) with
+      | None -> (
+        order.(start + count) <- Some x;
+        indices.(c1).(c2) <- Some (start + count);
+        count_one indices order start (count + 1) xs
+      )
+      | Some y -> count_one indices order start count xs
+  )
+
+let rec traverse_arrows arrows i start indices order =
+  if i = (Array.length arrows) then start else (
+    let (c1, c2) = (fst arrows.(i)) in
+    
+    match indices.(c1).(c2) with
+      | None -> (
+          order.(start) <- Some (fst arrows.(i));
+          indices.(c1).(c2) <- Some start;
+          let count = count_one indices order (start + 1) 0 (snd arrows.(i)) in
+          traverse_arrows arrows (i + 1) (start + count + 1) indices order
+        )
+      | Some x -> (
+          let count = count_one indices order start 0 (snd arrows.(i)) in
+          traverse_arrows arrows (i + 1) (start + count) indices order
+        )
+  )
+
+let rec traverse_cages cages i start indices order =
+  if i = (Array.length cages) then start else (
+    let count = count_one indices order start 0 (snd cages.(i)) in
+    traverse_cages cages (i + 1) (start + count) indices order
+  )
+
+let rec traverse_thermometers thermos i start indices order =
+  if i = (Array.length thermos) then start else (
+    let count = count_one indices order start 0 thermos.(i) in
+    traverse_thermometers thermos (i + 1) (start + count) indices order
+  )
+
+let rec traverse_others indices order count i j =
+  if i = 9 then (order, indices) else (
+    if j = 8 then (
+      if indices.(i).(j) = None then (
+        indices.(i).(j) <- Some count;
+        order.(count) <- Some (i, j);
+        traverse_others indices order (count + 1) (i + 1) 0
+      ) 
+      else (
+        traverse_others indices order count (i + 1) 0
+      )
+    )
+    else (
+      if indices.(i).(j) = None then (
+        indices.(i).(j) <- Some count;
+        order.(count) <- Some (i, j);
+        traverse_others indices order (count + 1) i (j + 1)
+      ) 
+      else (
+        traverse_others indices order count i (j + 1)
+      )
+    )
+  )
+
+(* Inicializira zaporedje, v katerem izpolnjujemo celie v sudokuju. Najprej izpolnjujemo celice
+v enakih puščicah, nato v enakih kletkah, nato v enakih termometrih in na koncu celice izven vseh
+posebnih objektov. *)
+let initialize_order (problem : Model.problem) = 
+  let indices = Array.init 9 (fun i -> (Array.init 9 (fun j -> None))) in
+  let order = Array.init 81 (fun i -> None) in
+  let start1 = traverse_arrows problem.arrows 0 0 indices order in
+  let start2 = traverse_cages problem.cages 0 start1 indices order in
+  let start3 = traverse_thermometers problem.thermometers 0 start2 indices order in
+  traverse_others indices order start3 0 0
+
 (* Naključno premeša seznam. Funkcija kopirana s strani 
 https://stackoverflow.com/questions/15095541/how-to-shuffle-list-in-on-in-ocaml*)
 let shuffle d =
@@ -79,16 +157,23 @@ let initialize_state (problem : Model.problem) : state =
               (Array.init 9 (fun j -> {loc = (i,j); possible = generate_possible cur_grid i j}))) in 
   let (cages_s, cages_t) = initialize_cages_sum_taken problem (Array.init (Array.length problem.cages)
   (fun i -> 0)) (Array.init (Array.length problem.cages) (fun i -> (Array.init 9 (fun j -> 0)))) in
+  let (order, index_in_order) = initialize_order problem in
 
+  (*for i = 0 to 80 do
+    let Some (c1, c2) = order.(i) in
+    Printf.printf "(%d,%d)\n" c1 c2
+  done;
+*)
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) rows in
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cols in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) boxes in
   let wrong_cage = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cages_t in
   let wrong_sum = Array.exists (fun i -> cages_s.(i) > (fst problem.cages.(i))) (Array.init 
   (Array.length problem.cages) (fun j -> j)) in
+  let Some beggining = order.(0) in
   {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes; 
-  cages_sum = cages_s; cages_taken = cages_t; cur_index = (0, 0); options = opts; 
-  wrong = (wrong_row || wrong_col || wrong_box || wrong_cage || wrong_sum)}
+  cages_sum = cages_s; cages_taken = cages_t; cur_index = beggining; order = order; index_in_order = index_in_order;
+  options = opts; wrong = (wrong_row || wrong_col || wrong_box || wrong_cage || wrong_sum)}
 
 (* Preveri, ali smo popolnili tabelo in če smo, preveri še, ali trenutna postavitev reši sudoku. *)
 let validate_state (state : state) : response =
@@ -102,9 +187,14 @@ let validate_state (state : state) : response =
     if Model.is_valid_solution state.problem solution then Solved solution
     else Fail state
 
-let find_next_index i j = if j = 8 then (
-  if i = 8 then (8, 8) else (i + 1, 0)
-) else (i, j + 1)
+let find_next_index state i j = 
+  match state.index_in_order.(i).(j) with
+    | Some x -> if x = 80 then (i, j) else (
+        match state.order.(x + 1) with
+          | Some y -> y
+    )
+(* Ko zgornjo funkcijo uporabimo, v [state.index_in_order] in [state.order] ni več nobene vrednosti 
+[None] in zato tega primera ni treba obravnavati. *)
 
 let copy_array_of_lists arr = Array.init 9 (fun i -> 
                                 (Array.init 9 (fun j -> {loc = (i, j);
@@ -151,7 +241,7 @@ izberemo jo in rešimo preostali sudoku - in 2. možnost - prva izmed možnih š
 nepravilna in z njo ne moremo rešiti preostalega sudokuja, zato je pravilna števka med preostalimi 
 elementi [possible] ali pa sploh ne obstaja, zato jo lahko iščemo med preostalimi števili v [possible]*)
 let branch_state (state : state) : (state * state) option =
-  let (i, j) = state.cur_index in 
+  let (i, j) = state.cur_index in
   match state.options.(i).(j).possible with
     | [] -> None
     | x :: xs -> (
@@ -165,26 +255,28 @@ let branch_state (state : state) : (state * state) option =
         | None -> (
             let wrong_cages = update_cages x state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j) in
             let wrong_thermos = check_thermometers state.current_grid state.problem.thermometers state.problem.in_thermos.(i).(j) in
-            let wrong_arrows = check_arrows state.problem.arrows state.current_grid state.problem.in_cages.(i).(j) in
+            let wrong_arrows = check_arrows state.problem.arrows state.current_grid state.problem.in_arrows.(i).(j) in
             let wrong2 = ((state.rows_taken.(i).(x - 1) > 1) || (state.cols_taken.(j).(x - 1) > 1) || 
             (state.boxes_taken.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos || wrong_arrows) in
 
             Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
-            cols_taken = state.cols_taken;
-            boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; cages_sum = state.cages_sum; cur_index = (find_next_index i j); 
-            options = state.options; wrong = (state.wrong || wrong2)},
+            cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; 
+            cages_sum = state.cages_sum; cur_index = (find_next_index state i j); order = state.order; 
+            index_in_order = state.index_in_order; options = state.options; wrong = (state.wrong || wrong2)},
             {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
             cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
-            cages_sum = state.cages_sum; cur_index = state.cur_index; options = state.options; wrong = state.wrong})
+            cages_sum = state.cages_sum; cur_index = state.cur_index; order = state.order; 
+            index_in_order = state.index_in_order; options = state.options; wrong = state.wrong})
         )
         | Some y -> 
             Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
-            cols_taken = state.cols_taken;
-            boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; cages_sum = state.cages_sum; cur_index = (find_next_index i j); 
-            options = state.options; wrong = state.wrong},
+            cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; 
+            cages_sum = state.cages_sum; cur_index = (find_next_index state i j); order = state.order; 
+            index_in_order = state.index_in_order; options = state.options; wrong = state.wrong},
             {current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken;
             cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken;
-            cages_sum = state.cages_sum; cur_index = state.cur_index; options = state.options; wrong = state.wrong})
+            cages_sum = state.cages_sum; cur_index = state.cur_index; order = state.order; 
+            index_in_order = state.index_in_order; options = state.options; wrong = state.wrong})
     )
 
 (* pogledamo, če trenutno stanje vodi do rešitve *)
