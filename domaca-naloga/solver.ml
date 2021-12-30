@@ -137,6 +137,15 @@ let rec check_thermometers grid thermometers = function
     (check_one (-1) thermometers.(x)) || (check_thermometers grid thermometers xs)
   ) 
 
+let rec check_arrows arrows grid = function
+  | [] -> false
+  | x :: xs -> (
+    let (c1, c2) = fst arrows.(x) in
+    match grid.(c1).(c2) with
+      | None -> check_arrows arrows grid xs
+      | Some y -> if y < (Model.sum_arrow 0 grid (snd arrows.(x))) then true else check_arrows arrows grid xs
+    )
+
 (* Razvejimo stanje na 1.možnost - prva izmed možnih števk v [possible] za trenutno mesto je pravilna, 
 izberemo jo in rešimo preostali sudoku - in 2. možnost - prva izmed možnih števk za trenutno mesto je 
 nepravilna in z njo ne moremo rešiti preostalega sudokuja, zato je pravilna števka med preostalimi 
@@ -146,29 +155,19 @@ let branch_state (state : state) : (state * state) option =
   match state.options.(i).(j).possible with
     | [] -> None
     | x :: xs -> (
-      (*let grid2 = Model.copy_grid state.current_grid in
-      let rows2 = Model.copy_grid state.rows_taken in
-      let cols2 = Model.copy_grid state.cols_taken in
-      let box2 = Model.copy_grid state.boxes_taken in*)
       state.current_grid.(i).(j) <- Some x;
       state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) + 1 ;
       state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) + 1;
       state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) + 1;
-      (*let cages2 = copy_cages state.cages_taken in
-      let sum_cages2 = Array.copy state.cages_sum in*)
-      (*let options2 = copy_array_of_lists state.options in*)
       state.options.(i).(j) <- {loc = (i, j); possible = xs};
 
       match state.problem.initial_grid.(i).(j) with
         | None -> (
-            (*grid2.(i).(j) <- Some x;
-            rows2.(i).(x - 1) <- rows2.(i).(x - 1) + 1 ;
-            cols2.(j).(x - 1) <- cols2.(j).(x - 1) + 1;
-            box2.(3 * (i/3) + j/3).(x - 1) <- box2.(3 * (i/3) + j/3).(x - 1) + 1;*)
             let wrong_cages = update_cages x state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j) in
             let wrong_thermos = check_thermometers state.current_grid state.problem.thermometers state.problem.in_thermos.(i).(j) in
+            let wrong_arrows = check_arrows state.problem.arrows state.current_grid state.problem.in_cages.(i).(j) in
             let wrong2 = ((state.rows_taken.(i).(x - 1) > 1) || (state.cols_taken.(j).(x - 1) > 1) || 
-            (state.boxes_taken.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos) in
+            (state.boxes_taken.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos || wrong_arrows) in
 
             Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
             cols_taken = state.cols_taken;

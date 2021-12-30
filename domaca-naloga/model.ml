@@ -1,5 +1,4 @@
 (* Pomožni tip, ki predstavlja mrežo *)
-(*#load "str.cma";;*)
 
 type 'a grid = 'a Array.t Array.t
 
@@ -110,9 +109,10 @@ let grid_of_string cell_of_char str =
 
 (* Model za vhodne probleme *)
 
-type problem = { initial_grid : int option grid; arrows: ((int * int) * ((int * int) List.t)) List.t; 
-thermometers : (int * int) List.t Array.t; in_thermos: (int List.t) Array.t Array.t; 
-cages: (int * ((int * int) List.t)) Array.t; in_cages: (int List.t) Array.t Array.t}
+type problem = { initial_grid : int option grid; arrows: ((int * int) * ((int * int) List.t)) Array.t;
+in_arrows: (int List.t) Array.t Array.t; thermometers : (int * int) List.t Array.t; 
+in_thermos: (int List.t) Array.t Array.t; cages: (int * ((int * int) List.t)) Array.t; 
+in_cages: (int List.t) Array.t Array.t}
 
 let string_of_int_option = function
   | None -> " "
@@ -191,22 +191,22 @@ let rec generate_in_thermos i arr = function
     generate_in_thermos (i + 1) (one_thermo i arr x) xs
   )
 
-(*let rec generate_predecessors_thermos predecessors = function
-  | [] -> predecessors
+let rec generate_in_arrows i arr = function
+  | [] -> arr
   | x :: xs -> (
-    let rec one_thermo predecessors predecessor = function
-      | [] -> predecessors
+    let rec one_arrow i arr = function
+      | [] -> arr
       | y :: ys -> (
         let (c1, c2) = y in
-        predessors.(c1).(c2) <- (predecessor :: predessors.(c1).(c2));
-        one_thermo predecessors y ys
+        arr.(c1).(c2) <- (i :: arr.(c1).(c2));
+        one_arrow i arr ys
       )
     in
 
-    match x with
-      | [] -> generate_predecessors_thermos predecessors xs
-      | y :: ys -> generate_predecessors_thermos (one_thermo predecessors y ys) xs
-  )*)
+    let (c1, c2) = fst x in
+    arr.(c1).(c2) <- (i :: arr.(c1).(c2));
+    generate_in_arrows (i + 1) (one_arrow i arr (snd x)) xs
+  )
 
 let rec sum_of_cage solution sum = function
   | [] -> sum
@@ -214,6 +214,24 @@ let rec sum_of_cage solution sum = function
     let (c1, c2) = x in
     sum_of_cage solution (sum + solution.(c1).(c2)) xs
   )
+
+let rec sum_arrow sum grid = function
+  | [] -> sum
+  | x :: xs -> (
+    let (c1, c2) = x in
+    match grid.(c1).(c2) with
+      | None -> sum_arrow sum grid xs
+      | Some y -> sum_arrow (sum + y) grid xs
+  )
+
+let rec check_arrows arrows grid = function
+  | [] -> true
+  | x :: xs -> (
+    let (c1, c2) = fst arrows.(x) in
+    match grid.(c1).(c2) with
+      | None -> check_arrows arrows grid xs
+      | Some y -> if y <> (sum_arrow 0 grid (snd arrows.(x))) then false else check_arrows arrows grid xs
+    )
 
 let problem_of_string str =
   Printf.printf "%s\n" str;
@@ -224,16 +242,20 @@ let problem_of_string str =
     | c when '1' <= c && c <= '9' -> Some (Some (Char.code c - Char.code '0'))
     | _ -> None
   in
-
+  
   match str2 with
     | [ordinary; special] -> (
         let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
-        { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow; thermometers = Array.of_list thermo;
+        { initial_grid = grid_of_string cell_of_char ordinary; arrows = Array.of_list arrow;
+        in_arrows = generate_in_arrows 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) arrow;
+        thermometers = Array.of_list thermo;
         in_thermos = generate_in_thermos 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) thermo; 
-        cages = Array.of_list cage; in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
+        cages = Array.of_list cage; 
+        in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
       )
     | [ordinary] -> (
-        { initial_grid = grid_of_string cell_of_char ordinary; arrows = []; thermometers = [||];
+        { initial_grid = grid_of_string cell_of_char ordinary; arrows = [||]; 
+        in_arrows =  (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))); thermometers = [||];
         in_thermos = (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))); cages = [||]; 
         in_cages = (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) }
       )
@@ -262,41 +284,16 @@ let is_valid_solution problem solution =
                                         | Some x -> solution.(i).(j) != x
                                       )) (Array.init 9 (fun j -> j))) (Array.init 9 (fun i -> i)) in
   (* Ni treba preverjati, ali so v vseh kletkah same različne številke, ker to sproti preverjamo
-  v datoteki [Solver.ml]. Prav tako ni treba preverjati, ali so v termometrih naraščajoča zaporedja,
+  v datoteki [Solver.ml]. Prav tako ni treba preverjati, ali so v termometrih naraščajoča zaporedja, 
   saj tudi to sproti preverjamo v [Solver.ml] *)
-  let sum_correct solution problem = Array.for_all (fun sub -> 
+  (* Preveri, ali so vsote v vseh kletkah pravilne *)
+  let cages_correct solution problem = Array.for_all (fun sub -> 
     (fst sub) = (sum_of_cage solution 0 (snd sub))) problem.cages in
+  (* Preveri, ali so vsote v vseh puščicah pravilne. *)
+  let solution_option solution = Array.init 9 (fun i -> Array.init 9 (fun j -> Some solution.(i).(j))) in
+  let arrows_correct solution problem = (
+    check_arrows problem.arrows (solution_option solution) (List.init (Array.length problem.arrows) (fun j -> j))
+  ) in
 
   (rows_correct solution) && (columns_correct solution) && (boxes_correct solution) && 
-  (not (sol_prob_same solution problem)) && (sum_correct solution problem)
-
-
-(*┏━━━┯━━━┯━━━┓
-┃483│921│657┃
-┃967│3 5│821┃
-┃251│876│493┃
-┠───┼───┼───┨
-┃548│132│976┃
-┃729│ 64│ 38┃
-┃136│798│ 45┃
-┠───┼───┼───┨
-┃372│689│514┃
-┃814│253│769┃
-┃695│417│382┃
-┗━━━┷━━━┷━━━┛*)
-
-  (*[|[|Some 4; Some 8; Some 3; Some 9; Some 2; Some 1; Some 6; Some 5;
-      Some 7|];
-    [|Some 9; Some 6; Some 7; Some 3; None; Some 5; Some 8; Some 2; Some 1|];
-    [|Some 2; Some 5; Some 1; Some 8; Some 7; Some 6; Some 4; Some 9;
-      Some 3|];
-    [|Some 5; Some 4; Some 8; Some 1; Some 3; Some 2; Some 9; Some 7;
-      Some 6|];
-    [|Some 7; Some 2; Some 9; None; Some 6; Some 4; None; Some 3; Some 8|];
-    [|Some 1; Some 3; Some 6; Some 7; Some 9; Some 8; None; Some 4; Some 5|];
-    [|Some 3; Some 7; Some 2; Some 6; Some 8; Some 9; Some 5; Some 1;
-      Some 4|];
-    [|Some 8; Some 1; Some 4; Some 2; Some 5; Some 3; Some 7; Some 6;
-      Some 9|];
-    [|Some 6; Some 9; Some 5; Some 4; Some 1; Some 7; Some 3; Some 8;
-      Some 2|]|]}*)
+  (not (sol_prob_same solution problem)) && (cages_correct solution problem) && (arrows_correct solution problem)
