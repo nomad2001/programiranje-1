@@ -143,7 +143,7 @@ let rec procces_special special proccesed =
   let (arrow, thermo, cage) = proccesed in
   match special with
     | [] -> proccesed
-    | x :: xs -> (
+    | x :: xs -> (if x = "" then proccesed else (
       match x.[0] with
         | 'K' -> (
           let start = Str.search_forward (Str.regexp "[0-9]+") x 0 in
@@ -158,6 +158,7 @@ let rec procces_special special proccesed =
         )
         | 'T' -> procces_special xs (arrow, (List.rev (search_indices_from x 0 [])) :: thermo, cage)
         | _ -> procces_special xs proccesed
+      )
     )
 
 let rec generate_in_cages i arr = function
