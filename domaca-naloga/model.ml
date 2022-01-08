@@ -242,16 +242,27 @@ let problem_of_string str =
     | c when '1' <= c && c <= '9' -> Some (Some (Char.code c - Char.code '0'))
     | _ -> None
   in
-  
+
   match str2 with
     | [ordinary; special] -> (
         let (arrow, thermo, cage) = procces_special (String.split_on_char '\n' special) ([], [], []) in
-        { initial_grid = grid_of_string cell_of_char ordinary; arrows = Array.of_list arrow;
-        in_arrows = generate_in_arrows 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) arrow;
-        thermometers = Array.of_list thermo;
-        in_thermos = generate_in_thermos 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) thermo; 
-        cages = Array.of_list cage; 
-        in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) cage }
+        let arrow2 = Array.of_list arrow in
+        let thermo2 = Array.of_list thermo in
+        let cage2 = Array.of_list cage in
+
+        let compare_cages_arrows x y = (List.length (snd x)) - (List.length (snd y)) in
+        let compare_thermos x y = (List.length x) - (List.length y) in
+
+        Array.sort compare_thermos thermo2;
+        Array.sort compare_cages_arrows cage2;
+        Array.sort compare_cages_arrows arrow2;
+
+        { initial_grid = grid_of_string cell_of_char ordinary; arrows = arrow2;
+        in_arrows = generate_in_arrows 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) (Array.to_list arrow2);
+        thermometers = thermo2;
+        in_thermos = generate_in_thermos 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) (Array.to_list thermo2); 
+        cages = cage2; 
+        in_cages = generate_in_cages 0 (Array.init 9 (fun i -> (Array.init 9 (fun j -> [])))) (Array.to_list cage2) }
       )
     | [ordinary] -> (
         { initial_grid = grid_of_string cell_of_char ordinary; arrows = [||]; 
