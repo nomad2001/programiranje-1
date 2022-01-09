@@ -249,7 +249,7 @@ let problem_of_string str =
         let arrow2 = Array.of_list arrow in
         let thermo2 = Array.of_list thermo in
         let cage2 = Array.of_list cage in
-        
+
         let compare_cages_arrows x y = (List.length (snd x)) - (List.length (snd y)) in
         let compare_thermos x y = (List.length x) - (List.length y) in
 
