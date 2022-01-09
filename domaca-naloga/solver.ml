@@ -123,8 +123,8 @@ let initialize_order (problem : Model.problem) =
   let indices = Array.init 9 (fun i -> (Array.init 9 (fun j -> None))) in
   let order = Array.init 81 (fun i -> None) in
   let start1 = traverse_arrows problem.arrows 0 0 indices order in
-  let start2 = traverse_cages problem.cages 0 start1 indices order in
-  let start3 = traverse_thermometers problem.thermometers 0 start2 indices order in
+  (*let start2 = traverse_cages problem.cages 0 start1 indices order in*) (* Kletke iz nekega razloga upočasni, če ugibamo po kletkah po vrsti. *)
+  let start3 = traverse_thermometers problem.thermometers 0 start1 indices order in
   traverse_others indices order start3 0 0
 
 (* Naključno premeša seznam. Funkcija kopirana s strani 
