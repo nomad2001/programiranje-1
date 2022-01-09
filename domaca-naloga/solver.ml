@@ -1,10 +1,10 @@
 type available = { loc : int * int; possible : int list }
-
 (* V atributu [problem] je shranjen začetni problem, v [current_grid] sudoku kot je izpolnjen v
 trenutnem stanju, v [rows_taken], [cols_taken] in [boxes_taken] je označeno, kolikokrat se posamezne 
 številke v trenutni postavitivi, pojavljajo v posameznih vrsticah, stolpcih in škatlah, v [cur_index] 
 je shranjeno mesto celice,ki jo trenutno izpoljnjujemo, v [options] pa številke, ki po posameznih 
 celicah še pridejo v poštev*)
+
 type state = { problem : Model.problem; current_grid : int option Model.grid; rows_taken : int Array.t Array.t;
               cols_taken : int Array.t Array.t; boxes_taken : int Array.t Array.t; cages_taken : int Array.t Array.t; 
               cages_sum : int Array.t; cur_index : int * int; order : (int * int) option Array.t; 
@@ -42,7 +42,7 @@ let initialize_cages_sum_taken (problem : Model.problem) sum taken =
   in 
 
   let rec all_cages i (problem : Model.problem) sum taken = 
-    if i >= Array.length sum then (sum, taken) else (
+    if i >= (Array.length sum) then (sum, taken) else (
       let (sum2, taken2) = one_cage problem i sum taken (snd problem.cages.(i)) in
       all_cages (i + 1) problem sum2 taken2
   ) 
@@ -159,11 +159,6 @@ let initialize_state (problem : Model.problem) : state =
   (fun i -> 0)) (Array.init (Array.length problem.cages) (fun i -> (Array.init 9 (fun j -> 0)))) in
   let (order, index_in_order) = initialize_order problem in
 
-  (*for i = 0 to 80 do
-    let Some (c1, c2) = order.(i) in
-    Printf.printf "(%d,%d)\n" c1 c2
-  done;
-*)
   let wrong_row = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) rows in
   let wrong_col = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) cols in
   let wrong_box = Array.exists (fun sub -> (Array.exists (fun x -> x > 1) sub)) boxes in
@@ -171,6 +166,7 @@ let initialize_state (problem : Model.problem) : state =
   let wrong_sum = Array.exists (fun i -> cages_s.(i) > (fst problem.cages.(i))) (Array.init 
   (Array.length problem.cages) (fun j -> j)) in
   let Some beggining = order.(0) in
+  
   {current_grid = cur_grid; problem; rows_taken = rows; cols_taken = cols;boxes_taken = boxes; 
   cages_sum = cages_s; cages_taken = cages_t; cur_index = beggining; order = order; index_in_order = index_in_order;
   options = opts; wrong = (wrong_row || wrong_col || wrong_box || wrong_cage || wrong_sum)}
@@ -196,19 +192,13 @@ let find_next_index state i j =
 (* Ko zgornjo funkcijo uporabimo, v [state.index_in_order] in [state.order] ni več nobene vrednosti 
 [None] in zato tega primera ni treba obravnavati. *)
 
-let copy_array_of_lists arr = Array.init 9 (fun i -> 
-                                (Array.init 9 (fun j -> {loc = (i, j);
-                                    possible = (List.map (fun x -> x) arr.(i).(j).possible)})))
-
-let copy_cages cages = Array.init (Array.length cages) (fun i -> (Array.map (fun x -> x) cages.(i)))
-
-let rec update_cages x sum taken cages = function
-  | [] -> false
+let rec update_cages x sum taken cages validate = function
+  | [] -> validate
   | y :: ys -> (
     sum.(y) <- sum.(y) + x;
     taken.(y).((Int.abs x) - 1) <- taken.(y).((Int.abs x) - 1) + (x / (Int.abs x));
-    if (sum.(y) > (fst cages.(y))) || (taken.(y).((Int.abs x) - 1) > 1) then true else (
-      update_cages x sum taken cages ys
+    if (sum.(y) > (fst cages.(y))) || (taken.(y).((Int.abs x) - 1) > 1) then update_cages x sum taken cages true ys else (
+      update_cages x sum taken cages validate ys
     )
   )
 
@@ -245,20 +235,19 @@ let branch_state (state : state) : (state * state) option =
   match state.options.(i).(j).possible with
     | [] -> None
     | x :: xs -> (
-      state.current_grid.(i).(j) <- Some x;
-      state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) + 1 ;
-      state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) + 1;
-      state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) + 1;
       state.options.(i).(j) <- {loc = (i, j); possible = xs};
 
       match state.problem.initial_grid.(i).(j) with
         | None -> (
-            let wrong_cages = update_cages x state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j) in
+            state.current_grid.(i).(j) <- Some x;
+            state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) + 1 ;
+            state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) + 1;
+            state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) + 1;
+            let wrong_cages = update_cages x state.cages_sum state.cages_taken state.problem.cages false state.problem.in_cages.(i).(j) in
             let wrong_thermos = check_thermometers state.current_grid state.problem.thermometers state.problem.in_thermos.(i).(j) in
             let wrong_arrows = check_arrows state.problem.arrows state.current_grid state.problem.in_arrows.(i).(j) in
             let wrong2 = ((state.rows_taken.(i).(x - 1) > 1) || (state.cols_taken.(j).(x - 1) > 1) || 
             (state.boxes_taken.(3 * (i/3) + j/3).(x - 1) > 1) || wrong_cages  || wrong_thermos || wrong_arrows) in
-
             Some ({current_grid = state.current_grid; problem = state.problem; rows_taken = state.rows_taken; 
             cols_taken = state.cols_taken; boxes_taken = state.boxes_taken; cages_taken = state.cages_taken; 
             cages_sum = state.cages_sum; cur_index = (find_next_index state i j); order = state.order; 
@@ -282,42 +271,18 @@ let branch_state (state : state) : (state * state) option =
 (* pogledamo, če trenutno stanje vodi do rešitve *)
 let rec solve_state (state : state) =
   (* uveljavimo trenutne omejitve in pogledamo, kam smo prišli *)
-  (*Printf.printf "%s %s\n"(string_of_int (fst state.cur_index)) (string_of_int (snd state.cur_index));*)
-  (*Model.print_problem {initial_grid = state.current_grid; arrows = []; thermometers = []; cages = [||]; in_cages = [||]};
-  for i = 0 to ((Array.length state.cages_taken) - 1) do
-    for j = 0 to 8 do 
-      Printf.printf "%d " state.cages_taken.(i).(j)
-    done;
-    Printf.printf "\n";
-  done;
-  *)
-  (*let x = match state.current_grid.(0).(0) with
-    | None -> -1
-    | Some x -> x
-  in
-  Printf.printf "%d\n" x;*)
-  (*for i = 0 to ((Array.length state.cages_sum) - 1) do
-    Printf.printf "%d " state.cages_sum.(i)
-  done;
-  Printf.printf "\n";
-  *)
-  (*Model.print_grid string_of_int state.rows_taken;*)
-  (*Printf.printf "%B\n" (wrong_row || wrong_col || wrong_box);*)
   if state.wrong then ( 
     None
   ) else (
     match validate_state state with
     | Solved solution ->
         (* če smo našli rešitev, končamo *)
-        (*Printf.printf "Solved\n";*)
         Some solution
     | Fail fail ->
         (* prav tako končamo, če smo odkrili, da rešitev ni *)
-        (*Printf.printf "Fail\n";*)
         None
     | Unsolved state' ->
         (* če še nismo končali, raziščemo stanje, v katerem smo končali *)
-        (*Printf.printf "Unsolved\n";*)
         explore_state state'
   )
 
@@ -338,11 +303,17 @@ and explore_state (state : state) =
       | None -> (
           (* če prva možnost ne vodi do rešitve, raziščemo še drugo možnost *)
           let x = match state.current_grid.(i).(j) with | Some y -> y in
-          state.current_grid.(i).(j) <- None;
-          state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) - 1 ;
-          state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) - 1;
-          state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) - 1;
-          update_cages (-x) state.cages_sum state.cages_taken state.problem.cages state.problem.in_cages.(i).(j);
+          let change = match state.problem.initial_grid.(i).(j) with 
+            | None -> (
+                state.current_grid.(i).(j) <- None;
+                state.rows_taken.(i).(x - 1) <- state.rows_taken.(i).(x - 1) - 1 ;
+                state.cols_taken.(j).(x - 1) <- state.cols_taken.(j).(x - 1) - 1;
+                state.boxes_taken.(3 * (i/3) + j/3).(x - 1) <- state.boxes_taken.(3 * (i/3) + j/3).(x - 1) - 1;
+                update_cages (-x) state.cages_sum state.cages_taken state.problem.cages false state.problem.in_cages.(i).(j)
+            )
+            | Some y -> true
+          in
+          change;
           let answer = solve_state st2 in
           state.options.(i).(j) <- {loc = (i, j); possible = (x :: state.options.(i).(j).possible)};
           answer
